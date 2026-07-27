@@ -298,6 +298,9 @@
         <label style="display:flex;flex-direction:column;gap:9px;font-size:.9rem;color:var(--muted)">Company
           <input name="company" style="background:rgba(10,10,11,.9);border:1px solid var(--line);border-radius:8px;padding:14px 16px;color:var(--fg);font-family:var(--mono);font-size:13px;outline:none" style-focus="border-color:var(--accent)" />
         </label>
+        <label style="display:flex;flex-direction:column;gap:9px;font-size:.9rem;color:var(--muted)">Phone
+          <input name="phone" type="tel" style="background:rgba(10,10,11,.9);border:1px solid var(--line);border-radius:8px;padding:14px 16px;color:var(--fg);font-family:var(--mono);font-size:13px;outline:none" style-focus="border-color:var(--accent)" />
+        </label>
         <label style="display:flex;flex-direction:column;gap:9px;font-size:.9rem;color:var(--muted)">Message *
           <textarea name="message" rows="6" required style="background:rgba(10,10,11,.9);border:1px solid var(--line);border-radius:8px;padding:14px 16px;color:var(--fg);font-family:var(--mono);font-size:13px;line-height:1.6;outline:none;resize:vertical" style-focus="border-color:var(--accent)"></textarea>
         </label>
@@ -796,9 +799,27 @@ class Component extends DCLogic {
       sendMsg: (e)=>{
         e.preventDefault();
         const f=e.target, g=(n)=>((f.elements[n]||{}).value||'').trim();
-        const body=['Name: '+g('name'),'Email: '+g('email'),'Company: '+g('company'),'','' +g('message')].join('\n');
-        location.href='mailto:steve.jung@avycon.com?subject='+encodeURIComponent('Portfolio 문의 — '+g('name'))+'&body='+encodeURIComponent(body);
-        const b=f.querySelector('button[type=submit]'); if(b){ const t=b.textContent; b.textContent='Opening mail…'; setTimeout(()=>{b.textContent=t;},2200); }
+        const CONTACT_EMAIL='ledlaputa@gmail.com';
+        const WEB3FORMS_KEY='YOUR_WEB3FORMS_ACCESS_KEY';
+        const b=f.querySelector('button[type=submit]'); const orig=b?b.textContent:'';
+        const mailFallback=()=>{
+          const body=['Name: '+g('name'),'Email: '+g('email'),'Phone: '+g('phone'),'Company: '+g('company'),'',g('message')].join('\n');
+          location.href='mailto:'+CONTACT_EMAIL+'?subject='+encodeURIComponent('Portfolio 문의 — '+g('name'))+'&body='+encodeURIComponent(body);
+          if(b){ b.textContent='Opening mail…'; setTimeout(()=>{b.textContent=orig; b.disabled=false;},2500); }
+        };
+        if(!WEB3FORMS_KEY || WEB3FORMS_KEY==='YOUR_WEB3FORMS_ACCESS_KEY'){ mailFallback(); return; }
+        if(b){ b.disabled=true; b.textContent='Sending…'; }
+        fetch('https://api.web3forms.com/submit',{
+          method:'POST',
+          headers:{'Content-Type':'application/json',Accept:'application/json'},
+          body:JSON.stringify({access_key:WEB3FORMS_KEY,to:CONTACT_EMAIL,
+            subject:'Portfolio 문의 — '+g('name'),from_name:g('name'),
+            name:g('name'),email:g('email'),phone:g('phone'),company:g('company'),message:g('message')})
+        }).then(r=>r.json()).then(res=>{
+          if(!res.success) throw new Error(res.message||'send failed');
+          if(b){ b.textContent='Sent ✓'; setTimeout(()=>{b.textContent=orig; b.disabled=false;},2500); }
+          f.reset();
+        }).catch(mailFallback);
       },
       pick1: (e)=>this._onPick(0,e), pick2: (e)=>this._onPick(1,e), pick3: (e)=>this._onPick(2,e),
       clear1: ()=>this._clearGlb(0), clear2: ()=>this._clearGlb(1), clear3: ()=>this._clearGlb(2),
