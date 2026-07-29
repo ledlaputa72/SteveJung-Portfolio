@@ -127,11 +127,11 @@
   <!-- SPECIAL A — BEFORE / AFTER -->
   <sc-if value="{{ cs.hasBeforeAfter }}" hint-placeholder-val="{{ false }}">
   <section style="padding:clamp(44px,7vw,72px) 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
-    <div style="position:relative;aspect-ratio:16/10;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+    <div style="position:relative;aspect-ratio:16/9;border:1px solid var(--line);background:rgba(17,17,20,.6)">
       <image-slot id="{{ cs.beforeSlot }}" shape="rect" fit="cover" placeholder="{{ cs.beforeLabel }}"></image-slot>
       <span style="position:absolute;top:12px;left:12px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:rgba(236,233,226,.14);color:var(--fg);padding:5px 11px;border-radius:999px;pointer-events:none">BEFORE</span>
     </div>
-    <div style="position:relative;aspect-ratio:16/10;border:1px solid var(--accent);background:rgba(17,17,20,.6)">
+    <div style="position:relative;aspect-ratio:16/9;border:1px solid var(--accent);background:rgba(17,17,20,.6)">
       <image-slot id="{{ cs.afterSlot }}" shape="rect" fit="cover" placeholder="{{ cs.afterLabel }}"></image-slot>
       <span style="position:absolute;top:12px;left:12px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:var(--accent);color:#0a0a0b;font-weight:700;padding:5px 11px;border-radius:999px;pointer-events:none">AFTER</span>
     </div>
@@ -171,14 +171,14 @@
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
-          <div style="position:relative;aspect-ratio:16/10;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+          <div style="position:relative;aspect-ratio:16/9;border:1px solid var(--line);background:rgba(17,17,20,.6)">
             <image-slot id="{{ a.slot }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 메인 화면"></image-slot>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-            <div style="position:relative;aspect-ratio:4/3;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+            <div style="position:relative;aspect-ratio:16/9;border:1px solid var(--line);background:rgba(17,17,20,.6)">
               <image-slot id="{{ a.slot2 }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 상세 1"></image-slot>
             </div>
-            <div style="position:relative;aspect-ratio:4/3;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+            <div style="position:relative;aspect-ratio:16/9;border:1px solid var(--line);background:rgba(17,17,20,.6)">
               <image-slot id="{{ a.slot3 }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 상세 2"></image-slot>
             </div>
           </div>
@@ -250,7 +250,7 @@
     <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">Visual Gallery</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px">
       <sc-for list="{{ cs.gallery }}" as="g" hint-placeholder-count="6">
-        <div style="position:relative;aspect-ratio:4/3;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+        <div style="position:relative;aspect-ratio:16/9;border:1px solid var(--line);background:rgba(17,17,20,.6)">
           <image-slot id="{{ g.id }}" shape="rect" fit="cover" placeholder="{{ g.label }}"></image-slot>
           <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);pointer-events:none;z-index:5">{{ g.label }}</div>
         </div>
