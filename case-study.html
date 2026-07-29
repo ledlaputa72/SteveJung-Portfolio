@@ -76,7 +76,7 @@
   <div onMouseEnter="{{ pauseRoll }}" onMouseLeave="{{ resumeRoll }}" style="margin-top:26px;position:relative;aspect-ratio:21/8;min-height:260px;border:1px solid var(--line);background:rgba(17,17,20,.6);overflow:hidden">
     <sc-for list="{{ cs.bannerList }}" as="a" hint-placeholder-count="6">
       <div style="position:absolute;inset:0;opacity:{{ a.op }};transition:opacity .7s ease;pointer-events:{{ a.pe }}">
-        <image-slot id="{{ a.bannerSlot }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 배너 이미지"></image-slot>
+        <image-slot id="{{ a.bannerSlot }}" shape="rect" fit="cover" placeholder="[{{ a.codeBanner }}] {{ a.name }} — 배너 이미지"></image-slot>
         <div style="position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(10,10,11,.92) 0%,rgba(10,10,11,.72) 42%,rgba(10,10,11,.15) 100%)"></div>
         <button onClick="{{ a.go }}" style="position:absolute;left:0;top:0;bottom:0;width:min(62%,660px);text-align:left;background:transparent;border:0;cursor:pointer;color:var(--fg);padding:clamp(22px,3.5vw,44px);display:flex;flex-direction:column;justify-content:center;gap:12px">
           <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">{{ a.no }} — {{ a.group }}</span>
@@ -128,11 +128,11 @@
   <sc-if value="{{ cs.hasBeforeAfter }}" hint-placeholder-val="{{ false }}">
   <section style="padding:clamp(44px,7vw,72px) 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
     <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
-      <image-slot id="{{ cs.beforeSlot }}" shape="rect" fit="cover" placeholder="{{ cs.beforeLabel }}"></image-slot>
+      <image-slot id="{{ cs.beforeSlot }}" shape="rect" fit="cover" placeholder="[{{ cs.codeBefore }}] {{ cs.beforeLabel }}"></image-slot>
       <span style="position:absolute;top:12px;left:12px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:rgba(236,233,226,.14);color:var(--fg);padding:5px 11px;border-radius:999px;pointer-events:none">BEFORE</span>
     </div>
     <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--accent);background:rgba(17,17,20,.6)">
-      <image-slot id="{{ cs.afterSlot }}" shape="rect" fit="cover" placeholder="{{ cs.afterLabel }}"></image-slot>
+      <image-slot id="{{ cs.afterSlot }}" shape="rect" fit="cover" placeholder="[{{ cs.codeAfter }}] {{ cs.afterLabel }}"></image-slot>
       <span style="position:absolute;top:12px;left:12px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:var(--accent);color:#0a0a0b;font-weight:700;padding:5px 11px;border-radius:999px;pointer-events:none">AFTER</span>
     </div>
   </section>
@@ -172,14 +172,14 @@
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
           <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
-            <image-slot id="{{ a.slot }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 메인 화면"></image-slot>
+            <image-slot id="{{ a.slot }}" shape="rect" fit="cover" placeholder="[{{ a.codeMain }}] {{ a.name }} — 메인 화면"></image-slot>
           </div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
             <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
-              <image-slot id="{{ a.slot2 }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 상세 1"></image-slot>
+              <image-slot id="{{ a.slot2 }}" shape="rect" fit="cover" placeholder="[{{ a.codeD1 }}] {{ a.name }} — 상세 1"></image-slot>
             </div>
             <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
-              <image-slot id="{{ a.slot3 }}" shape="rect" fit="cover" placeholder="{{ a.name }} — 상세 2"></image-slot>
+              <image-slot id="{{ a.slot3 }}" shape="rect" fit="cover" placeholder="[{{ a.codeD2 }}] {{ a.name }} — 상세 2"></image-slot>
             </div>
           </div>
         </div>
@@ -251,7 +251,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px">
       <sc-for list="{{ cs.gallery }}" as="g" hint-placeholder-count="6">
         <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
-          <image-slot id="{{ g.id }}" shape="rect" fit="cover" placeholder="{{ g.label }}"></image-slot>
+          <image-slot id="{{ g.id }}" shape="rect" fit="cover" placeholder="[{{ g.code }}] {{ g.label }}"></image-slot>
           <div style="position:absolute;bottom:10px;left:12px;font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);pointer-events:none;z-index:5">{{ g.label }}</div>
         </div>
       </sc-for>
@@ -846,6 +846,7 @@ class Component extends DCLogic {
     const cs = Object.assign({}, c, {
       heroSlot: c.anchor+'-hero', heroSlotLabel: c.title+' — 히어로 이미지',
       beforeSlot: c.anchor+'-before', afterSlot: c.anchor+'-after',
+      codeBefore: 'C'+(+c.num)+'-BEFORE', codeAfter: 'C'+(+c.num)+'-AFTER',
       hasBeforeAfter: !!c.beforeLabel, hasApps: !!c.apps, plainHero: false, bodyId: c.anchor+'-body',
       hasSections: !!(c.apps || (c.banners||[]).some(b=>b.body)),
       sectionList: (c.apps || (c.banners||[]).filter(b=>b.body) || []).map((b,k)=>{
@@ -857,6 +858,9 @@ class Component extends DCLogic {
           slot: (isApp?'appm-':'secm-')+pre+b.key,
           slot2: (isApp?'apps2-':'secs2-')+pre+b.key,
           slot3: (isApp?'apps3-':'secs3-')+pre+b.key,
+          codeMain: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN',
+          codeD1: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1',
+          codeD2: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2',
           status: b.status || (b.group||'').toUpperCase(),
           siteLink: b.link || c.callout || 'stevejung-portfolio.vercel.app',
           siteLabel: (b.link || c.callout) ? 'Visit site' : 'Portfolio site'
@@ -870,6 +874,7 @@ class Component extends DCLogic {
           no: String(k+1).padStart(2,'0'),
           group: b.group || (c.short||'').toUpperCase(),
           bannerSlot: isApp ? 'appb-'+b.key : 'bnr-'+c.anchor+'-'+b.key,
+          codeBanner: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-BANNER',
           op: k===sl ? 1 : 0,
           pe: k===sl ? 'auto' : 'none',
           gaugeAnim: k===sl ? 'gaugeFill 4.5s linear forwards' : 'none',
@@ -912,7 +917,7 @@ class Component extends DCLogic {
           numBg: on ? 'var(--accent)' : 'transparent',
           numFg: on ? '#0a0a0b' : 'var(--muted)' });
       }),
-      gallery: c.gallery.map((label, k) => ({ id: c.anchor+'-g'+k, label })),
+      gallery: c.gallery.map((label, k) => ({ id: c.anchor+'-g'+k, label, code: 'C'+(+c.num)+'-GAL'+(k+1) })),
       prevAnchor: prev.anchor, prevTitle: prev.title, nextAnchor: next.anchor, nextTitle: next.title
     });
     const nav = CASES.map((x, k) => ({ anchor:x.anchor, num:x.num, short:x.short,
