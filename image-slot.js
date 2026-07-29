@@ -578,10 +578,13 @@
         if (!this.hasAttribute('data-editable')) return;
         if (act === 'replace') {
           this._exitReframe(true);
-          // Host-owned picker (Unsplash modal; it also offers local import).
+          // No host is listening for image-slot:pick on this standalone
+          // deployment (dispatched for compatibility only) — open the
+          // native file picker directly so Replace actually works.
           this.dispatchEvent(new CustomEvent('image-slot:pick', {
             bubbles: true, composed: true, detail: { id: this.id || null }
           }));
+          this._input.click();
         }
         if (act === 'edit') {
           if (!this._reframes()) return;
@@ -1068,7 +1071,9 @@
       this._ring.style.display = mask ? 'none' : '';
 
       // Controls and reframe entry gate on this so share links stay read-only.
-      const editable = !!(window.omelette && window.omelette.writeFile);
+      // This deployed copy runs standalone (no host bridge), so the slot is
+      // always locally editable — click/drag/replace should always work.
+      const editable = true;
       this.toggleAttribute('data-editable', editable);
       this._sub.style.display = editable ? '' : 'none';
 
