@@ -185,7 +185,12 @@
             </sc-for>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:30px">
-            <a href="https://{{ a.siteUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border-radius:999px;padding:13px 22px" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></a>
+            <sc-if value="{{ a.hasPdf }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ a.openPdf }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border:0;border-radius:999px;padding:13px 22px;cursor:pointer" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></button>
+            </sc-if>
+            <sc-if value="{{ !a.hasPdf }}" hint-placeholder-val="{{ true }}">
+              <a href="https://{{ a.siteUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border-radius:999px;padding:13px 22px" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></a>
+            </sc-if>
             <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim)">{{ a.siteLink }}</span>
           </div>
         </div>
@@ -329,6 +334,24 @@
     </div>
   </sc-if>
 
+  <!-- PDF MODAL — in-browser preview with download, same pattern as the resume modal -->
+  <sc-if value="{{ pdfModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px);background:rgba(5,5,6,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)" onClick="{{ closePdf }}">
+      <div onClick="{{ stopClick }}" style="position:relative;width:min(940px,100%);height:min(90vh,100%);display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(14px,2vw,18px);border-bottom:1px solid var(--line);flex:none">
+          <span style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">{{ pdfModalTitle }}</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <a href="{{ pdfModalUrl }}" download style="display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;background:var(--accent);color:#0a0a0b;font-weight:700" style-hover="background:var(--fg)">Download ↓</a>
+            <button onClick="{{ closePdf }}" type="button" aria-label="Close" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--fg);font-family:var(--mono);font-size:16px;line-height:1;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent)">✕</button>
+          </div>
+        </div>
+        <div style="flex:1;min-height:0;background:#525659">
+          <iframe src="{{ pdfModalUrl }}" title="{{ pdfModalTitle }}" style="width:100%;height:100%;border:0;display:block"></iframe>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
 </main>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d6ff3f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#d6ff3f&quot;,&quot;#49f0ff&quot;,&quot;#ff5c39&quot;,&quot;#c8a2ff&quot;,&quot;#ffffff&quot;],&quot;section&quot;:&quot;Look&quot;},&quot;object&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;icosahedron&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;torus&quot;,&quot;torusKnot&quot;],&quot;section&quot;:&quot;3D Background&quot;},&quot;glb&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D Background&quot;},&quot;glbScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D Background&quot;}}">
@@ -342,6 +365,8 @@ const CASES = [
       tags:['Landing','Multilingual','SEO','Lead Gen']},
      {key:'plan',group:'Planning · 138p Doc',name:'138페이지 사이트 기획서',short:'IA · 사이트맵 · 50+ 화면정의서 · 기능 명세까지 단독으로 작성한 기획 문서.',
       stack:'IA · Sitemap · 화면정의서 · 기능 명세',
+      pdf:['Case 1 — AVYCON','AVYCON PDF','AVYCON Renewal Site Plan - Detailed Site Plan v1.0 (2025-10-10) EN_1.pdf'],
+      linkLabel:'View PDF',
       body:'외주 개발사에 넘길 수 있는 수준의 기획서를 혼자 138페이지로 정리했습니다. 사이트맵과 정보 구조에서 시작해 50개 이상의 화면정의서, 데이터 필드 정의, 예외 케이스까지 문서화해 구현 단계의 해석 차이를 최소화했습니다.',
       points:['사이트맵 · 3-depth 정보 구조 · URL 규칙 정의','50+ 화면정의서 — 화면별 요소 · 동작 · 예외 처리','CMS 데이터 필드와 제품 속성 스키마 사전 정의','런칭 후 운영 가이드까지 하나의 문서로 통합'],
       tags:['IA','Documentation','Spec','Solo']},
@@ -666,6 +691,7 @@ const CASES = [
 // Maps a case-study image code (e.g. 'C1-HOME-MAIN') to its source image path.
 // Filled in incrementally as image assignments come in per case.
 const imgPath = (folder, file) => './images/' + encodeURIComponent(folder) + '/' + encodeURIComponent(file);
+const docPath = (...parts) => './pdf/' + parts.map(encodeURIComponent).join('/');
 const IMG_MAP = (() => {
   const C1 = 'Case 1 — AVYCON';
   const C2 = 'Case 2 — Starllion';
@@ -721,7 +747,7 @@ const IMG_MAP = (() => {
 })();
 
 class Component extends DCLogic {
-  state = { i: 0, slide: 0, chal: 0, step: 0, lightbox: null };
+  state = { i: 0, slide: 0, chal: 0, step: 0, lightbox: null, pdfModal: null };
   componentDidMount(){
     if (this.props.accentColor) document.documentElement.style.setProperty('--accent', this.props.accentColor);
     const y = document.getElementById('om-year'); if (y) y.textContent = new Date().getFullYear();
@@ -958,7 +984,9 @@ class Component extends DCLogic {
           openD1: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1']; if (s) this.setState({ lightbox: s }); },
           openD2: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']; if (s) this.setState({ lightbox: s }); },
           status: b.status || (b.group||'').toUpperCase(),
-          siteLink: b.link || c.callout || 'stevejung.dev',
+          hasPdf: !!b.pdf,
+          openPdf: () => { if (b.pdf) this.setState({ pdfModal: { url: docPath(...b.pdf), title: b.name } }); },
+          siteLink: b.pdf ? 'PDF Document' : (b.link || c.callout || 'stevejung.dev'),
           siteUrl: b.linkUrl || b.link || c.callout || 'stevejung.dev',
           siteLabel: b.linkLabel || ((b.link || c.callout) ? 'Visit site' : 'Portfolio site')
         });
@@ -1034,6 +1062,10 @@ class Component extends DCLogic {
       lightboxOpen: !!this.state.lightbox,
       lightboxSrc: this.state.lightbox || '',
       closeLightbox: () => this.setState({ lightbox: null }),
+      pdfModalOpen: !!this.state.pdfModal,
+      pdfModalUrl: (this.state.pdfModal && this.state.pdfModal.url) || '',
+      pdfModalTitle: (this.state.pdfModal && this.state.pdfModal.title) || 'PDF',
+      closePdf: () => this.setState({ pdfModal: null }),
       stopClick: (e) => e.stopPropagation(),
       pauseRoll: ()=>{ this._paused=true; this.setState({paused:true}); },
       resumeRoll: ()=>{ this._paused=false; this.setState({paused:false}); },
