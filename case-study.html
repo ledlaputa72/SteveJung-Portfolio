@@ -559,7 +559,7 @@ const CASES = [
      {n:'2',title:'Claude Design — UI 목업',body:'HTML 레퍼런스로 내보내 디자인 기준선 확보.'},
      {n:'3',title:'Cursor로 구현',body:'React / Next.js 코드베이스를 AI 페어링으로 작성.',hl:true},
      {n:'4',title:'GitHub → Vercel 배포',body:'CI/CD로 실사용 URL까지 연결하고 팀에 배포.'}],
-   callout:'stevejung-portfolio.vercel.app',
+   callout:'stevejung.dev',
    results:[{value:'3',label:'사내 업무 자동화 앱'},{value:'3',label:'개인 · Lab 프로젝트'},{value:'15min',label:'스펙시트 검수 (기존 3시간)'}],
    gallery:['Claude Design 작업 파일','Cursor AI 세션','GitHub 레포'],
    skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
@@ -862,7 +862,7 @@ class Component extends DCLogic {
           codeD1: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1',
           codeD2: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2',
           status: b.status || (b.group||'').toUpperCase(),
-          siteLink: b.link || c.callout || 'stevejung-portfolio.vercel.app',
+          siteLink: b.link || c.callout || 'stevejung.dev',
           siteLabel: (b.link || c.callout) ? 'Visit site' : 'Portfolio site'
         });
       }),
@@ -885,7 +885,7 @@ class Component extends DCLogic {
           go: ()=>this._scrollTo(target)
         });
       }),
-      slideLink: ((c.apps||[])[this.state.slide]||{}).link || c.callout || 'stevejung-portfolio.vercel.app',
+      slideLink: ((c.apps||[])[this.state.slide]||{}).link || c.callout || 'stevejung.dev',
       slideLinkLabel: ((c.apps||[])[this.state.slide]||{}).link ? 'Visit site' : 'Portfolio site',
       appList: (c.apps||[]).map((a,k)=>Object.assign({}, a, {
         no: String(k+1).padStart(2,'0'),
@@ -898,7 +898,7 @@ class Component extends DCLogic {
         dotW: k===this.state.slide ? '68px' : '14px',
         dotBg: k===this.state.slide ? 'rgba(236,233,226,.22)' : 'rgba(236,233,226,.3)',
         select: ()=>this.setState({slide:k}, ()=>this._glitchTitle()),
-        siteLink: a.link || 'stevejung-portfolio.vercel.app',
+        siteLink: a.link || 'stevejung.dev',
         siteLabel: a.link ? 'Visit site' : 'Portfolio site',
         go: ()=>this._scrollTo('app-'+a.key)
       })),
