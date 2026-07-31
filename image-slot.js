@@ -568,7 +568,7 @@
       this._subFn = () => this._render();
       // Shadow-DOM listeners live with the shadow DOM — bound once here so
       // disconnect/reconnect (e.g. React remount) doesn't stack handlers.
-      this._empty.addEventListener('click', () => this._input.click());
+      this._empty.addEventListener('click', () => { if (this.hasAttribute('data-editable')) this._input.click(); });
       root.addEventListener('click', (e) => {
         const act = e.target && e.target.getAttribute && e.target.getAttribute('data-act');
         if (!act) return;
@@ -1070,10 +1070,11 @@
       this._ring.style.borderRadius = mask ? '' : radius;
       this._ring.style.display = mask ? 'none' : '';
 
-      // Controls and reframe entry gate on this so share links stay read-only.
-      // This deployed copy runs standalone (no host bridge), so the slot is
-      // always locally editable — click/drag/replace should always work.
-      const editable = true;
+      // Public portfolio build: slots are display-only. Images are set via the
+      // `src` attribute in the HTML, so the Replace/Edit controls stay hidden and
+      // the slot is non-interactive (no click-to-replace, no drag-to-reframe).
+      // Add an `allow-edit` attribute to a slot to opt back into the controls.
+      const editable = this.hasAttribute('allow-edit');
       this.toggleAttribute('data-editable', editable);
       this._sub.style.display = editable ? '' : 'none';
 
