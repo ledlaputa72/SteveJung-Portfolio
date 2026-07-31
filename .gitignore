@@ -2,7 +2,3 @@
 node_modules/
 .vercel
 .claude/
-
-# Local PDF reference material stays out of the repo, but the resume is served on the site.
-pdf/*
-!pdf/Steve-Jung-Resume.pdf
