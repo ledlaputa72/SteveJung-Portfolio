@@ -166,7 +166,7 @@
             </sc-for>
           </div>
           <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:30px">
-            <a href="https://{{ a.siteLink }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border-radius:999px;padding:13px 22px" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></a>
+            <a href="https://{{ a.siteUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border-radius:999px;padding:13px 22px" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></a>
             <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim)">{{ a.siteLink }}</span>
           </div>
         </div>
@@ -306,7 +306,7 @@ const CASES = [
   {anchor:'case-1',num:'01',short:'AVYCON Renewal',cats:['Web Dev','UX'],
    banners:[
      {key:'home',group:'Main Site · Home',name:'홈 · 글로벌 랜딩',short:'브랜드 히어로 · 제품 하이라이트 · 리드 폼까지 단일 CMS 위에서 4개 언어로 동작하는 메인 페이지.',
-      stack:'Wix Studio · Velo · Multilingual CMS', link:'www.avycon.com/home-test-2',
+      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',
       body:'레거시 PHP 홈을 브랜드 히어로 · 제품 하이라이트 · 리드 캡처가 하나의 흐름으로 이어지는 랜딩으로 재설계했습니다. EN / KO / JA / ES가 각각 독립 도메인으로 흩어져 있던 구조를 단일 CMS 위로 통합해, 한 번의 콘텐츠 업데이트가 4개 언어에 동일하게 반영됩니다.',
       points:['4개 언어를 단일 CMS · 단일 도메인 구조로 통합','히어로 → 제품 → 솔루션 → 문의로 이어지는 리드 전환 동선','메타태그 · canonical · 구조화 데이터를 회사 최초로 구축'],
       tags:['Landing','Multilingual','SEO','Lead Gen']},
@@ -326,7 +326,7 @@ const CASES = [
       points:['100+ SKU를 CMS 컬렉션으로 정규화 · 속성 스키마 정의','main · sub · focal_length · size 멀티 필터 구현','5-SKU 스펙 비교 도구 · 페이지네이션 직접 개발','3-depth 동적 라우팅으로 제품 URL과 SEO 확보'],
       tags:['CMS','Velo','Filtering','Product Data']},
      {key:'structure',group:'Architecture',name:'사이트 구조 & 다국어 설계',short:'3-depth 메가메뉴, 4개 언어 통합 구조, SEO 인프라까지 사이트 전반의 구성 설계.',
-      stack:'IA · Mega Menu · SEO · i18n', link:'www.avycon.com/home-test-2',
+      stack:'IA · Mega Menu · SEO · i18n', link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',
       body:'제품 · 솔루션 · 서포트 · 컴퍼니로 이어지는 전체 사이트 구조를 다시 세우고, 3-depth 메가메뉴로 탐색 경로를 단순화했습니다. 다국어는 언어별 사이트가 아니라 하나의 구조 위에서 언어 레이어로 동작하도록 설계했습니다.',
       points:['3-depth 메가메뉴 — 제품군 · 솔루션 · 서포트 진입 통합','언어별 도메인 분리 → 단일 구조 + 언어 레이어로 전환','서포트 · 다운로드 문서 허브와 문의 라우팅 설계','전 페이지 SEO 규칙(메타 · canonical · 구조화 데이터) 표준화'],
       tags:['Architecture','Mega Menu','i18n','SEO']}],
@@ -863,6 +863,7 @@ class Component extends DCLogic {
           codeD2: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2',
           status: b.status || (b.group||'').toUpperCase(),
           siteLink: b.link || c.callout || 'stevejung.dev',
+          siteUrl: b.linkUrl || b.link || c.callout || 'stevejung.dev',
           siteLabel: (b.link || c.callout) ? 'Visit site' : 'Portfolio site'
         });
       }),
