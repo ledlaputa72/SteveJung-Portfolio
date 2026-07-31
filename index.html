@@ -270,7 +270,7 @@
       <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:clamp(26px,4vw,36px)">
         <a href="https://linkedin.com/in/stevejung.dev" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:13px 22px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--fg)" style-hover="border-color:var(--accent);color:var(--accent)">LinkedIn ↗</a>
         <a href="mailto:steve@stevejung.dev" style="display:inline-flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:999px;padding:13px 22px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;color:var(--fg)" style-hover="border-color:var(--accent);color:var(--accent)">Email ↗</a>
-        <a href="./pdf/Steve-Jung-Resume.pdf" download="Steve Jung Resume.pdf" style="display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:13px 22px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;background:var(--accent);color:#0a0a0b;font-weight:700" style-hover="background:var(--fg)">Resume PDF ↓</a>
+        <a id="resume-open" href="./pdf/Steve-Jung-Resume.pdf" download="Steve Jung Resume.pdf" style="display:inline-flex;align-items:center;gap:10px;border-radius:999px;padding:13px 22px;font-family:var(--mono);font-size:12.5px;letter-spacing:.06em;background:var(--accent);color:#0a0a0b;font-weight:700;cursor:pointer" style-hover="background:var(--fg)">Resume PDF ↓</a>
       </div>
       <div style="margin-top:clamp(34px,5vw,46px);padding-top:24px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)">Availability</div>
       <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:16px">
@@ -318,6 +318,22 @@
   </section>
 
 </main>
+
+<!-- RESUME MODAL — in-browser PDF preview with download -->
+<div id="resume-modal" role="dialog" aria-modal="true" aria-label="Steve Jung Resume" aria-hidden="true" style="position:fixed;inset:0;z-index:2000;display:none;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px);background:rgba(5,5,6,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)">
+  <div style="position:relative;width:min(940px,100%);height:min(90vh,100%);display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(14px,2vw,18px);border-bottom:1px solid var(--line);flex:none">
+      <span style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">Steve Jung — Resume</span>
+      <div style="display:flex;align-items:center;gap:10px">
+        <a href="./pdf/Steve-Jung-Resume.pdf" download="Steve Jung Resume.pdf" style="display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;background:var(--accent);color:#0a0a0b;font-weight:700" style-hover="background:var(--fg)">Download ↓</a>
+        <button id="resume-close" type="button" aria-label="Close" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--fg);font-family:var(--mono);font-size:16px;line-height:1;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent)">✕</button>
+      </div>
+    </div>
+    <div style="flex:1;min-height:0;background:#525659">
+      <iframe id="resume-frame" title="Steve Jung Resume" src="about:blank" style="width:100%;height:100%;border:0;display:block"></iframe>
+    </div>
+  </div>
+</div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d6ff3f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#d6ff3f&quot;,&quot;#49f0ff&quot;,&quot;#ff5c39&quot;,&quot;#c8a2ff&quot;,&quot;#ffffff&quot;],&quot;section&quot;:&quot;Look&quot;},&quot;filmGrain&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;neuralField&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Look&quot;},&quot;object1&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;torusKnot&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;torusKnot&quot;,&quot;torus&quot;,&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;grid&quot;,&quot;network&quot;],&quot;section&quot;:&quot;3D · Scene 1 (Manifesto)&quot;},&quot;glb1&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D · Scene 1 (Manifesto)&quot;},&quot;glbScale1&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D · Scene 1 (Manifesto)&quot;},&quot;object2&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;grid&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;grid&quot;,&quot;torusKnot&quot;,&quot;torus&quot;,&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;network&quot;],&quot;section&quot;:&quot;3D · Scene 2 (Work)&quot;},&quot;glb2&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D · Scene 2 (Work)&quot;},&quot;glbScale2&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D · Scene 2 (Work)&quot;},&quot;object3&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;network&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;network&quot;,&quot;torusKnot&quot;,&quot;torus&quot;,&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;grid&quot;],&quot;section&quot;:&quot;3D · Scene 3 (Closing)&quot;},&quot;glb3&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D · Scene 3 (Closing)&quot;},&quot;glbScale3&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D · Scene 3 (Closing)&quot;}}">
 class Component extends DCLogic {
@@ -330,7 +346,35 @@ class Component extends DCLogic {
     this._scroll();
     this._reveal();
     this._glitch();
+    this._resumeModal();
     setTimeout(()=>{ this._rowGlitch(); this._idleGlitch(); }, 400);
+  }
+  _resumeModal(){
+    const modal = document.getElementById('resume-modal');
+    const openBtn = document.getElementById('resume-open');
+    const closeBtn = document.getElementById('resume-close');
+    const frame = document.getElementById('resume-frame');
+    const PDF = './pdf/Steve-Jung-Resume.pdf';
+    if (!modal || !openBtn) return;
+    const open = (e)=>{
+      if (e) e.preventDefault();
+      // Lazy-load the PDF only on first open so it doesn't cost the initial paint.
+      if (frame && frame.getAttribute('src') !== PDF) frame.setAttribute('src', PDF);
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    };
+    const close = ()=>{
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    };
+    openBtn.addEventListener('click', open);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    // Backdrop click (only the overlay itself, not the panel) closes.
+    modal.addEventListener('click', (e)=>{ if (e.target === modal) close(); });
+    this._onResumeKey = (e)=>{ if (e.key === 'Escape' && modal.style.display === 'flex') close(); };
+    document.addEventListener('keydown', this._onResumeKey);
   }
   componentDidUpdate(prev){
     if (this.props.accentColor && prev.accentColor !== this.props.accentColor)
@@ -353,6 +397,7 @@ class Component extends DCLogic {
     if (this._rows) this._rows.forEach(r=>r.removeEventListener('mouseenter', this._rowHandler));
     clearTimeout(this._idleTimer); clearTimeout(this._idleWait);
     if (this._onIdleScroll) removeEventListener('scroll', this._onIdleScroll);
+    if (this._onResumeKey) removeEventListener('keydown', this._onResumeKey);
     if (this._ioCenter) this._ioCenter.disconnect();
     if (this._io) this._io.disconnect();
     if (this._io2) this._io2.disconnect();
