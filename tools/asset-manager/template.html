@@ -1,0 +1,524 @@
+<title>이미지 에셋 매니저 — Steve Jung Portfolio</title>
+<style>
+  :root{
+    --bg:#0a0a0b; --panel:#111114; --panel2:#16161a; --fg:#ece9e2; --muted:#8b887e; --dim:#5c5a53;
+    --line:rgba(236,233,226,.12); --line2:rgba(236,233,226,.07);
+    --accent:#d6ff3f; --accent-ink:#0a0a0b; --danger:#e0554a; --pending:#e8a33d;
+    --mono:ui-monospace,'SF Mono','Space Mono',Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,'Malgun Gothic','Apple SD Gothic Neo',sans-serif;
+    --radius:10px;
+  }
+  @media (prefers-color-scheme: light){
+    :root{
+      --bg:#f7f6f1; --panel:#ffffff; --panel2:#f0efe9; --fg:#18170f; --muted:#6b6a5d; --dim:#a09e91;
+      --line:rgba(20,18,8,.12); --line2:rgba(20,18,8,.06); --accent:#7a9400; --accent-ink:#ffffff; --pending:#b06f00;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0a0a0b; --panel:#111114; --panel2:#16161a; --fg:#ece9e2; --muted:#8b887e; --dim:#5c5a53;
+    --line:rgba(236,233,226,.12); --line2:rgba(236,233,226,.07); --accent:#d6ff3f; --accent-ink:#0a0a0b; --pending:#e8a33d;
+  }
+  :root[data-theme="light"]{
+    --bg:#f7f6f1; --panel:#ffffff; --panel2:#f0efe9; --fg:#18170f; --muted:#6b6a5d; --dim:#a09e91;
+    --line:rgba(20,18,8,.12); --line2:rgba(20,18,8,.06); --accent:#7a9400; --accent-ink:#ffffff; --pending:#b06f00;
+  }
+  *{box-sizing:border-box}
+  body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--sans); font-size:14px; line-height:1.5; -webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  button{font:inherit}
+  .topbar{
+    position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line); padding:16px clamp(14px,3vw,32px) 12px;
+  }
+  .top-row{display:flex; align-items:baseline; justify-content:space-between; gap:16px; flex-wrap:wrap}
+  .eyebrow{font-family:var(--mono); font-size:10.5px; letter-spacing:.18em; text-transform:uppercase; color:var(--accent); margin:0 0 5px}
+  h1{font-size:clamp(18px,2.2vw,22px); font-weight:700; margin:0; letter-spacing:-.01em}
+  .stat{font-family:var(--mono); font-size:11.5px; color:var(--muted); text-align:right}
+  .stat b{color:var(--fg); font-weight:700}
+  .stat .pending-n{color:var(--pending)}
+  .syncline{font-family:var(--mono); font-size:10px; color:var(--dim); margin-top:3px}
+  .controls{display:flex; gap:10px; margin-top:12px; flex-wrap:wrap; align-items:center}
+  .search-wrap{position:relative; flex:1 1 220px; min-width:180px}
+  .search-wrap svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); opacity:.5; pointer-events:none}
+  #search{width:100%; background:var(--panel); border:1px solid var(--line); color:var(--fg); border-radius:999px; padding:8px 14px 8px 32px; font:13px/1.3 var(--sans); outline:none}
+  #search:focus{border-color:var(--accent)}
+  #search::placeholder{color:var(--dim)}
+  .chips{display:flex; gap:6px; flex-wrap:wrap}
+  .chip{font-family:var(--mono); font-size:11px; background:var(--panel); border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:6px 11px; cursor:pointer; white-space:nowrap}
+  .chip:hover{border-color:var(--accent); color:var(--fg)}
+  .chip[aria-pressed="true"]{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:700}
+  .exportbar{display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap}
+  .btn{
+    font-family:var(--mono); font-size:11.5px; letter-spacing:.03em; background:var(--accent); color:var(--accent-ink);
+    border:0; border-radius:8px; padding:8px 14px; cursor:pointer; font-weight:700;
+    white-space:nowrap; flex:0 0 auto;
+  }
+  .btn.ghost{background:transparent; border:1px solid var(--line); color:var(--fg); font-weight:600}
+  .btn:disabled{opacity:.4; cursor:not-allowed}
+  .btn:focus-visible,#search:focus-visible,.chip:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+  .hint{font-size:11.5px; color:var(--dim); flex-basis:100%}
+  main{padding:10px clamp(14px,3vw,32px) 70px; max-width:1280px; margin:0 auto}
+  .group{margin-top:34px}
+  .group-head{display:flex; align-items:baseline; justify-content:space-between; gap:10px; padding:8px 0 10px; border-bottom:1px solid var(--line); position:sticky; top:128px; background:var(--bg); z-index:10}
+  .group-title{font-size:15px; font-weight:700}
+  .group-stat{font-family:var(--mono); font-size:11px; color:var(--dim)}
+  .group-stat b{color:var(--accent)}
+  .split{display:grid; grid-template-columns:1.15fr 1fr; gap:18px; margin-top:12px; align-items:start}
+  @media (max-width:860px){ .split{grid-template-columns:1fr} }
+  .pane-label{font-family:var(--mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--dim); margin-bottom:6px}
+  .table-wrap{overflow-x:auto; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel)}
+  table{width:100%; border-collapse:collapse; min-width:420px}
+  thead th{text-align:left; font-family:var(--mono); font-size:9.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--dim); font-weight:600; padding:8px 10px; border-bottom:1px solid var(--line); background:var(--panel2)}
+  tbody tr{border-top:1px solid var(--line2); cursor:pointer; transition:background .1s}
+  tbody tr:hover{background:var(--panel2)}
+  tbody tr.selected{background:color-mix(in srgb, var(--accent) 16%, var(--panel))}
+  tbody tr.done{opacity:.55}
+  td{padding:8px 10px; vertical-align:top}
+  .code-pill{font-family:var(--mono); font-size:12px; white-space:nowrap}
+  .desc{color:var(--muted); font-size:12px}
+  .assigned-chip{
+    display:inline-flex; align-items:center; gap:5px; margin-top:5px; font-family:var(--mono); font-size:10.5px;
+    background:var(--panel2); border:1px solid var(--accent); color:var(--accent); border-radius:6px; padding:2px 6px;
+  }
+  .assigned-chip.pending{border-color:var(--pending); color:var(--pending)}
+  .assigned-chip button{background:none; border:0; color:inherit; cursor:pointer; font-size:11px; line-height:1; padding:0}
+  .pending-tag{display:inline-block; margin-left:4px; font-family:var(--mono); font-size:9px; color:var(--pending); border:1px solid var(--pending); border-radius:4px; padding:0 4px; vertical-align:1px}
+  .locked-badge{display:inline-block; font-family:var(--mono); font-size:10px; color:var(--accent); border:1px solid var(--accent); border-radius:999px; padding:2px 8px}
+  .gallery{display:grid; grid-template-columns:repeat(auto-fill,minmax(108px,1fr)); gap:8px; border:1px solid var(--line); border-radius:var(--radius); background:var(--panel); padding:10px}
+  .thumb{position:relative; cursor:pointer; border-radius:7px; overflow:hidden; border:1.5px solid var(--line); background:var(--panel2); aspect-ratio:4/3}
+  .thumb img{width:100%; height:100%; object-fit:cover; display:block}
+  .thumb .fname{position:absolute; left:0; right:0; bottom:0; background:rgba(0,0,0,.6); color:#fff; font-family:var(--mono); font-size:9px; padding:3px 4px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+  .thumb.usable{outline:2px solid var(--accent)}
+  .thumb.zoom-hint:hover{outline:2px solid var(--muted)}
+  .thumb .used-badge{position:absolute; top:3px; right:3px; background:var(--accent); color:var(--accent-ink); font-family:var(--mono); font-size:8.5px; border-radius:4px; padding:1px 4px; font-weight:700; max-width:calc(100% - 6px); overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .empty-gallery{color:var(--dim); font-family:var(--mono); font-size:12px; padding:20px; text-align:center; border:1px dashed var(--line); border-radius:var(--radius)}
+  .lightbox{position:fixed; inset:0; background:rgba(0,0,0,.82); display:none; align-items:center; justify-content:center; z-index:100; padding:30px; flex-direction:column; gap:14px}
+  .lightbox.open{display:flex}
+  .lightbox img{max-width:min(90vw,760px); max-height:70vh; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,.5)}
+  .lightbox .cap{color:#fff; font-family:var(--mono); font-size:12px; text-align:center}
+  .lightbox .close{position:absolute; top:20px; right:24px; background:none; border:0; color:#fff; font-size:26px; cursor:pointer; line-height:1}
+  #exportModal{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:110; padding:20px}
+  #exportModal.open{display:flex}
+  #confirmModal{position:fixed; inset:0; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:120; padding:20px}
+  #confirmModal.open{display:flex}
+  .modal-card{background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:20px; max-width:640px; width:100%; max-height:80vh; display:flex; flex-direction:column; gap:12px}
+  .modal-card h2{margin:0; font-size:15px}
+  .modal-card textarea{
+    flex:1; min-height:260px; background:var(--panel2); border:1px solid var(--line); border-radius:8px; color:var(--fg);
+    font-family:var(--mono); font-size:12px; padding:10px; resize:vertical;
+  }
+  .toast{
+    position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:130;
+    background:var(--panel); border:1px solid var(--accent); color:var(--fg); border-radius:10px;
+    padding:10px 16px; font-size:12.5px; font-family:var(--mono); box-shadow:0 8px 30px rgba(0,0,0,.35);
+    opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  .toast.show{opacity:1}
+  footer{max-width:1280px; margin:10px auto 50px; padding:0 clamp(14px,3vw,32px); color:var(--dim); font-size:12px; font-family:var(--mono); line-height:1.7}
+</style>
+
+<div class="topbar">
+  <div class="top-row">
+    <div>
+      <p class="eyebrow">STEVE JUNG PORTFOLIO · IMAGE ASSET MANAGER</p>
+      <h1>이미지 에셋 매니저</h1>
+    </div>
+    <div>
+      <div class="stat">코드 <b id="totalCodes">0</b>개 · 원본 이미지 <b id="totalImgs">0</b>개 · 배정 <b id="assignedCount">0</b>개<span id="pendingStat"></span></div>
+      <div class="syncline">동기화 기준: 커밋 __COMMIT__ · __BUILT_AT__ 게시</div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      <input id="search" type="search" placeholder="코드, 파일명, 문구로 검색" autocomplete="off">
+    </div>
+    <div class="chips" id="chips"></div>
+  </div>
+  <div class="exportbar">
+    <button class="btn" id="applyBtn">✓ 적용하기 — 클립보드 복사</button>
+    <button class="btn ghost" id="exportBtn">목록만 미리보기</button>
+    <button class="btn ghost" id="clearBtn">전체 배정 초기화</button>
+    <button class="btn ghost" id="resyncBtn" title="이 브라우저에서만 수정한 배정(미적용 표시)을 버리고, 사이트 코드(case-study.html)에 실제로 반영되어 있는 상태로 되돌립니다.">⟲ 사이트 상태로 재동기화</button>
+    <button class="btn ghost" id="reloadBtn" title="페이지를 새로고침합니다. Claude가 이 페이지를 다시 게시했다면 최신 사이트 상태가 자동으로 반영됩니다 — 직접 수정한 미적용 배정은 그대로 유지됩니다.">⟳ 새로고침</button>
+    <span class="hint">왼쪽 코드 행을 클릭 → 오른쪽 썸네일을 클릭하면 그 코드에 배정됩니다. 코드 옆 <b style="color:var(--accent)">초록 칩</b>은 사이트에 실제 반영된 배정, <b style="color:var(--pending)">주황 칩(미적용)</b>은 이 브라우저에서만 수정한 배정입니다. "적용하기"로 복사해 Claude 채팅에 붙여넣으면 사이트에 반영됩니다.</span>
+  </div>
+</div>
+
+<main id="main"></main>
+
+<div class="lightbox" id="lightbox">
+  <button class="close" id="lightboxClose">&times;</button>
+  <img id="lightboxImg" alt="">
+  <div class="cap" id="lightboxCap"></div>
+</div>
+
+<div id="exportModal">
+  <div class="modal-card">
+    <h2 id="exportModalTitle">배정 목록</h2>
+    <p id="exportModalNote" style="display:none;margin:-6px 0 4px;font-size:13px;line-height:1.6;color:#3a7d3a;background:#eef8ee;border:1px solid #cbe8cb;border-radius:8px;padding:10px 12px">
+      ✅ 클립보드에 복사됐습니다. 이 창을 닫고 <b>Claude와의 채팅</b>으로 돌아가 붙여넣기(Ctrl/Cmd+V) 하면, Claude가 코드에 반영하고 커밋 · 푸시까지 진행해서 사이트에 적용합니다.
+      (이 아티팩트는 독립된 웹페이지라 브라우저에서 직접 git에 접근할 수 없어요 — 붙여넣기가 실제 "적용" 단계입니다.)
+    </p>
+    <textarea id="exportText" readonly></textarea>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn ghost" id="exportClose">닫기</button>
+      <button class="btn" id="exportCopy">클립보드에 다시 복사</button>
+    </div>
+  </div>
+</div>
+
+<div id="confirmModal">
+  <div class="modal-card" style="max-width:420px">
+    <p id="confirmModalMsg" style="margin:0;font-size:13.5px;line-height:1.6"></p>
+    <div style="display:flex;gap:8px;justify-content:flex-end">
+      <button class="btn ghost" id="confirmModalCancel">취소</button>
+      <button class="btn" id="confirmModalOk">확인</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer>
+  이 페이지의 코드 목록과 배정 상태는 저장소의 case-study.html · index.html에서 자동 생성됩니다 (커밋 __COMMIT__ 기준) ·
+  index.html 카드 이미지 7개는 이미 사이트에 연결되어 있어 회색으로 표시됩니다 ·
+  직접 수정한 배정은 "미적용"으로 표시되며 이 브라우저에만 저장됩니다 — "적용하기" 후 Claude 채팅에 붙여넣어야 실제 코드 반영 · 커밋 · 배포가 진행됩니다.
+</footer>
+
+<script>
+  const CODE_GROUPS = __CODE_GROUPS__;
+  const RAW_IMAGES = __RAW_IMAGES__;
+  const SEED_ASSIGNMENTS = __SEED_ASSIGNMENTS__;
+  const CASE_KEY_MAP = __CASE_KEY_MAP__;
+  const STATE_VERSION = '__STATE_VERSION__';
+  const DONE_CODES = new Set(CODE_GROUPS[0].rows.map(r => r.code));
+
+  // ── State model ─────────────────────────────────────────────────────────
+  // Effective state = SEED_ASSIGNMENTS (what's actually wired into the site,
+  // regenerated from the repo on every publish) + a local OVERLAY of edits
+  // made in this browser ({code: {file, case}} to assign, {code: null} to
+  // unassign). Only the overlay is persisted, so a republish + refresh always
+  // shows the new site state — the old design persisted a full copy of the
+  // assignments, which permanently shadowed every later publish and made the
+  // refresh/resync buttons useless.
+  const OVERLAY_KEY = 'om-asset-overlay-v2';
+  const VERSION_KEY = 'om-asset-seed-version';
+  const LEGACY_KEY = 'om-asset-assignments';
+
+  let overlay = {};
+  try {
+    const legacy = localStorage.getItem(LEGACY_KEY);
+    const storedOverlay = localStorage.getItem(OVERLAY_KEY);
+    if (storedOverlay !== null) {
+      overlay = JSON.parse(storedOverlay) || {};
+    } else if (legacy !== null) {
+      // One-time migration from the old full-copy format: keep only entries
+      // that differ from the current site state (those are genuinely local,
+      // un-applied edits); everything else is represented by SEED already.
+      // A code absent from the legacy copy is NOT treated as an unassign —
+      // the old page simply may not have known that code existed.
+      const old = JSON.parse(legacy) || {};
+      for (const [code, a] of Object.entries(old)) {
+        const seed = SEED_ASSIGNMENTS[code];
+        if (a && a.file && !(seed && seed.file === a.file)) overlay[code] = { file: a.file, case: a.case };
+      }
+    }
+  } catch (e) { overlay = {}; }
+
+  // On every load, drop overlay entries the site has caught up with (the
+  // edit was applied via chat and is now in SEED) and clear the legacy key.
+  for (const [code, a] of Object.entries(overlay)) {
+    const seed = SEED_ASSIGNMENTS[code];
+    if (a === null && !seed) delete overlay[code];
+    else if (a && seed && seed.file === a.file) delete overlay[code];
+  }
+  try {
+    localStorage.removeItem(LEGACY_KEY);
+    localStorage.setItem(OVERLAY_KEY, JSON.stringify(overlay));
+    localStorage.setItem(VERSION_KEY, STATE_VERSION);
+  } catch (e) {}
+
+  function persist(){
+    try { localStorage.setItem(OVERLAY_KEY, JSON.stringify(overlay)); } catch(e) {}
+  }
+  function getAssignment(code){
+    if (Object.prototype.hasOwnProperty.call(overlay, code)) return overlay[code]; // may be null = unassigned locally
+    return SEED_ASSIGNMENTS[code] || null;
+  }
+  function isPending(code){
+    return Object.prototype.hasOwnProperty.call(overlay, code);
+  }
+  function setAssignment(code, val){
+    const seed = SEED_ASSIGNMENTS[code];
+    const same = val === null ? !seed : (seed && seed.file === val.file);
+    if (same) delete overlay[code]; else overlay[code] = val;
+    persist();
+  }
+  function effectiveEntries(){
+    const out = {};
+    for (const g of CODE_GROUPS) for (const r of g.rows) {
+      const a = getAssignment(r.code);
+      if (a) out[r.code] = a;
+    }
+    return out;
+  }
+
+  let selectedCode = null;
+
+  function customConfirm(message, onConfirm){
+    const modal = document.getElementById('confirmModal');
+    document.getElementById('confirmModalMsg').textContent = message;
+    modal.classList.add('open');
+    const okBtn = document.getElementById('confirmModalOk');
+    const cancelBtn = document.getElementById('confirmModalCancel');
+    const cleanup = () => {
+      modal.classList.remove('open');
+      okBtn.removeEventListener('click', onOk);
+      cancelBtn.removeEventListener('click', onCancel);
+    };
+    const onOk = () => { cleanup(); onConfirm(); };
+    const onCancel = () => cleanup();
+    okBtn.addEventListener('click', onOk);
+    cancelBtn.addEventListener('click', onCancel);
+  }
+
+  let toastTimer = 0;
+  function toast(msg){
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+
+  const main = document.getElementById('main');
+  const chips = document.getElementById('chips');
+  const search = document.getElementById('search');
+
+  document.getElementById('totalCodes').textContent = CODE_GROUPS.reduce((a,g)=>a+g.rows.length,0);
+  document.getElementById('totalImgs').textContent = Object.values(RAW_IMAGES).reduce((a,v)=>a+v.length,0);
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+
+  function updateCounts(){
+    const eff = effectiveEntries();
+    document.getElementById('assignedCount').textContent = Object.keys(eff).length;
+    const pendingN = Object.keys(overlay).length;
+    document.getElementById('pendingStat').innerHTML = pendingN
+      ? ' · <b class="pending-n">미적용 ' + pendingN + '개</b>' : '';
+  }
+
+  function render(){
+    const q = search.value.trim().toLowerCase();
+    const activeChip = chips.querySelector('.chip[aria-pressed="true"]');
+    const activeKey = activeChip ? activeChip.dataset.key : 'all';
+
+    main.innerHTML = '';
+    CODE_GROUPS.forEach(g => {
+      if (activeKey !== 'all' && g.key !== activeKey) return;
+      const rawKey = CASE_KEY_MAP[g.key];
+      const rawList = RAW_IMAGES[rawKey] || [];
+
+      const rows = g.rows.filter(r => !q ||
+        r.code.toLowerCase().includes(q) || r.location.toLowerCase().includes(q) || r.desc.toLowerCase().includes(q));
+      const imgs = rawList.filter(im => !q || im.file.toLowerCase().includes(q));
+      if (!rows.length && !imgs.length && q) return;
+
+      const section = document.createElement('section');
+      section.className = 'group';
+      section.dataset.groupKey = g.key;
+
+      const isIdx = g.key === 'idx';
+      section.innerHTML =
+        '<div class="group-head"><div class="group-title">' + escapeHtml(g.title) + '</div>' +
+        '<div class="group-stat">코드 <b>' + g.rows.length + '</b> · 원본 이미지 <b>' + rawList.length + '</b></div></div>' +
+        '<div class="split">' +
+          '<div><div class="pane-label">코드 (클릭해서 선택)</div><div class="table-wrap"><table><thead><tr><th>코드</th><th>설명</th></tr></thead><tbody></tbody></table></div></div>' +
+          '<div><div class="pane-label">' + (isIdx ? '연결된 원본 이미지 (참고용)' : '사용 가능한 원본 이미지 (클릭해서 배정 또는 확대)') + '</div><div class="gallery"></div></div>' +
+        '</div>';
+
+      const tbody = section.querySelector('tbody');
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        const isDone = isIdx && DONE_CODES.has(r.code);
+        tr.dataset.code = r.code;
+        if (isDone) tr.classList.add('done');
+        if (r.code === selectedCode) tr.classList.add('selected');
+        const assigned = getAssignment(r.code);
+        const pending = isPending(r.code);
+        tr.innerHTML =
+          '<td class="code-pill">' + escapeHtml(r.code) +
+            (isDone ? '<br><span class="locked-badge">이미 연결됨</span>' :
+             assigned ? '<div class="assigned-chip' + (pending ? ' pending' : '') + '"><span>' + escapeHtml(assigned.file) + '</span>' +
+                        (pending ? '<span class="pending-tag">미적용</span>' : '') +
+                        '<button data-unassign="' + escapeHtml(r.code) + '" title="배정 해제">&times;</button></div>' :
+             pending ? '<div class="assigned-chip pending"><span>배정 해제됨</span><span class="pending-tag">미적용</span>' +
+                       '<button data-restore="' + escapeHtml(r.code) + '" title="사이트 상태로 복원">↺</button></div>' : '') +
+          '</td>' +
+          '<td class="desc">' + escapeHtml(r.location.replace(/^.*—\s*/,'')) + ' · ' + escapeHtml(r.desc) + '</td>';
+        tbody.appendChild(tr);
+      });
+
+      const galEl = section.querySelector('.gallery');
+      if (!imgs.length) {
+        galEl.outerHTML = '<div class="empty-gallery">이 케이스에는 아직 업로드된 원본 이미지가 없습니다.</div>';
+      } else {
+        const eff = effectiveEntries();
+        imgs.forEach(im => {
+          const div = document.createElement('div');
+          div.className = 'thumb zoom-hint';
+          div.dataset.file = im.file;
+          const usedFor = Object.entries(eff).find(([c,v]) => v.file === im.file && v.case === g.key);
+          if (usedFor) div.classList.add('usable');
+          div.innerHTML = '<img src="data:image/jpeg;base64,' + im.b64 + '" alt="' + escapeHtml(im.file) + '" loading="lazy">' +
+            '<div class="fname">' + escapeHtml(im.file) + '</div>' +
+            (usedFor ? '<div class="used-badge">' + escapeHtml(usedFor[0]) + '</div>' : '');
+          galEl.appendChild(div);
+        });
+      }
+
+      main.appendChild(section);
+    });
+    updateCounts();
+  }
+
+  chips.innerHTML = '<button class="chip" data-key="all" aria-pressed="true">전체</button>' +
+    CODE_GROUPS.map(g => '<button class="chip" data-key="' + g.key + '" aria-pressed="false">' +
+      escapeHtml(g.title.replace(/^index\.html — /,'').replace(/^Case (\d+) — .*/,'Case $1')) + '</button>').join('');
+
+  chips.addEventListener('click', e => {
+    const btn = e.target.closest('.chip');
+    if (!btn) return;
+    chips.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', c === btn ? 'true' : 'false'));
+    render();
+  });
+  search.addEventListener('input', render);
+
+  main.addEventListener('click', e => {
+    const unassignBtn = e.target.closest('[data-unassign]');
+    if (unassignBtn) {
+      setAssignment(unassignBtn.dataset.unassign, null);
+      render();
+      return;
+    }
+    const restoreBtn = e.target.closest('[data-restore]');
+    if (restoreBtn) {
+      delete overlay[restoreBtn.dataset.restore];
+      persist(); render();
+      return;
+    }
+    const row = e.target.closest('tbody tr');
+    if (row) {
+      if (row.classList.contains('done')) return;
+      selectedCode = (selectedCode === row.dataset.code) ? null : row.dataset.code;
+      render();
+      return;
+    }
+    const thumb = e.target.closest('.thumb');
+    if (thumb) {
+      const section = thumb.closest('.group');
+      const chipKey = section.dataset.groupKey;
+      if (selectedCode && chipKey !== 'idx') {
+        setAssignment(selectedCode, { file: thumb.dataset.file, case: chipKey });
+        selectedCode = null;
+        render();
+      } else {
+        const img = thumb.querySelector('img');
+        document.getElementById('lightboxImg').src = img.src;
+        document.getElementById('lightboxCap').textContent = thumb.dataset.file;
+        document.getElementById('lightbox').classList.add('open');
+      }
+    }
+  });
+
+  document.getElementById('lightboxClose').addEventListener('click', () => document.getElementById('lightbox').classList.remove('open'));
+  document.getElementById('lightbox').addEventListener('click', e => { if (e.target.id === 'lightbox') e.currentTarget.classList.remove('open'); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.getElementById('lightbox').classList.remove('open'); });
+
+  document.getElementById('clearBtn').addEventListener('click', () => {
+    customConfirm('화면의 모든 배정을 비웁니다 (사이트 코드는 바뀌지 않으며, 전부 "미적용 해제" 상태로 표시됩니다). 계속할까요?', () => {
+      overlay = {};
+      for (const code of Object.keys(SEED_ASSIGNMENTS)) overlay[code] = null;
+      persist(); render();
+    });
+  });
+
+  // Reload re-fetches whatever is currently published at this URL. Because
+  // only the local-edit overlay is persisted (not a full snapshot), a
+  // republished page's new site state shows up immediately after reload.
+  document.getElementById('reloadBtn').addEventListener('click', () => location.reload());
+
+  // Resync = discard local edits, show pure site state (SEED).
+  document.getElementById('resyncBtn').addEventListener('click', () => {
+    const pendingN = Object.keys(overlay).length;
+    if (!pendingN) { toast('이미 사이트 상태와 완전히 일치합니다 (미적용 수정 없음)'); return; }
+    customConfirm('이 브라우저에서만 수정한 배정 ' + pendingN + '건(미적용)을 버리고, 사이트에 실제 반영된 상태로 되돌립니다. 계속할까요?', () => {
+      overlay = {};
+      persist(); render();
+      toast('사이트 상태(코드 ' + Object.keys(SEED_ASSIGNMENTS).length + '개 배정)로 재동기화했습니다');
+    });
+  });
+
+  function buildExportText(){
+    const eff = effectiveEntries();
+    const lines = ['# 이미지 배정 목록 (' + Object.keys(eff).length + '개)', ''];
+    CODE_GROUPS.forEach(g => {
+      const entries = g.rows.filter(r => eff[r.code]);
+      if (!entries.length) return;
+      lines.push('## ' + g.title);
+      entries.forEach(r => lines.push(r.code + ' = ' + eff[r.code].file));
+      lines.push('');
+    });
+    return lines.join('\n');
+  }
+
+  function legacyCopy(text){
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly',''); ta.style.position='fixed'; ta.style.top='-1000px';
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    let ok = false; try { ok = document.execCommand('copy'); } catch(e) {}
+    document.body.removeChild(ta); return ok;
+  }
+  async function copyText(text){
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      try { await navigator.clipboard.writeText(text); return true; } catch(e) {}
+    }
+    return legacyCopy(text);
+  }
+
+  function openExportModal({ autoCopied }){
+    document.getElementById('exportText').value = buildExportText();
+    document.getElementById('exportModalTitle').textContent = autoCopied ? '적용 준비 완료' : '배정 목록 미리보기';
+    document.getElementById('exportModalNote').style.display = autoCopied ? 'block' : 'none';
+    document.getElementById('exportModal').classList.add('open');
+  }
+
+  document.getElementById('applyBtn').addEventListener('click', async () => {
+    if (!Object.keys(effectiveEntries()).length) { toast('아직 배정된 이미지가 없습니다. 코드를 클릭한 뒤 썸네일을 클릭해 배정해주세요.'); return; }
+    const ok = await copyText(buildExportText());
+    openExportModal({ autoCopied: ok });
+    if (!ok) {
+      const note = document.getElementById('exportModalNote');
+      note.style.display = 'block';
+      note.style.background = '#fdecea';
+      note.style.borderColor = '#f3c2bd';
+      note.style.color = '#8a2e24';
+      note.textContent = '⚠ 자동 복사에 실패했습니다. 아래 텍스트를 직접 선택(전체 선택)해서 복사한 뒤 Claude 채팅에 붙여넣어 주세요.';
+      const ta = document.getElementById('exportText'); ta.focus(); ta.select();
+    }
+  });
+  document.getElementById('exportBtn').addEventListener('click', () => openExportModal({ autoCopied: false }));
+  document.getElementById('exportClose').addEventListener('click', () => document.getElementById('exportModal').classList.remove('open'));
+  document.getElementById('exportCopy').addEventListener('click', async (e) => {
+    const ok = await copyText(document.getElementById('exportText').value);
+    e.target.textContent = ok ? '복사됨' : '복사 실패 — 텍스트를 직접 선택하세요';
+    if (!ok) { const ta = document.getElementById('exportText'); ta.focus(); ta.select(); }
+    setTimeout(() => { e.target.textContent = '클립보드에 다시 복사'; }, 1600);
+  });
+
+  render();
+</script>

@@ -2,3 +2,4 @@
 node_modules/
 .vercel
 .claude/
+tools/asset-manager/asset-manager.html
