@@ -188,10 +188,12 @@
             <sc-if value="{{ a.hasPdf }}" hint-placeholder-val="{{ false }}">
               <button onClick="{{ a.openPdf }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border:0;border-radius:999px;padding:13px 22px;cursor:pointer" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></button>
             </sc-if>
-            <sc-if value="{{ !a.hasPdf }}" hint-placeholder-val="{{ true }}">
+            <sc-if value="{{ a.hasSiteLink }}" hint-placeholder-val="{{ false }}">
               <a href="https://{{ a.siteUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border-radius:999px;padding:13px 22px" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></a>
             </sc-if>
-            <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim)">{{ a.siteLink }}</span>
+            <sc-if value="{{ a.hasCta }}" hint-placeholder-val="{{ false }}">
+              <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim)">{{ a.siteLink }}</span>
+            </sc-if>
           </div>
         </div>
         <div style="display:flex;flex-direction:column;gap:14px">
@@ -1091,6 +1093,8 @@ class Component extends DCLogic {
           status: b.status || (b.group||'').toUpperCase(),
           hasPdf: !!b.pdf,
           openPdf: () => { if (b.pdf) this.setState({ pdfModal: { url: docPath(...b.pdf), title: b.name } }); },
+          hasSiteLink: !b.pdf && !!(b.link || c.callout),
+          hasCta: !!(b.pdf || b.link || c.callout),
           siteLink: b.pdf ? 'PDF Document' : (b.link || c.callout || 'stevejung.dev'),
           siteUrl: b.linkUrl || b.link || c.callout || 'stevejung.dev',
           siteLabel: b.linkLabel || ((b.link || c.callout) ? 'Visit site' : 'Portfolio site')
