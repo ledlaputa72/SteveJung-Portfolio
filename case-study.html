@@ -1105,7 +1105,10 @@ class Component extends DCLogic {
           hasD1: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'],
           hasD2: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2'],
           hasDetails: !!(IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] || IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']),
-          detailCols: (IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] && IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']) ? '1fr 1fr' : '1fr',
+          // A lone detail tile gets minmax(0,1fr) so the track's auto minimum
+          // can't push it past the main tile's width; the two-tile row keeps
+          // the 1fr 1fr sizing it has always had.
+          detailCols: (IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] && IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']) ? '1fr 1fr' : 'minmax(0, 1fr)',
           openMain: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN']; if (s) this.setState({ lightbox: s }); },
           openD1: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1']; if (s) this.setState({ lightbox: s }); },
           openD2: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']; if (s) this.setState({ lightbox: s }); },
