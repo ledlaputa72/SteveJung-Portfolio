@@ -201,16 +201,23 @@
             <image-slot id="{{ a.slot }}" shape="rect" fit="cover" src="{{ a.srcMain }}" placeholder=""></image-slot>
             <div class="img-catch" style="cursor:{{ a.cursorMain }}" onClick="{{ a.openMain }}"></div>
           </div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+          <!-- Unassigned detail slots are dropped; with one left the grid collapses to a single column -->
+          <sc-if value="{{ a.hasDetails }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:{{ a.detailCols }};gap:14px">
+            <sc-if value="{{ a.hasD1 }}" hint-placeholder-val="{{ true }}">
             <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
               <image-slot id="{{ a.slot2 }}" shape="rect" fit="cover" src="{{ a.srcD1 }}" placeholder=""></image-slot>
               <div class="img-catch" style="cursor:{{ a.cursorD1 }}" onClick="{{ a.openD1 }}"></div>
             </div>
+            </sc-if>
+            <sc-if value="{{ a.hasD2 }}" hint-placeholder-val="{{ true }}">
             <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
               <image-slot id="{{ a.slot3 }}" shape="rect" fit="cover" src="{{ a.srcD2 }}" placeholder=""></image-slot>
               <div class="img-catch" style="cursor:{{ a.cursorD2 }}" onClick="{{ a.openD2 }}"></div>
             </div>
+            </sc-if>
           </div>
+          </sc-if>
         </div>
       </div>
     </section>
@@ -274,7 +281,8 @@
     </div>
   </section>
 
-  <!-- ⑦ GALLERY -->
+  <!-- ⑦ GALLERY (hidden while no image is assigned to any of its slots) -->
+  <sc-if value="{{ cs.hasGallery }}" hint-placeholder-val="{{ true }}">
   <section style="padding:clamp(50px,8vw,86px) 0 0">
     <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">Visual Gallery</div>
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px">
@@ -286,6 +294,7 @@
       </sc-for>
     </div>
   </section>
+  </sc-if>
 
   <!-- ⑧ SKILLS -->
   <section style="padding:clamp(50px,8vw,86px) 0 0">
@@ -1093,6 +1102,10 @@ class Component extends DCLogic {
           cursorMain: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN'] ? 'pointer' : 'default',
           cursorD1: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] ? 'pointer' : 'default',
           cursorD2: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2'] ? 'pointer' : 'default',
+          hasD1: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'],
+          hasD2: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2'],
+          hasDetails: !!(IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] || IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']),
+          detailCols: (IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] && IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']) ? '1fr 1fr' : '1fr',
           openMain: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN']; if (s) this.setState({ lightbox: s }); },
           openD1: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1']; if (s) this.setState({ lightbox: s }); },
           openD2: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']; if (s) this.setState({ lightbox: s }); },
@@ -1165,7 +1178,8 @@ class Component extends DCLogic {
         return { id: c.anchor+'-g'+k, label, code, src,
           cursor: src ? 'pointer' : 'default',
           open: () => { if (src) this.setState({ lightbox: src }); } };
-      }),
+      }).filter(g => g.src),
+      hasGallery: c.gallery.some((_, k) => IMG_MAP['C'+(+c.num)+'-GAL'+(k+1)]),
       prevAnchor: prev.anchor, prevTitle: prev.title, nextAnchor: next.anchor, nextTitle: next.title
     });
     const nav = CASES.map((x, k) => ({ anchor:x.anchor, num:x.num, short:x.short,
