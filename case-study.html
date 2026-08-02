@@ -45,7 +45,26 @@
     .cs-hero-grad{display:none}
     .cs-hero-cta{width:100%!important;justify-content:flex-end!important;gap:8px!important;
       padding:20px 20px 104px!important}
-    .cs-detail-grid{grid-template-columns:minmax(0,1fr)!important}
+    /* Pin the media column and all three tiles to the column width. A grid
+       or flex item's default min-width:auto lets an item's min-content push
+       it wider than its track, which is how the main image ended up wider
+       than the two details below it; zeroing that and clamping to 100%
+       makes the three tiles identical in width whatever the engine's
+       intrinsic sizing decides. */
+    /* repeat(auto-fit,minmax(300px,1fr)) cannot shrink a track below 300px,
+       so on a narrow screen the text/media columns overflowed the container
+       instead of fitting it. One flexible column that may shrink to zero
+       makes the media column exactly as wide as the copy above it. */
+    .cs-split{grid-template-columns:minmax(0,1fr)!important}
+    .cs-media-col{min-width:0!important;width:100%!important;max-width:100%!important}
+    .cs-detail-grid{grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important}
+    /* Size the tiles with a padding ratio box rather than aspect-ratio: a
+       grid/flex item's min-width:auto can let aspect-ratio derive a width
+       from the height and push one tile wider than its siblings, which is
+       how the main image ended up larger than the two details under it. */
+    .cs-media-tile{aspect-ratio:auto!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
+    .cs-media-tile::before{content:"";display:block;padding-top:82.68%}
+    .cs-media-tile > image-slot{position:absolute!important;inset:0!important;width:auto!important;height:auto!important}
   }
   .lightbox-backdrop{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
   .lightbox-img{max-width:80vw;max-height:80vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6);border-radius:4px;cursor:default}
@@ -186,7 +205,7 @@
         <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 12px">{{ a.group }}</span>
         <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--dim)">{{ a.status }}</span>
       </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,4vw,48px);margin-top:26px;align-items:start">
+      <div class="cs-split" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,4vw,48px);margin-top:26px;align-items:start">
         <div>
           <h3 style="font-family:var(--disp);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.1;text-wrap:pretty">{{ a.name }}</h3>
           <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-top:12px">{{ a.stack }}</div>
@@ -216,8 +235,8 @@
             </sc-if>
           </div>
         </div>
-        <div style="display:flex;flex-direction:column;gap:14px">
-          <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+        <div class="cs-media-col" style="display:flex;flex-direction:column;gap:14px">
+          <div class="cs-media-tile" style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
             <image-slot id="{{ a.slot }}" shape="rect" fit="cover" src="{{ a.srcMain }}" placeholder=""></image-slot>
             <div class="img-catch" style="cursor:{{ a.cursorMain }}" onClick="{{ a.openMain }}"></div>
           </div>
@@ -225,13 +244,13 @@
           <sc-if value="{{ a.hasDetails }}" hint-placeholder-val="{{ true }}">
           <div class="cs-detail-grid" style="display:grid;grid-template-columns:{{ a.detailCols }};gap:14px">
             <sc-if value="{{ a.hasD1 }}" hint-placeholder-val="{{ true }}">
-            <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+            <div class="cs-media-tile" style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
               <image-slot id="{{ a.slot2 }}" shape="rect" fit="cover" src="{{ a.srcD1 }}" placeholder=""></image-slot>
               <div class="img-catch" style="cursor:{{ a.cursorD1 }}" onClick="{{ a.openD1 }}"></div>
             </div>
             </sc-if>
             <sc-if value="{{ a.hasD2 }}" hint-placeholder-val="{{ true }}">
-            <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+            <div class="cs-media-tile" style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
               <image-slot id="{{ a.slot3 }}" shape="rect" fit="cover" src="{{ a.srcD2 }}" placeholder=""></image-slot>
               <div class="img-catch" style="cursor:{{ a.cursorD2 }}" onClick="{{ a.openD2 }}"></div>
             </div>
