@@ -40,7 +40,7 @@
   @media (max-width:720px){
     .cs-hero{aspect-ratio:auto!important;min-height:0!important;height:clamp(300px,86vw,360px)!important}
     .cs-hero-media{width:100%!important}
-    .cs-hero-media::after{content:'';position:absolute;inset:0;pointer-events:none;
+    .cs-hero-media::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;
       background:linear-gradient(180deg,rgba(10,10,11,.28) 0%,rgba(10,10,11,.52) 26%,rgba(10,10,11,.88) 52%,rgba(10,10,11,.97) 74%)}
     .cs-hero-grad{display:none}
     .cs-hero-cta{width:100%!important;justify-content:flex-end!important;gap:8px!important;
@@ -64,7 +64,9 @@
        how the main image ended up larger than the two details under it. */
     .cs-media-tile{aspect-ratio:auto!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
     .cs-media-tile::before{content:"";display:block;padding-top:82.68%}
-    .cs-media-tile > image-slot{position:absolute!important;inset:0!important;width:auto!important;height:auto!important}
+    /* Explicit offsets + width/height, not the inset shorthand: iOS Safari
+       before 14.5 ignores inset, which would leave the slot at 0x0. */
+    .cs-media-tile > image-slot{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important}
   }
   .lightbox-backdrop{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
   .lightbox-img{max-width:80vw;max-height:80vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6);border-radius:4px;cursor:default}
