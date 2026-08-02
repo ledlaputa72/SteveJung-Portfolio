@@ -56,17 +56,15 @@
        instead of fitting it. One flexible column that may shrink to zero
        makes the media column exactly as wide as the copy above it. */
     .cs-split{grid-template-columns:minmax(0,1fr)!important}
-    .cs-media-col{min-width:0!important;width:100%!important;max-width:100%!important}
+    /* The media column becomes a single-column GRID. The gallery and the
+       two detail tiles — grid items with an aspect-ratio wrapper — render
+       correctly on iOS Safari; only the main tile, then a FLEX item, blew
+       up (Safari lets aspect-ratio derive a flex item's width from its
+       height). Same grid construction for all three tiles = the gallery's
+       exact behavior: image covers the frame edge-to-edge, no dead band. */
+    .cs-media-col{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important;min-width:0!important;width:100%!important;max-width:100%!important}
     .cs-detail-grid{grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important}
-    /* Size the tiles with a padding ratio box rather than aspect-ratio: a
-       grid/flex item's min-width:auto can let aspect-ratio derive a width
-       from the height and push one tile wider than its siblings, which is
-       how the main image ended up larger than the two details under it. */
-    .cs-media-tile{aspect-ratio:auto!important;width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
-    .cs-media-tile::before{content:"";display:block;padding-top:82.68%}
-    /* Explicit offsets + width/height, not the inset shorthand: iOS Safari
-       before 14.5 ignores inset, which would leave the slot at 0x0. */
-    .cs-media-tile > image-slot{position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important}
+    .cs-media-tile{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
   }
   .lightbox-backdrop{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
   .lightbox-img{max-width:80vw;max-height:80vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6);border-radius:4px;cursor:default}
