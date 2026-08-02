@@ -27,6 +27,11 @@
   image-slot{--is-bg:#131316}
   image-slot::part(empty){display:none}
   .img-catch{position:absolute;inset:0;z-index:4}
+  /* All viewports: the media column and detail grid must be allowed to
+     shrink to their grid track. Their default min-width:auto inherits the
+     image-slot's ~300px intrinsic minimum, which pushed the detail pair
+     wider than the column at mid-size desktop widths. */
+  .cs-media-col,.cs-detail-grid,.cs-media-tile{min-width:0;max-width:100%}
   /* Mobile layout. The hero's aspect-ratio:21/8 loses to its own
      min-height:260px on a narrow screen, and the ratio then derives the
      WIDTH from that height (260 x 21/8 = ~683px) — the banner rendered
@@ -1141,7 +1146,11 @@ class Component extends DCLogic {
           // A lone detail tile gets minmax(0,1fr) so the track's auto minimum
           // can't push it past the main tile's width; the two-tile row keeps
           // the 1fr 1fr sizing it has always had.
-          detailCols: (IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] && IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']) ? '1fr 1fr' : 'minmax(0, 1fr)',
+          // minmax(0,1fr) on both tracks: a bare 1fr can't shrink below the
+          // image-slot's intrinsic ~300px min-content, so the two detail
+          // tiles rendered wider than the media column and spilled past it
+          // at mid-size desktop widths.
+          detailCols: (IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] && IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']) ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'minmax(0, 1fr)',
           openMain: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN']; if (s) this.setState({ lightbox: s }); },
           openD1: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1']; if (s) this.setState({ lightbox: s }); },
           openD2: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']; if (s) this.setState({ lightbox: s }); },
