@@ -67,6 +67,9 @@
        up (Safari lets aspect-ratio derive a flex item's width from its
        height). Same grid construction for all three tiles = the gallery's
        exact behavior: image covers the frame edge-to-edge, no dead band. */
+    /* All-case-studies nav: one chip per row, so 07 sits under 06 instead
+       of sharing its line when the two happen to fit side by side. */
+    .cs-allnav{flex-direction:column;align-items:flex-start}
     .cs-media-col{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important;min-width:0!important;width:100%!important;max-width:100%!important}
     .cs-detail-grid{grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important}
     .cs-media-tile{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
@@ -368,7 +371,7 @@
   <!-- ALL CASES -->
   <section style="padding:clamp(50px,8vw,86px) 0 0">
     <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">All case studies</div>
-    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px">
+    <div class="cs-allnav" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px">
       <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
         <a href="#{{ n.anchor }}" style="font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;border:1px solid {{ n.border }};background:{{ n.bg }};color:{{ n.fg }};border-radius:999px;padding:10px 18px">{{ n.num }} · {{ n.short }}</a>
       </sc-for>
