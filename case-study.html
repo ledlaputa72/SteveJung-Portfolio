@@ -920,7 +920,17 @@ class Component extends DCLogic {
       if(n>1 && !this._paused) this.setState(s=>({slide:(s.slide+1)%n}), ()=>this._glitchTitle());
     }, 4500);
     this._chalRoll = setInterval(()=>this.setState(s=>({chal:s.chal+1})), 5000);   // Challenge 카드 순차 하이라이트
-    this._onHash = () => { this._sync(); window.scrollTo(0,0); };
+    // html{scroll-behavior:smooth} turns scrollTo(0,0) into an animation
+    // that the case re-render (new content, new page height) can cut short
+    // mid-flight, leaving the new case loaded partway down. Jump instantly
+    // instead, and pin to top again once the re-render has committed.
+    this._toTop = () => {
+      const de = document.documentElement, prev = de.style.scrollBehavior;
+      de.style.scrollBehavior = 'auto';
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => { window.scrollTo(0, 0); de.style.scrollBehavior = prev; });
+    };
+    this._onHash = () => { this._sync(); this._toTop(); };
     addEventListener('hashchange', this._onHash);
     this._onScroll = () => {
       const dh = document.documentElement.scrollHeight - innerHeight;
@@ -974,7 +984,8 @@ class Component extends DCLogic {
   _sync(){
     const h = (location.hash || '').replace('#','');
     const i = CASES.findIndex(c => c.anchor === h);
-    this.setState({ i: i < 0 ? 0 : i, slide: 0, chal: 0, step: 0 });
+    this.setState({ i: i < 0 ? 0 : i, slide: 0, chal: 0, step: 0 },
+      () => { if (this._toTop) this._toTop(); });
   }
   _waitThree(n){
     if (window.THREE) {
