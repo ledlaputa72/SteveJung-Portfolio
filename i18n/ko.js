@@ -68,9 +68,9 @@ window.SITE_COPY.ko = {
         tags:['3D Render','Exhibition','Interior','Vendor Mgmt'],link:null,slot:'slot-booth',src:'/images/index.html/IDX-CASE4.png',slotLabel:'[IDX-CASE4] 3D 부스 렌더링 · CX 센터'},
       {num:'05',anchor:'case-5',scene:'06',sceneName:'05 — AI-BUILT APPS',label:'Case 05 · AI-Built Apps',
         kicker:'AI-BUILT · INTERNAL + PERSONAL',title:'AI 기반 앱 개발 — 업무용 + 개인',
-        tagline:'엔지니어도 예산도 본업 외 시간도 없는 조건에서, AI를 개발 레이어로 삼아 실제로 작동하는 소프트웨어를 배포했습니다. Claude API·Cursor·v0·Vercel로 사내 업무 자동화 도구 3개(악세서리 가이드 생성기, 스펙시트 검수기, Three.js 재질 편집기)와 개인 프로젝트 3개, Three.js 실험 Lab 1개를 혼자 만들었습니다. 데모가 아니라 팀이 실제로 쓰는 도구로, 스펙 검수는 3시간을 15분으로 줄였습니다.',
-        meta:[{k:'Role',v:'100% Solo'},{k:'Internal',v:'3 apps in use'},{k:'Personal',v:'3 apps + 1 Lab'}],
-        points:['업무용 — 악세서리 가이드 생성기 · AI 스펙시트 검수기 · Three.js 재질 편집기','개인 — 영어 학습 앱 · STREAMIX 콘텐츠 브라우징 · 스타벅스 코리아 리디자인','Lab — 포트폴리오용 Three.js 기술 테스트 (Synapser Studio 등)'],
+        tagline:'엔지니어도 예산도 본업 외 시간도 없는 조건에서, AI를 개발 레이어로 삼아 실제로 작동하는 소프트웨어를 배포했습니다. Claude API·Cursor·v0·Vercel로 사내 업무 자동화 도구 3개(악세서리 가이드 생성기, 스펙시트 검수기, Three.js 재질 편집기)와 개인 프로젝트 2개, Three.js 실험 Lab 1개, 웹 샘플 1개를 혼자 만들었습니다. 데모가 아니라 팀이 실제로 쓰는 도구로, 스펙 검수는 3시간을 15분으로 줄였습니다.',
+        meta:[{k:'Role',v:'100% Solo'},{k:'Internal',v:'3 apps in use'},{k:'Personal',v:'2 apps + Lab + sample'}],
+        points:['업무용 — 악세서리 가이드 생성기 · AI 스펙시트 검수기 · Three.js 재질 편집기','개인 — 영어 학습 앱 · STREAMIX 콘텐츠 브라우징 사이트','Lab · 웹 샘플 — Three.js 기술 테스트 · 스타벅스 코리아 리디자인'],
         tags:['React','Next.js','Three.js','Claude API'],link:null,slot:'slot-apps',src:'/images/index.html/IDX-CASE6.png',slotLabel:'[IDX-CASE6] 7개 앱 스크린 / UI'},
       {num:'06',anchor:'case-6',scene:'06',sceneName:'06 — DIGITAL CAMPAIGN',label:'Case 06 · Digital Campaign & Video',
         kicker:'CAMPAIGN · SOCIAL · VIDEO',title:'디지털 캠페인 · SNS · 영상',
@@ -295,7 +295,7 @@ window.SITE_COPY.ko = {
 
   {anchor:'case-5',num:'05',short:'AI-Built Apps',cats:['AI','Dev'],
    title:'AI 기반 앱 개발 — 업무용 + 개인',
-   summary:'Claude API · Cursor · v0 · Vercel로 100% 단독 제작한 7개 앱. 사내 업무 자동화 3개, 개인 프로젝트 3개, Three.js 실험용 Lab 1개.',
+   summary:'Claude API · Cursor · v0 · Vercel로 100% 단독 제작한 7개 앱. 사내 업무 자동화 3개, 개인 프로젝트 2개, Three.js 실험용 Lab 1개, 웹 샘플 1개.',
    meta:[
      {label:'Role',value:'Marketing Manager — 100% 단독: 기획 · UI/UX · 개발 · 배포'},
      {label:'Tools',value:'Claude AI · Claude Design · Cursor AI · Gemini · v0 · GitHub · Vercel'},
@@ -314,7 +314,7 @@ window.SITE_COPY.ko = {
      {n:'3',title:'Cursor로 구현',body:'React / Next.js 코드베이스를 AI 페어링으로 작성.',hl:true},
      {n:'4',title:'GitHub → Vercel 배포',body:'CI/CD로 실사용 URL까지 연결하고 팀에 배포.'}],
    callout:'stevejung.dev',
-   results:[{value:'3',label:'사내 업무 자동화 앱'},{value:'4',label:'개인 · Lab 프로젝트'},{value:'15min',label:'스펙시트 검수 (기존 3시간)'}],
+   results:[{value:'3',label:'사내 업무 자동화 앱'},{value:'4',label:'개인 · Lab · 웹 샘플'},{value:'15min',label:'스펙시트 검수 (기존 3시간)'}],
    gallery:['Claude Design 작업 파일','Cursor AI 세션','GitHub 레포'],
    skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
    apps:[
@@ -354,11 +354,11 @@ window.SITE_COPY.ko = {
       body:'포트폴리오에 적용할 Three.js 기술을 미리 검증하는 테스트 Lab입니다. 완성된 서비스가 아니라, 기법 하나하나를 독립 씬으로 만들어 배포하고 검증된 것만 실제 포트폴리오에 반영합니다.',
       points:['Synapser Studio — 스크롤 연동 시네마틱 3D 씬 테스트','지오메트리 · GLSL 셰이더 · 파티클 · 포스트프로세싱 단위 검증','GitHub → Vercel 자동 배포로 테스트마다 공개 URL 확보'],
       tags:['Three.js','기술 검증','R3F']},
-     {key:'starbucks',group:'개인 프로젝트',name:'스타벅스 코리아 리디자인',stack:'React · Node.js · Netlify',status:'PERSONAL PROJECT',link:'ledlaputa-startbucks.netlify.app',
+     {key:'starbucks',group:'웹 샘플',name:'스타벅스 코리아 리디자인',stack:'React · Node.js · Netlify',status:'WEB SAMPLE',link:'ledlaputa-startbucks.netlify.app',
       short:'스타벅스 코리아 웹사이트 리디자인 시안',
       body:'스타벅스 코리아 웹사이트를 다시 디자인한 시안입니다. 시안 이미지로 끝내지 않고 React · Node.js로 구현해 Netlify에 배포했기 때문에, 히어로 캐러셀부터 메가메뉴 · 프로모션 섹션까지 실제 사용 흐름 그대로 움직입니다.',
       points:['홈 히어로 캐러셀과 프로모션 슬라이더 구현','COFFEE · MENU 등 3-depth 메가메뉴 내비게이션 설계','My Starbucks Rewards 등 주요 하위 페이지 리디자인','GitHub → Netlify 자동 배포로 공개 URL 확보'],
-      tags:['개인 프로젝트','React','리디자인','Netlify']}]},
+      tags:['웹 샘플','React','리디자인','Netlify']}]},
 
   {anchor:'case-6',num:'06',short:'Campaign & Video',cats:['Campaign','Video'],
    banners:[
