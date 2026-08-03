@@ -411,6 +411,8 @@ window.SITE_COPY.en = {
       tags:['Asana','Notion','Process Design','Knowledge Base']},
      {key:'remote',group:'Guides · Remote · Vendor',name:'Brand Guide & Template-Based Collaboration',short:'A brand guide and work templates that set the standard for remote and vendor communication.',
       stack:'Brand Guide · Templates · Feedforward / Feedback',
+      pdf:['docs','avycon-brand-guidelines-2026.pdf'],
+      linkLabel:'View PDF',
       body:'I produced and distributed the AVYCON brand guide — logo, color, typography, and application rules — along with templates for each type of work. Instructions that used to be explained verbally to the remote Korean team and to outside vendors now live in those documents, and interpretation gaps narrowed. Feedforward before a task starts and feedback after it finishes are fixed as a cycle, so work continues across a 16–17 hour gap without a round trip.',
       points:['AVYCON brand guide — logo, color, and typography rules','Work templates and briefing forms distributed alongside it','The same standard applied to the remote Korean team and to outside vendors','Feedforward before start and feedback after completion fixed as a cycle','Asynchronous collaboration that carries across a 16–17 hour gap without waiting'],
       tags:['Brand Guide','Templates','Feedforward','Remote']}],

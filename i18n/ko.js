@@ -410,6 +410,8 @@ window.SITE_COPY.ko = {
       tags:['Asana','Notion','Process Design','Knowledge Base']},
      {key:'remote',group:'Guides · Remote · Vendor',name:'브랜드 가이드 · 템플릿 기반 협업',short:'브랜드 가이드와 작업 템플릿으로 원격 · 외주 소통 기준을 세움.',
       stack:'Brand Guide · Templates · Feedforward / Feedback',
+      pdf:['docs','avycon-brand-guidelines-2026.pdf'],
+      linkLabel:'View PDF',
       body:'로고 · 컬러 · 타이포 · 적용 규정을 담은 AVYCON 브랜드 가이드와 작업 유형별 템플릿을 만들어 배포했습니다. 한국 원격 팀과 외주 업체에 매번 말로 설명하던 업무 지시를 이 문서가 대신하면서 해석 차이가 줄었습니다. 착수 전 피드포워드와 완료 후 피드백을 사이클로 고정해, 16–17시간 시차에서도 소통 왕복 없이 업무가 이어집니다.',
       points:['AVYCON 브랜드 가이드 — 로고 · 컬러 · 타이포 규정','작업 유형별 템플릿과 브리핑 양식을 함께 배포','한국 원격 팀 · 외주 업체에 같은 기준으로 지시 전달','착수 전 피드포워드 · 완료 후 피드백을 사이클로 고정','16–17시간 시차에도 왕복 없이 이어지는 비동기 협업'],
       tags:['Brand Guide','Templates','Feedforward','Remote']}],
