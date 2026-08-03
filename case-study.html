@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Case Study — Steve Jung</title>
 <meta name="description" content="Steve Jung — B2B Hardware Marketing Manager. Case studies in product marketing, brand, and web development.">
-<script src="./support.js"></script>
+<script src="/i18n/locale.js"></script>
+<script src="/support.js"></script>
 </head>
 <body>
 <x-dc>
@@ -13,7 +14,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
-<script src="./image-slot.js"></script>
+<script src="/image-slot.js"></script>
 <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
 <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <style>
@@ -96,11 +97,12 @@
 <canvas id="stage" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.7"></canvas>
 
 <header style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,54px);mix-blend-mode:difference">
-  <a href="index.html" style="font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:#fff">STEVE JUNG<span style="color:var(--accent)"> ▚</span></a>
+  <a data-lp="/" style="font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:#fff">STEVE JUNG<span style="color:var(--accent)"> ▚</span></a>
   <nav style="display:flex;gap:clamp(16px,2.4vw,34px);font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase">
-    <a href="index.html#studio" style="color:#fff">Studio</a>
-    <a href="index.html#work" style="color:#fff">Work</a>
-    <a href="index.html#contact" style="color:#fff">Contact</a>
+    <a data-lp="/" data-lp-hash="#studio" style="color:#fff">Studio</a>
+    <a data-lp="/" data-lp-hash="#work" style="color:#fff">Work</a>
+    <a data-lp="/" data-lp-hash="#contact" style="color:#fff">Contact</a>
+    <a id="lang-switch" href="/" title="Language" style="color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:4px 10px;line-height:1.4">EN</a>
   </nav>
 </header>
 
@@ -121,7 +123,7 @@
 
   <!-- BACK -->
   <div style="padding-top:clamp(96px,14vh,140px)">
-    <a href="index.html#work" style="font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)" style-hover="color:var(--accent)">← Back to Work</a>
+    <a data-lp="/" data-lp-hash="#work" style="font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)" style-hover="color:var(--accent)">← Back to Work</a>
   </div>
 
   <!-- ① HERO VISUAL -->
@@ -381,7 +383,7 @@
   <footer style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:clamp(60px,10vw,120px);padding:26px 0 60px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dim)">
     <span>STEVE JUNG © <span id="om-year">2026</span></span>
     <span>B2B HARDWARE MARKETING · IRVINE, CA</span>
-    <a href="index.html">← PORTFOLIO HOME</a>
+    <a data-lp="/">← PORTFOLIO HOME</a>
   </footer>
 
   <!-- LIGHTBOX — full-size view for any non-banner image -->
@@ -749,8 +751,8 @@ const CASES = [
 
 // Maps a case-study image code (e.g. 'C1-HOME-MAIN') to its source image path.
 // Filled in incrementally as image assignments come in per case.
-const imgPath = (folder, file) => './images/' + encodeURIComponent(folder) + '/' + encodeURIComponent(file);
-const docPath = (...parts) => './pdf/' + parts.map(encodeURIComponent).join('/');
+const imgPath = (folder, file) => '/images/' + encodeURIComponent(folder) + '/' + encodeURIComponent(file);
+const docPath = (...parts) => '/pdf/' + parts.map(encodeURIComponent).join('/');
 const IMG_MAP = (() => {
   const C1 = 'Case 1 — AVYCON';
   const C2 = 'Case 2 — Starllion';
