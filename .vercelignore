@@ -1,0 +1,11 @@
+# Files kept in the repository but not needed by the deployed site.
+#
+# The site links to exactly five PDFs: pdf/docs/*.pdf (the four case-study
+# documents) and pdf/Steve-Jung-Resume.pdf. Everything under pdf/Case */ is
+# the original source archive, so shipping it only inflated the deployment.
+# Add a document to pdf/docs/ before linking it, or it will 404 in production.
+pdf/Case*
+
+# Generator inputs for the image asset manager artifact (thumbnail data and
+# its build script) — never requested by a page.
+tools/
