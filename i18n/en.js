@@ -316,7 +316,7 @@ window.SITE_COPY.en = {
      {n:'4',title:'Shipped GitHub → Vercel',body:'CI/CD out to a live URL, then handed to the team.'}],
    callout:'stevejung.dev',
    results:[{value:'3',label:'Internal automation apps'},{value:'4',label:'Personal · Lab · web sample'},{value:'15min',label:'Spec review (was 3 hours)'}],
-   gallery:['Claude Design working file','Cursor AI session','GitHub repo'],
+   gallery:['AI spec sheet reviewer — data mapping screen','AI spec sheet reviewer — review report','Three.js material editor — material preview','Three.js material editor — render result','Accessory guide generator — product database','Accessory guide generator — generated guide'],
    skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
    apps:[
      {key:'accessory',group:'Work Automation · Internal',name:'Accessory Guide Generator',stack:'React · Next.js · Claude API',status:'IN USE · INTERNAL',link:'avycon-accessory-guide.vercel.app',

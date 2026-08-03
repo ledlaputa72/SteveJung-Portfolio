@@ -315,7 +315,7 @@ window.SITE_COPY.ko = {
      {n:'4',title:'GitHub → Vercel 배포',body:'CI/CD로 실사용 URL까지 연결하고 팀에 배포.'}],
    callout:'stevejung.dev',
    results:[{value:'3',label:'사내 업무 자동화 앱'},{value:'4',label:'개인 · Lab · 웹 샘플'},{value:'15min',label:'스펙시트 검수 (기존 3시간)'}],
-   gallery:['Claude Design 작업 파일','Cursor AI 세션','GitHub 레포'],
+   gallery:['AI 스펙시트 검수기 — 데이터 매핑 화면','AI 스펙시트 검수기 — 검수 리포트','Three.js 재질 편집기 — 재질 프리뷰','Three.js 재질 편집기 — 렌더 결과','악세서리 가이드 생성기 — 제품 데이터베이스','악세서리 가이드 생성기 — 생성 가이드 문서'],
    skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
    apps:[
      {key:'accessory',group:'업무 자동화 · Internal',name:'악세서리 가이드 생성기',stack:'React · Next.js · Claude API',status:'IN USE · INTERNAL',link:'avycon-accessory-guide.vercel.app',
