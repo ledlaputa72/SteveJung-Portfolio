@@ -14,6 +14,18 @@
  */
 window.SITE_COPY = window.SITE_COPY || {};
 window.SITE_COPY.en = {
+  // <title>, meta description, and the link-preview text, per page.
+  // Applied by i18n/locale.js, which loads after this file.
+  head: {
+    index: {
+      title: 'Steve Jung — B2B Hardware Marketing Manager',
+      description: 'Steve Jung — B2B Hardware Marketing Manager who plans, designs, codes, and ships. Portfolio and case studies.'
+    },
+    caseStudy: {
+      title: 'Case Study — Steve Jung',
+      description: 'Steve Jung — B2B Hardware Marketing Manager. Case studies in product marketing, brand, and web development.'
+    }
+  },
   index: {
     ui: {
       devClearModel: 'Clear model',

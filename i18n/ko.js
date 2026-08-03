@@ -13,6 +13,18 @@
  */
 window.SITE_COPY = window.SITE_COPY || {};
 window.SITE_COPY.ko = {
+  // <title>, meta description, and the link-preview text, per page.
+  // Applied by i18n/locale.js, which loads after this file.
+  head: {
+    index: {
+      title: 'Steve Jung — B2B 하드웨어 마케팅 매니저',
+      description: '기획하고, 디자인하고, 코드를 쓰고, 배포합니다. 브랜드 · 인쇄 디자인부터 웹 개발, AI 자동화까지 — Steve Jung 포트폴리오와 케이스 스터디.'
+    },
+    caseStudy: {
+      title: '케이스 스터디 — Steve Jung',
+      description: 'Steve Jung — B2B 하드웨어 마케팅 매니저. 제품 마케팅 · 브랜드 · 웹 개발 케이스 스터디.'
+    }
+  },
   index: {
     ui: {
       devClearModel: '모델 제거',
@@ -32,7 +44,7 @@ window.SITE_COPY.ko = {
     cases: [
       {num:'01',anchor:'case-1',scene:'04',sceneName:'01 — AVYCON RENEWAL',label:'Case 01 · AVYCON Renewal',
         kicker:'PLATFORM · UX · VELO',title:'AVYCON 웹사이트 리뉴얼',
-        tagline:'레거시 PHP에서 Wix Studio 글로벌 플랫폼으로. 제한된 예산 안에서 개발과 이후 운영·업데이트까지 감당할 수 있는 구조를 택하고, 138페이지 세부 기획서와 Figma 와이어프레임 · 프로토타입으로 외주 개발사와 개발을 진행하며 아키텍처 가이드와 오류 수정까지 직접 담당했습니다.',
+        tagline:'레거시 PHP에서 Wix Studio 글로벌 플랫폼으로. 제한된 예산 안에서 개발과 이후 운영·업데이트까지 감당할 수 있는 구조를 택하고, 138페이지 세부 기획서와 Figma 와이어프레임 · 프로토타입으로 외주 개발사를 디렉팅하며 아키텍처 가이드와 오류 수정까지 직접 담당했습니다.',
         meta:[{k:'Role',v:'Project Lead · Velo Dev'},{k:'Year',v:'2025 —'},{k:'Platform',v:'Wix Studio · Velo'}],
         points:['138페이지 기획서 · Figma 와이어프레임 · 50+ 화면정의서를 단독 작성','외주사의 iframe 오류를 진단하고 CMS 네이티브 Velo 데모로 개발 방향을 교정','4개 언어(EN/KO/JA/ES) 통합 · 회사 최초 구조화 SEO · 제품 필터·비교 시스템'],
         tags:['Wix Velo','CMS','Figma','SEO'],link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',slot:'slot-avycon',src:'/images/index.html/IDX-CASE1.png',slotLabel:'[IDX-CASE1] AVYCON 리뉴얼 화면 / 와이어프레임'},
@@ -327,12 +339,12 @@ window.SITE_COPY.ko = {
       body:'웹에서 Three.js로 3D 모델을 띄울 때 쓸 재질을 브라우저에서 직접 편집하는 도구입니다. 모델을 불러와 재질과 라이팅을 실시간으로 조정하고, 그대로 웹에 적용할 설정값으로 내보냅니다.',
       points:['GLB / OBJ 모델을 불러와 재질을 실시간 편집','메탈니스 · 러프니스 · 이미시브 · 환경광 파라미터 조정','웹 적용용 재질 설정값 · 프리셋으로 내보내기'],
       tags:['Three.js','웹 3D','재질 워크플로우']},
-     {key:'english',group:'개인 프로젝트 · Personal',name:'영어 학습 앱',stack:'React · Claude API',status:'PERSONAL PROJECT',link:'midani-english.vercel.app',
+     {key:'english',group:'개인 프로젝트',name:'영어 학습 앱',stack:'React · Claude API',status:'PERSONAL PROJECT',link:'midani-english.vercel.app',
       short:'간격 반복 기반 개인 학습 도구',
       body:'문장 단위 반복 학습 루프와 오답 기반 복습 스케줄을 갖춘 개인용 학습 도구입니다. 업무와 무관하게, 직접 매일 쓰고 싶은 도구를 만들며 상태 관리와 데이터 설계를 익혔습니다.',
       points:['간격 반복(spaced repetition) 스케줄러 직접 구현','AI 문장 교정 및 예문 생성','학습 기록 로컬 저장 · 진도 시각화','Google 로그인으로 계정 관리 및 기기 간 학습 데이터 동기화'],
       tags:['개인 프로젝트','학습 설계','상태 관리']},
-     {key:'streamix',group:'개인 프로젝트 · Personal',name:'STREAMIX 콘텐츠 브라우징 사이트',stack:'Next.js · Tailwind · Content API',status:'PERSONAL PROJECT',link:'streamix-green.vercel.app',
+     {key:'streamix',group:'개인 프로젝트',name:'STREAMIX 콘텐츠 브라우징 사이트',stack:'Next.js · Tailwind · Content API',status:'PERSONAL PROJECT',link:'streamix-green.vercel.app',
       short:'영화·시리즈 API 기반 콘텐츠 소개 사이트',
       body:'영화와 시리즈 콘텐츠 데이터 API를 연동해 만든 콘텐츠 소개 사이트입니다. 실시간 외부 데이터를 다루면서 B2B 하드웨어와 정반대 성격의 컨슈머 UI를 설계해봤습니다.',
       points:['콘텐츠 데이터 API 연동 · 장르/인기순 큐레이션','히어로 · 캐러셀 · 상세 페이지 전체 플로우 설계','반응형 그리드 · 스켈레톤 로딩 · 키보드 내비게이션'],
