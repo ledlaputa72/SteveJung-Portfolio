@@ -40,14 +40,19 @@
     return prefix + clean;
   }
 
-  /** The same page in the other language, hash preserved. */
+  /**
+   * The same page in the other language, keeping the hash — the
+   * case-study page identifies which case is open by #case-N, so
+   * dropping it would send the reader back to the first case.
+   */
   function switchPath() {
     var other = locale === DEFAULT ? 'ko' : DEFAULT;
     var parts = location.pathname.split('/').filter(Boolean);
     if (LOCALES.indexOf(parts[0]) >= 0) parts.shift();
     var rest = parts.join('/');
     var prefix = other === DEFAULT ? '' : '/' + other;
-    return (prefix + '/' + rest).replace(/\/+$/, '') || '/';
+    var base = (prefix + '/' + rest).replace(/\/+$/, '') || '/';
+    return base + (location.hash || '');
   }
 
   window.SITE_LOCALE = locale;
@@ -93,15 +98,16 @@
       var hash = el.getAttribute('data-lp-hash') || '';
       el.setAttribute('href', localePath(target) + hash);
     }
-    // The switcher label names the language you would get by clicking it.
-    var sw = scope.querySelector
-      ? scope.querySelector('#lang-switch') || document.getElementById('lang-switch')
-      : null;
-    if (sw) {
-      sw.setAttribute('href', switchPath());
-      sw.textContent = window.localeOther.toUpperCase();
-      sw.setAttribute('hreflang', window.localeOther);
-    }
+    updateSwitch();
+  }
+
+  // The switcher label names the language you would get by clicking it.
+  function updateSwitch() {
+    var sw = document.getElementById('lang-switch');
+    if (!sw) return;
+    sw.setAttribute('href', switchPath());
+    sw.textContent = window.localeOther.toUpperCase();
+    sw.setAttribute('hreflang', window.localeOther);
   }
   window.applyLocaleLinks = applyLinks;
 
@@ -110,6 +116,16 @@
   } else {
     applyLinks();
   }
+
+  // The case-study page rewrites the hash as the reader moves between
+  // cases, which is not a DOM mutation the observer below would catch.
+  // Refresh on hashchange, and resolve once more at click time so the
+  // destination is right even if something changed the hash in between.
+  addEventListener('hashchange', updateSwitch);
+  document.addEventListener('click', function (e) {
+    var sw = e.target && e.target.closest && e.target.closest('#lang-switch');
+    if (sw) sw.setAttribute('href', switchPath());
+  }, true);
   // The template engine swaps large parts of the DOM in after boot; keep
   // newly inserted locale links pointed at the right language.
   if (window.MutationObserver) {
