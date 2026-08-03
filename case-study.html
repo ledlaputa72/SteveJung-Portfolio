@@ -712,13 +712,13 @@ const CASES = [
 
   {anchor:'case-7',num:'07',short:'Project Ops',cats:['PMS','Process'],
    banners:[
-     {key:'pms',group:'PMS · Guides · Remote',name:'프로젝트 관리 시스템 · 가이드 운영',short:'Asana · Notion 위에 브랜드 가이드와 작업 템플릿을 얹어, 내부 팀과 외부 벤더를 같은 기준으로 운영.',
-      stack:'Asana · Notion · 브랜드 가이드 · Async Handoff',
-      body:'담당자와 마감, 진행 상태가 어디에도 남지 않던 업무 방식을 Asana 워크스페이스로 옮기고, Notion을 지식 레이어로 붙였습니다. 브랜드 아이덴티티를 위한 브랜드 가이드와 개발 · 인쇄 · 3D · 영상 · 디자인 작업 템플릿을 정리해, 내부 팀과 외부 벤더가 같은 기준으로 착수할 수 있게 했습니다. 한국과 미국의 16–17시간 시차는 회의 대신 피드포워드 · 피드백 기반의 비동기 인수인계 프로토콜로 흡수하고, 5개 이상의 외부 인쇄 · 시공 · 개발 벤더도 같은 보드와 문서 위에서 관리했습니다.',
-      points:['Asana 워크스페이스 설계 — 프로젝트 · 태스크 · 마일스톤 구조 정의','브랜드 가이드 구축 — 로고 · 컬러 · 타이포 · 적용 규정 문서화','개발 · 인쇄 · 3D · 영상 · 디자인 작업 템플릿과 브리핑 가이드 제공','Notion 지식베이스 — 브랜드 에셋 · 벤더 DB · 작업 SOP 검색화','한미 시차를 흡수하는 피드포워드 · 피드백 기반 비동기 인수인계','5개+ 내부 · 외부 협업을 공용 보드와 동일한 승인 프로세스로 운영','신규 인력이 문서만으로 업무에 붙을 수 있는 온보딩 체계'],
-      tags:['Asana','Notion','Brand Guide','Async','Vendor']}],
+     {key:'pms',group:'PMS · Asana + Notion',name:'프로젝트 관리 시스템 구축',short:'Asana와 Notion을 결합해 업무 흐름과 조직 지식을 하나의 운영 체계로 정리.',
+      stack:'Asana · Notion · SOP',
+      body:'담당자와 마감, 진행 상태가 어디에도 남지 않던 업무 방식을 Asana 워크스페이스로 옮겼습니다. 프로젝트 · 태스크 · 마일스톤 구조를 정의하고, 반복 업무는 템플릿으로 만들어 매번 새로 설계하지 않아도 되게 했습니다. 여기에 Notion을 지식 레이어로 붙여 브랜드 에셋, 벤더 정보, 작업 SOP를 검색 가능한 형태로 축적했습니다.',
+      points:['Asana 워크스페이스 설계 — 프로젝트 · 태스크 · 마일스톤 구조 정의','반복 업무(카탈로그 · 캠페인 · 전시) 템플릿화로 착수 시간 단축','Notion 지식베이스 — 브랜드 에셋 · 벤더 DB · 작업 SOP 문서화','업무 가시성 확보로 병목과 일정 리스크를 사전에 식별','신규 인력이 문서만으로 업무에 붙을 수 있는 온보딩 체계'],
+      tags:['Asana','Notion','Process Design','Knowledge Base']}],
    title:'프로젝트 매니지먼트 시스템 운영',
-   summary:'Asana · Notion으로 업무와 지식을 체계화하고, 브랜드 가이드와 작업 템플릿 위에서 내부 · 외부 협업을 같은 프로세스로 운영.',
+   summary:'Asana · Notion으로 업무와 지식을 체계화하고, 원격 · 외부 벤더 협업을 같은 프로세스 위에서 운영.',
    meta:[
      {label:'Role',value:'Marketing Manager — 팀 리드 · 원격 관리 · 벤더 코디네이터'},
      {label:'Team',value:'Sally Park (제품 데이터) · Sherry Kim (영상) · Vicky (운영) + 순환 벤더'},
@@ -738,7 +738,7 @@ const CASES = [
      {n:'4',title:'벤더 운영 체계',body:'5+ 외주를 동일한 브리핑 · QA · 승인 프로세스로 통합.'}],
    callout:'',
    results:[{value:'5+',label:'동시 벤더 관계'},{value:'2',label:'국가 · 원격 팀'},{value:'5yr',label:'조직 전환'}],
-   gallery:['Asana 프로젝트 보드','Asana 타임라인','브랜드 가이드 — 타이포그래피 시스템','브랜드 가이드 — 아이코노그래피 · 이미지','브랜드 가이드 — 코브랜딩 · 적용','Asana 작업 이력 · 첨부 관리','브랜드 가이드 — 로고 · 컬러 팔레트','브랜드 가이드 — 로고 변형 규정'],
+   gallery:['Asana 프로젝트 보드','Asana 타임라인','브랜드 가이드 — 타이포그래피 시스템','브랜드 가이드 — 아이코노그래피 · 이미지','브랜드 가이드 — 코브랜딩 · 적용','브랜드 가이드 — 브랜드 소개','브랜드 가이드 — 로고 · 컬러 팔레트','브랜드 가이드 — 로고 변형 규정'],
    skills:['Project Management','Knowledge Management','Remote Team Leadership','Vendor Management','Process Design','Crisis Management']}
 ];
 
@@ -897,13 +897,13 @@ const IMG_MAP = (() => {
     'C7-PMS-BANNER': imgPath(C7, 'Asana1.png'),
     'C7-PMS-MAIN': imgPath(C7, 'Asana1.png'),
     'C7-PMS-D1': imgPath(C7, 'Asana4.png'),
-    'C7-PMS-D2': imgPath(C7, 'Beand1.png'),
+    'C7-PMS-D2': imgPath(C7, 'Asana2.png'),
     'C7-GAL1': imgPath(C7, 'Asana3.png'),
     'C7-GAL2': imgPath(C7, 'Asana5.png'),
     'C7-GAL3': imgPath(C7, 'Beand4.png'),
     'C7-GAL4': imgPath(C7, 'Beand5.png'),
     'C7-GAL5': imgPath(C7, 'Beand6.png'),
-    'C7-GAL6': imgPath(C7, 'Asana2.png'),
+    'C7-GAL6': imgPath(C7, 'Beand1.png'),
     'C7-GAL7': imgPath(C7, 'Beand2.png'),
     'C7-GAL8': imgPath(C7, 'Beand3.png'),
   };
