@@ -716,7 +716,12 @@ const CASES = [
       stack:'Asana · Notion · SOP',
       body:'담당자와 마감, 진행 상태가 어디에도 남지 않던 업무 방식을 Asana 워크스페이스로 옮겼습니다. 프로젝트 · 태스크 · 마일스톤 구조를 정의하고, 반복 업무는 템플릿으로 만들어 매번 새로 설계하지 않아도 되게 했습니다. 여기에 Notion을 지식 레이어로 붙여 브랜드 에셋, 벤더 정보, 작업 SOP를 검색 가능한 형태로 축적했습니다.',
       points:['Asana 워크스페이스 설계 — 프로젝트 · 태스크 · 마일스톤 구조 정의','반복 업무(카탈로그 · 캠페인 · 전시) 템플릿화로 착수 시간 단축','Notion 지식베이스 — 브랜드 에셋 · 벤더 DB · 작업 SOP 문서화','업무 가시성 확보로 병목과 일정 리스크를 사전에 식별','신규 인력이 문서만으로 업무에 붙을 수 있는 온보딩 체계'],
-      tags:['Asana','Notion','Process Design','Knowledge Base']}],
+      tags:['Asana','Notion','Process Design','Knowledge Base']},
+     {key:'remote',group:'Remote · External',name:'원격 · 외부 협업 운영',short:'16–17시간 시차와 5개 이상 외부 업체를 같은 프로세스 위에서 조율.',
+      stack:'Async Handoff · Vendor Mgmt · Review Cycle',
+      body:'한국과 미국을 오가는 16–17시간 시차를 회의로 메우는 대신, 인수인계 프로토콜로 흡수했습니다. 하루의 끝에 다음 담당자가 바로 이어받을 수 있는 상태로 태스크를 정리하는 방식입니다. 외부 인쇄 · 시공 · 개발 벤더도 같은 보드와 문서를 공유하게 해, 이메일 스레드에 흩어졌던 요청과 승인을 한 곳으로 모았습니다.',
+      points:['한미 시차를 흡수하는 비동기 인수인계 프로토콜 운영','5개+ 외부 벤더를 공용 보드 · 문서 기반으로 관리','요청 · 수정 · 승인 이력을 태스크 단위로 추적','정기 리뷰와 단가 체계로 임기응변식 벤더 관계 정리','4개국 전시 등 동시 진행 프로젝트의 일정 · 물류 조율'],
+      tags:['Remote Ops','Vendor','Async','Coordination']}],
    title:'프로젝트 매니지먼트 시스템 운영',
    summary:'Asana · Notion으로 업무와 지식을 체계화하고, 원격 · 외부 벤더 협업을 같은 프로세스 위에서 운영.',
    meta:[
@@ -738,7 +743,7 @@ const CASES = [
      {n:'4',title:'벤더 운영 체계',body:'5+ 외주를 동일한 브리핑 · QA · 승인 프로세스로 통합.'}],
    callout:'',
    results:[{value:'5+',label:'동시 벤더 관계'},{value:'2',label:'국가 · 원격 팀'},{value:'5yr',label:'조직 전환'}],
-   gallery:['Asana 프로젝트 보드','Asana 타임라인','브랜드 가이드 — 타이포그래피 시스템','브랜드 가이드 — 아이코노그래피 · 이미지','브랜드 가이드 — 코브랜딩 · 적용','브랜드 가이드 — 브랜드 소개','브랜드 가이드 — 로고 · 컬러 팔레트','브랜드 가이드 — 로고 변형 규정'],
+   gallery:['Asana 프로젝트 보드','Asana 타임라인','브랜드 가이드 — 타이포그래피 시스템','브랜드 가이드 — 아이코노그래피 · 이미지','브랜드 가이드 — 코브랜딩 · 적용'],
    skills:['Project Management','Knowledge Management','Remote Team Leadership','Vendor Management','Process Design','Crisis Management']}
 ];
 
@@ -898,14 +903,15 @@ const IMG_MAP = (() => {
     'C7-PMS-MAIN': imgPath(C7, 'Asana1.png'),
     'C7-PMS-D1': imgPath(C7, 'Asana4.png'),
     'C7-PMS-D2': imgPath(C7, 'Asana2.png'),
+    'C7-REMOTE-BANNER': imgPath(C7, 'Beand1.png'),
+    'C7-REMOTE-MAIN': imgPath(C7, 'Beand1.png'),
+    'C7-REMOTE-D1': imgPath(C7, 'Beand2.png'),
+    'C7-REMOTE-D2': imgPath(C7, 'Beand3.png'),
     'C7-GAL1': imgPath(C7, 'Asana3.png'),
     'C7-GAL2': imgPath(C7, 'Asana5.png'),
     'C7-GAL3': imgPath(C7, 'Beand4.png'),
     'C7-GAL4': imgPath(C7, 'Beand5.png'),
     'C7-GAL5': imgPath(C7, 'Beand6.png'),
-    'C7-GAL6': imgPath(C7, 'Beand1.png'),
-    'C7-GAL7': imgPath(C7, 'Beand2.png'),
-    'C7-GAL8': imgPath(C7, 'Beand3.png'),
   };
 })();
 
