@@ -6,6 +6,7 @@
 <title>Case Study — Steve Jung</title>
 <meta name="description" content="Steve Jung — B2B Hardware Marketing Manager. Case studies in product marketing, brand, and web development.">
 <script src="/i18n/locale.js"></script>
+<script src="/i18n/ko.js"></script>
 <script src="/support.js"></script>
 </head>
 <body>
@@ -111,9 +112,9 @@
     <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Load .glb model</div>
     <div style="display:flex;gap:8px;align-items:center">
       <input type="file" accept=".glb,.gltf" onChange="{{ pick }}" style="font-family:var(--mono);font-size:10px;color:var(--fg);min-width:0;flex:1">
-      <button onClick="{{ resetGlb }}" title="모델 제거" style="font-family:var(--mono);font-size:10px;background:transparent;border:1px solid var(--line);color:var(--muted);padding:6px 10px;cursor:pointer;flex:none" style-hover="border-color:var(--accent);color:var(--accent)">✕</button>
+      <button onClick="{{ resetGlb }}" title="{{ t.devClearModel }}" style="font-family:var(--mono);font-size:10px;background:transparent;border:1px solid var(--line);color:var(--muted);padding:6px 10px;cursor:pointer;flex:none" style-hover="border-color:var(--accent);color:var(--accent)">✕</button>
     </div>
-    <div style="font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--dim);border-top:1px solid var(--line2);padding-top:10px">이 브라우저에 저장되어 새로고침 후에도 유지됩니다.</div>
+    <div style="font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--dim);border-top:1px solid var(--line2);padding-top:10px">{{ t.devHint }}</div>
     <button onClick="{{ resetGlb }}" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--muted);padding:9px;cursor:pointer">Reset to preset</button>
   </div>
   <button onClick="{{ toggleGlb }}" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;background:rgba(10,10,11,.9);border:1px solid var(--line);color:var(--fg);padding:11px 16px;cursor:pointer;backdrop-filter:blur(10px)">◆ 3D Model</button>
@@ -296,7 +297,7 @@
   <!-- ⑤ APPROACH -->
   <section style="padding:clamp(50px,8vw,86px) 0 0">
     <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">My Approach</div>
-    <h2 style="font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,4vw,3rem);letter-spacing:-.02em;margin-top:16px">어떻게 만들었나</h2>
+    <h2 style="font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,4vw,3rem);letter-spacing:-.02em;margin-top:16px">{{ t.approachHeading }}</h2>
     <div style="margin-top:30px">
       <sc-for list="{{ cs.approach }}" as="s" hint-placeholder-count="4">
         <div data-approach-step style="display:grid;grid-template-columns:46px 1fr;gap:clamp(14px,2.5vw,28px);border-top:1px solid var(--line);padding:22px 0;align-items:start">
@@ -415,339 +416,13 @@
 </main>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d6ff3f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#d6ff3f&quot;,&quot;#49f0ff&quot;,&quot;#ff5c39&quot;,&quot;#c8a2ff&quot;,&quot;#ffffff&quot;],&quot;section&quot;:&quot;Look&quot;},&quot;object&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;icosahedron&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;torus&quot;,&quot;torusKnot&quot;],&quot;section&quot;:&quot;3D Background&quot;},&quot;glb&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D Background&quot;},&quot;glbScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D Background&quot;}}">
-const CASES = [
-  {anchor:'case-1',num:'01',short:'AVYCON Renewal',cats:['Web Dev','UX'],
-   banners:[
-     {key:'home',group:'Main Site · Home',name:'홈 · 글로벌 랜딩',short:'브랜드 히어로 · 제품 하이라이트 · 리드 폼까지 단일 CMS 위에서 4개 언어로 동작하는 메인 페이지.',
-      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',
-      body:'레거시 PHP 홈을 브랜드 히어로 · 제품 하이라이트 · 리드 캡처가 하나의 흐름으로 이어지는 랜딩으로 재설계했습니다. EN / KO / JA / ES가 각각 독립 도메인으로 흩어져 있던 구조를 단일 CMS 위로 통합해, 한 번의 콘텐츠 업데이트가 4개 언어에 동일하게 반영됩니다.',
-      points:['다중 언어를 단일 CMS · 단일 도메인 구조로 통합','히어로 → 제품 → 솔루션 → 문의로 이어지는 리드 전환 동선','메타태그 · canonical · 구조화 데이터를 회사 최초로 구축'],
-      tags:['Landing','Multilingual','SEO','Lead Gen']},
-     {key:'plan',group:'Planning · 138p Doc',name:'138페이지 사이트 기획서',short:'IA · 사이트맵 · 50+ 화면정의서 · 기능 명세까지 단독으로 작성한 기획 문서.',
-      stack:'IA · Sitemap · 화면정의서 · 기능 명세',
-      pdf:['docs','avycon-site-plan-v1-en.pdf'],
-      linkLabel:'View PDF',
-      body:'외주 개발사에 넘길 수 있는 수준의 기획서를 혼자 138페이지로 정리했습니다. 사이트맵과 정보 구조에서 시작해 50개 이상의 화면정의서, 데이터 필드 정의, 예외 케이스까지 문서화해 구현 단계의 해석 차이를 최소화했습니다.',
-      points:['사이트맵 · 3-depth 정보 구조 · URL 규칙 정의','50+ 화면정의서 — 화면별 요소 · 동작 · 예외 처리','CMS 데이터 필드와 제품 속성 스키마 사전 정의','런칭 후 운영 가이드까지 하나의 문서로 통합'],
-      tags:['IA','Documentation','Spec','Solo']},
-     {key:'figma',group:'Design · Figma',name:'Figma 와이어프레임 & 프로토타입',short:'전 페이지 와이어프레임과 이해관계자 리뷰용 인터랙티브 프리뷰 제작.',
-      stack:'Figma · Auto Layout · Prototype', link:'figma.com',linkUrl:'www.figma.com/design/qg1wJkbEBXuaFwFeMrU410/AVYCON-Renewal-wire-frame?node-id=0-1&m=dev&t=fKm007Ql8MFJAsrh-1',linkLabel:'Visit Figma project',
-      body:'기획서의 화면정의서를 그대로 Figma 와이어프레임으로 옮기고, 클릭 가능한 프로토타입으로 연결했습니다. 경영진과 영업팀이 문서 대신 실제 흐름을 보고 피드백할 수 있어 의사결정 속도가 크게 줄었습니다.',
-      points:['전 페이지 와이어프레임 — 데스크톱 · 모바일 대응','인터랙티브 프로토타입으로 이해관계자 리뷰 진행','컴포넌트 · Auto Layout 기반의 재사용 가능한 UI 세트','피드백을 화면정의서에 즉시 반영하는 단일 소스 운영'],
-      tags:['Figma','Wireframe','Prototype','UX']},
-     {key:'cms',group:'Data · CMS',name:'CMS 제품 데이터 연동',short:'100+ SKU 제품 정보를 CMS로 구조화하고 3-depth 라우팅 · 멀티 필터 · 5-SKU 비교로 연결.',
-      stack:'Wix CMS · Velo (JavaScript)', link:'avycon.com',linkUrl:'www.avycon.com/products/network_camera',
-      body:'외주사가 제품 페이지를 iframe으로 임베드하면서 필터 · 비교 · SEO가 모두 무력화된 상태였습니다. 제품 데이터를 CMS 컬렉션으로 정규화하고, Velo로 동적 라우팅과 필터를 직접 구현한 교정 데모를 만들어 방향을 되돌렸습니다.',
-      points:['100+ SKU를 CMS 컬렉션으로 정규화 · 속성 스키마 정의','main · sub · focal_length · size 멀티 필터 구현','5-SKU 스펙 비교 도구 · 페이지네이션 직접 개발','3-depth 동적 라우팅으로 제품 URL과 SEO 확보'],
-      tags:['CMS','Velo','Filtering','Product Data']},
-     {key:'structure',group:'Architecture',name:'사이트 구조 & 다국어 설계',short:'3-depth 메가메뉴, 4개 언어 통합 구조, SEO 인프라까지 사이트 전반의 구성 설계.',
-      stack:'IA · Mega Menu · SEO · i18n', link:'avycon.com',linkUrl:'www.avycon.com/ko',
-      body:'제품 · 솔루션 · 서포트 · 컴퍼니로 이어지는 전체 사이트 구조를 다시 세우고, 3-depth 메가메뉴로 탐색 경로를 단순화했습니다. 다국어는 언어별 사이트가 아니라 하나의 구조 위에서 언어 레이어로 동작하도록 설계했습니다.',
-      points:['3-depth 메가메뉴 — 제품군 · 솔루션 · 서포트 진입 통합','언어별 도메인 분리 → 단일 구조 + 언어 레이어로 전환','서포트 · 다운로드 문서 허브와 문의 라우팅 설계','전 페이지 SEO 규칙(메타 · canonical · 구조화 데이터) 표준화'],
-      tags:['Architecture','Mega Menu','i18n','SEO']}],
-   title:'AVYCON 웹사이트 리뉴얼',
-   summary:'레거시 PHP에서 Wix Studio 글로벌 플랫폼으로. 제한된 예산과 인력 안에서 개발비와 이후 운영·업데이트 비용까지 함께 고려해 Wix Studio + Velo를 택했고, 138페이지 세부 기획서와 Figma 와이어프레임 · 프로토타입을 제작해 외주 개발사와 함께 개발을 진행하며, 개발 아키텍처 가이드 제공과 오류 수정까지 직접 담당했습니다.',
-   meta:[
-     {label:'Role',value:'Marketing Manager & Project Lead — 기획 · 디자인 · 개발 디렉션 · Velo 구현'},
-     {label:'Timeline',value:'2025.10 기획(v1.0) / 개발 진행 중'},
-     {label:'Platform',value:'Legacy PHP (avycon.net) → Wix Studio (avycon.com)'},
-     {label:'Tech',value:'Wix Studio CMS · Wix Velo (JS) · Freshdesk API · Wix Login · Mega Menu'},
-     {label:'Deliverables',value:'138페이지 기획서 · Figma 와이어프레임 · 50+ 화면정의서 · Velo 데모'}],
-   challengeIntro:'SEO가 전무한 레거시 PHP 사이트, 분리 운영되던 다국어 도메인, 그리고 아키텍처 단계에서 CMS를 망가뜨린 외주사의 구현.',
-   challenges:[
-     {title:'SEO 인프라 부재',body:'메타태그 · canonical · 구조화 데이터가 레거시 사이트 전체에 존재하지 않았습니다.'},
-     {title:'다국어 비효율',body:'KO / JA / EN이 서로 독립된 3개 도메인으로 분리 운영되고 있었습니다.'},
-     {title:'마케팅 자동화 없음',body:'리드 폼 · CRM · 이메일 연동이 전혀 구축되지 않은 상태.'},
-     {title:'외주사의 기술적 오류',body:'iframe 임베드 방식이 디자인 단계부터 CMS 필터 · 비교 · SEO를 무력화시켰습니다.',critical:true}],
-   approach:[
-     {n:'1',title:'138페이지 기획서 단독 작성',body:'IA · Figma 와이어프레임 · 50+ 화면정의서를 혼자 정리했습니다.'},
-     {n:'2',title:'Figma 와이어프레임 설계',body:'이해관계자 리뷰용 인터랙티브 프리뷰까지 포함해 제작.'},
-     {n:'3',title:'Velo 교정 데모를 직접 개발',body:'3-depth 동적 라우팅, 멀티 필터(main·sub·focal_length·size), 5-SKU 비교 도구, 3-depth 메가메뉴, 페이지네이션.',hl:true},
-     {n:'4',title:'글로벌 다국어 구조 통합',body:'EN / KO / JA / ES를 단일 CMS 위로 통합.'}],
-   callout:'steve98031.wixstudio.com/website-1',
-   results:[{value:'4',label:'단일 CMS로 통합한 언어'},{value:'138',label:'페이지 기획 문서'},{value:'First',label:'회사 최초 SEO 구축'}],
-   gallery:['avycon.com 홈','제품 필터 화면','Figma 와이어프레임','Velo 데모 화면','CMS 어드민','다국어 버전'],
-   skills:['Strategic Planning','Wix Velo (JS)','CMS Architecture','Figma','Vendor Management','Global Marketing'],
-   beforeLabel:'avycon.net — Legacy PHP, iframe 임베드',afterLabel:'avycon.com — Wix Studio, 네이티브 CMS'},
-
-  {anchor:'case-2',num:'02',short:'Starllion Launch',cats:['Brand','Full-stack'],
-   banners:[
-     {key:'brand',group:'Brand · Identity',name:'브랜드 아이덴티티',short:'네이밍부터 S-마크 그라디언트 로고, 다크 네이비 / 로열 블루 팔레트까지 제로베이스에서 구축.',
-      stack:'Naming · Logo · Color System · Guideline', link:'starllion.com',
-      body:'하드웨어 카탈로그 톤에서 완전히 벗어난 SaaS 브랜드가 필요했습니다. 네이밍부터 로고, 컬러, 타이포, 그래픽 언어까지 에이전시 없이 직접 정의하고, 웹 · 앱 · 소셜에 동일하게 적용되는 가이드로 정리했습니다.',
-      points:['네이밍 · S-마크 그라디언트 로고 개발','다크 네이비 / 로열 블루 SaaS 팔레트 정의','웹 · 앱 · 스토어 · 소셜에 공통 적용되는 가이드 구축','$0 에이전시 — 브랜드 전 과정 단독 진행'],
-      tags:['Branding','Logo','Design System','SaaS']},
-     {key:'ia',group:'Planning · IA',name:'IA & 사이트 설계',short:'5개 대분류 / 30+ 하위 / 3-depth 구조를 기획 단계에서 확정.',
-      stack:'Sitemap · 3-depth IA · 화면 정의', link:'figma.com',linkUrl:'www.figma.com/design/3FRiAoALtMKfCFjAio4JNi/Starllion-wire-Frame?node-id=0-1&m=dev&t=Drt5dHXO49UJVcjd-1',linkLabel:'Visit Figma project',
-      body:'플랫폼 · 애널리틱스 · 솔루션 · 리소스 · 컴퍼니 5개 축으로 정보 구조를 세우고, 30개가 넘는 하위 페이지를 3-depth 안에서 탐색할 수 있게 정리했습니다. 페이지 템플릿을 먼저 정의해 콘텐츠가 늘어나도 구조가 흔들리지 않도록 설계했습니다.',
-      points:['5개 대분류 / 30+ 하위 / 3-depth 정보 구조 확정','페이지 유형별 템플릿 정의 — 확장 가능한 구조','URL · 네비게이션 · 내부 링크 규칙 표준화','런칭 이후 콘텐츠 추가를 고려한 IA 여유 설계'],
-      tags:['IA','Sitemap','Content Model','UX']},
-     {key:'platform',group:'Site · Platforms',name:'플랫폼 페이지',short:'클라우드 VMS 라인업을 기능 단위로 나눠 설명하는 핵심 섹션.',
-      stack:'Wix Studio · Velo · CMS', link:'starllion.com',linkUrl:'www.starllion.com/platforms/admin-portal',
-      body:'클라우드 VMS의 7개 플랫폼을 각각 독립 페이지로 구성하고, 공통 템플릿 위에서 기능 · 구성도 · 적용 시나리오를 일관된 순서로 설명합니다. 하드웨어 스펙 나열이 아니라 도입 후 무엇이 달라지는지를 앞에 두었습니다.',
-      points:['7개 플랫폼 페이지를 단일 템플릿으로 통일','기능 → 구성도 → 시나리오 순의 설명 구조','제품 비교와 문의 폼으로 이어지는 전환 동선','CMS 기반으로 스펙 업데이트를 운영팀이 직접 처리'],
-      tags:['SaaS Content','CMS','Velo','Conversion']},
-     {key:'analytics',group:'Site · Analytics',name:'애널리틱스 · 솔루션 페이지',short:'AI 분석 기능(5)과 산업별 솔루션을 시나리오 중심으로 구성.',
-      stack:'Content Design · Velo · SEO', link:'starllion.com',
-      body:'AI 분석 기능 5종과 리테일 · 시설 · 시티 등 산업별 솔루션을 별도 축으로 나눴습니다. 기능 페이지는 “무엇을 감지하는가”, 솔루션 페이지는 “어떤 현장에서 무엇을 해결하는가”로 서로 다른 질문에 답하도록 카피와 레이아웃을 분리했습니다.',
-      points:['AI 애널리틱스 5개 기능 페이지 구성','산업별 솔루션 시나리오 페이지 설계','기능 ↔ 솔루션 상호 링크로 탐색 경로 확장','전 페이지 SEO 메타 · 구조화 데이터 적용'],
-      tags:['Analytics','Solutions','Content','SEO']},
-     {key:'app',group:'Mobile · App',name:'iOS · Android 앱 런칭',short:'스토어 에셋과 딥링크까지 웹과 같은 시점에 오픈.',
-      stack:'App Store · Google Play · Deep Link', link:'starllion.com',linkUrl:'www.starllion.com/platforms/mobile-app',
-      body:'웹 런칭과 동시에 iOS · Android 앱을 스토어에 올렸습니다. 아이콘 · 스크린샷 · 스토어 카피 등 에셋 전체를 브랜드 가이드에 맞춰 제작하고, 웹에서 앱으로 이어지는 딥링크를 Velo로 직접 구현했습니다.',
-      points:['iOS · Android 스토어 에셋 일괄 제작','스토어 카피 · 키워드 · 스크린샷 최적화','웹 → 앱 딥링크 라우팅 직접 구현','웹 · 모바일 동시 런칭 일정 관리'],
-      tags:['Mobile','App Store','Deep Link','Launch']}],
-   title:'Starllion™ 클라우드 VMS 런칭',
-   summary:'제로베이스 SaaS 브랜드: 30+ 페이지, iOS/Android까지 — 에이전시 없이 100% 단독으로 런칭했습니다.',
-   meta:[
-     {label:'Role',value:'Marketing Manager — 브랜드 컨셉부터 프로덕션 런칭까지 단독 오너'},
-     {label:'Product',value:'Starllion™ Cloud VMS (AWS 기반 SaaS, 4,000+ 카메라 지원)'},
-     {label:'Timeline',value:'2024 — 2025 런칭'},
-     {label:'Tech',value:'Wix Studio · Wix Velo (JS) · 앱 딥링크 · 폼/라우팅/SEO 직접 구현'},
-     {label:'Scope',value:'브랜드 아이덴티티 · IA · Figma · 화면정의서 · 전체 구축 · iOS/Android'}],
-   challengeIntro:'하드웨어 카탈로그 미학과 차별화된 SaaS 브랜드를, 개발 예산도 에이전시도 없이 제로베이스에서 런칭해야 했습니다.',
-   challenges:[
-     {title:'제로 베이스, 제로 예산',body:'브랜드도, 에이전시도, 개발 예산도 없는 상태에서 시작.',critical:true},
-     {title:'하드웨어와의 차별화',body:'기존 하드웨어 카탈로그 톤에서 벗어난 SaaS 언어가 필요했습니다.'},
-     {title:'3-depth 정보 구조',document:'',body:'플랫폼 · 애널리틱스 · 솔루션까지 30+ 하위 페이지를 설계.'},
-     {title:'멀티채널 동시 런칭',body:'웹 · iOS · Android를 한 시점에 맞춰야 했습니다.'}],
-   approach:[
-     {n:'1',title:'브랜드 아이덴티티',body:'네이밍, S-마크 그라디언트 로고, 다크 네이비 / 로열 블루 팔레트.'},
-     {n:'2',title:'IA 설계',body:'5개 대분류 / 30+ 하위 / 3-depth: Platforms(7) · Analytics(5) · Solutions.'},
-     {n:'3',title:'Velo로 전체 구축',body:'폼 · 라우팅 · SEO · 앱 딥링크를 전부 JavaScript로 직접 구현.',hl:true},
-     {n:'4',title:'멀티채널 런칭',body:'웹 + iOS + Android 동시 오픈.'}],
-   callout:'starllion.com',
-   results:[{value:'30+',label:'라이브 페이지'},{value:'4',label:'리드 캡처 폼'},{value:'$0',label:'개발 외주 비용'}],
-   gallery:['starllion.com 홈','로고 / 브랜드 보드','플랫폼 상세 페이지','솔루션 버티컬','모바일 앱스토어','Figma 화면정의서'],
-   skills:['Brand Strategy','Information Architecture','Wix Velo','UX Design','SaaS Content','Multi-channel Launch']},
-
-  {anchor:'case-3',num:'03',short:'Print & Catalog',cats:['Print','Packaging'],
-   banners:[
-     {key:'catalog',group:'Print · Catalog',name:'연간 제품 카탈로그',short:'100+ SKU를 하나의 그리드 시스템으로 정리한 라인업 전체 카탈로그.',
-      stack:'InDesign · Photoshop · Illustrator',
-      pdf:['docs','avycon-product-catalog-2025.pdf'],
-      linkLabel:'View PDF',
-      body:'회사의 전 제품 라인업을 담는 연간 카탈로그를 매년 단독으로 설계·제작했습니다. 100개가 넘는 SKU를 같은 그리드와 위계 안에 정리해, 페이지가 늘어나도 읽는 방식이 달라지지 않도록 시스템을 먼저 세웠습니다.',
-      points:['100+ SKU를 단일 그리드 · 위계 시스템으로 통합','제품군별 챕터 구조와 색인 · 비교 표 설계','TAA · NDAA · UL · AI 인증 배지 규칙을 제품별로 정확히 적용','해외 인쇄 벤더 색교정 · 후가공 · 납기 관리'],
-      tags:['Catalog','InDesign','Grid System','Print Prod']},
-     {key:'flier',group:'Print · Flier',name:'제품 플라이어',short:'신제품 · 캠페인 단위로 제작한 단면 / 양면 플라이어 시리즈.',
-      stack:'InDesign · Illustrator · Print',
-      pdf:['docs','avycon-product-flyers.pdf'],
-      linkLabel:'View PDF',
-      body:'전시회와 영업 현장에서 바로 쓰이는 플라이어를 신제품과 캠페인 주기에 맞춰 제작했습니다. 카탈로그의 디자인 시스템을 그대로 축약해, 낱장으로 배포돼도 브랜드가 흐트러지지 않게 유지했습니다.',
-      points:['신제품 · 시즌 캠페인 단위의 단면 / 양면 플라이어','카탈로그 시스템을 축약한 1페이지 레이아웃 규칙','핵심 스펙과 차별점만 남기는 정보 우선순위 편집','전시 · 영업 · 메일 발송용 규격 동시 대응'],
-      tags:['Flier','Sales Collateral','Layout','Campaign']},
-     {key:'packaging',group:'Packaging',name:'제품 패키징',short:'박스 · 라벨 · 동봉물까지 라인업 전체를 아우르는 패키징 시스템.',
-      stack:'Dieline · Illustrator · Vendor Mgmt',
-      pdf:['docs','avycon-giftbox.pdf'],
-      linkLabel:'View PDF',
-      body:'제품 박스부터 라벨, 동봉 인쇄물까지 개봉 순간의 경험을 하나의 시스템으로 설계했습니다. 도무송(다이라인) 단위에서 벤더와 조율하며 소재 · 후가공 · 조립까지 실제 생산 조건에 맞춰 정리했습니다.',
-      points:['제품군별 박스 · 라벨 · 동봉물 패키징 시스템 구축','다이라인 설계와 소재 · 후가공 벤더 조율','리테일 키트 · 기프트 박스 등 특수 패키지 제작','바코드 · 인증 표기 · 다국어 라벨 규정 대응'],
-      tags:['Packaging','Dieline','Production','Brand']}],
-   title:'제품 카탈로그 & 인쇄물',
-   summary:'5년간 50개 이상의 인쇄물 — 100+ SKU 연간 카탈로그, 패키징, 기술 문서까지 단독 디자인·제작 관리.',
-   meta:[
-     {label:'Role',value:'Marketing Manager — 전체 인쇄물의 단독 디자이너 겸 제작 오너'},
-     {label:'Scope',value:'플라이어 · 연간 카탈로그 · Solution-by-Industry 카탈로그 · 패키징 · 스펙시트 · 매뉴얼 · QSG'},
-     {label:'Span',value:'5년 · 50+ 제작물'},
-     {label:'Tools',value:'InDesign · Illustrator · Photoshop · 인쇄 벤더 관리'},
-     {label:'Compliance',value:'TAA · NDAA · UL · AI 인증 배지 적용 관리'}],
-   challengeIntro:'B2B 하드웨어 인쇄물은 정확한 기술 스펙, 인증 배지 규정, 그리고 100+ SKU를 아우르는 브랜드 일관성을 동시에 만족해야 합니다.',
-   challenges:[
-     {title:'기술적 정확성',body:'데이터 오류 허용치 0의 스펙 전사 작업.'},
-     {title:'인증 컴플라이언스',body:'TAA · NDAA · UL · AI 배지를 제품별로 정확히 적용.',critical:true},
-     {title:'100+ SKU 일관성',body:'전 라인업에 걸친 그리드 · 위계 · 비주얼 시스템 유지.'},
-     {title:'인쇄 프로덕션',body:'해외 벤더와의 색교정 · 후가공 · 납기 관리.'}],
-   approach:[
-     {n:'1',title:'브리프 & 데이터 수집',body:'제품 스펙과 캠페인 요구사항을 정리.'},
-     {n:'2',title:'컨셉 & 레이아웃',body:'그리드 · 위계 · 비주얼 시스템 확립.'},
-     {n:'3',title:'디자인 시스템 적용',body:'전 SKU에 재사용 가능한 템플릿과 배지 규칙 구축.',hl:true},
-     {n:'4',title:'인쇄 감리 & 납품',body:'벤더 색교정, 후가공 확인, 최종 출고.'}],
-   callout:'',
-   results:[{value:'50+',label:'제작 인쇄물'},{value:'100+',label:'SKU 카탈로그'},{value:'5yr',label:'브랜드 일관성 유지'}],
-   gallery:['연간 카탈로그 표지','카탈로그 내지 스프레드','Solution-by-Industry 카탈로그','PTZ 플라이어','파노라마 / 피시아이 플라이어','Smart Defender™ 시리즈','NVR / DVR 플라이어','Kit Box 패키징','기프트 박스'],
-   skills:['B2B Print Design','Catalog Production','Packaging','Technical Documentation','Print Production Mgmt','Brand Stewardship']},
-
-  {anchor:'case-4',num:'04',short:'Trade Show & CX',cats:['3D','Events'],
-   banners:[
-     {key:'cx',group:'Space · CX Center',name:'본사 CX 센터 구축',short:'쇼룸 공간 기획부터 벽면 그래픽, 제품 진열, 시공 감독까지 주도.',
-      stack:'Space Planning · Graphics · 시공 감독',
-      body:'고객이 제품을 직접 보고 상담하는 본사 CX 쇼룸을 처음부터 만들었습니다. 동선과 존 구성을 기획하고, 벽면 그래픽과 제품 진열, 조명까지 결정한 뒤 시공 현장을 직접 감독했습니다.',
-      points:['방문 고객 동선과 존(제품 · 데모 · 상담) 구성 기획','벽면 대형 그래픽 · 사이니지 디자인 및 제작','제품 진열 계획과 데모 환경 세팅','시공 벤더 선정 · 일정 · 현장 감독'],
-      tags:['Showroom','Interior','Environmental','Ops']},
-     {key:'render',group:'3D · Interior',name:'3D 인테리어 & 부스 렌더링',short:'제작 확정 전 공간과 그래픽을 직접 3D로 시각화해 의사결정을 앞당김.',
-      stack:'3D Modeling · Rendering',
-      body:'부스와 쇼룸을 제작하기 전에 공간을 직접 3D로 모델링하고 렌더링했습니다. 도면만으로는 판단이 어려웠던 구조 · 그래픽 · 조명을 미리 확인할 수 있어, 현장에서 발생하던 수정과 비용을 크게 줄였습니다.',
-      points:['부스 · 쇼룸 공간을 직접 3D 모델링 · 렌더링','구조 · 그래픽 · 조명을 제작 전에 검증','경영진 · 벤더와 동일한 이미지를 공유해 의사결정 단축','현장 수정 최소화로 제작비 · 일정 리스크 감소'],
-      tags:['3D Render','Booth Design','Visualization','Pre-viz']},
-     {key:'shows',group:'Trade Show · 4 Countries',name:'해외 전시 4개국',short:'미국 · UAE · 한국 · 일본 전시를 한 사이클 안에서 디자인 · 물류 · 현장 실행.',
-      stack:'ISC West · Intersec · SECON · Security Show',
-      body:'4개국 전시가 한 기간에 겹치는 사이클을 원격에서 조율했습니다. 부스 구조와 대형 그래픽을 함께 설계하고, 각국 벤더 제작과 물류, 현장 설치, 제품 진열, 운영 브리핑까지 하나의 프로세스로 관리했습니다.',
-      points:['ISC West(US) · Intersec(UAE) · SECON(KR) · Security Show(JP)','시장별 메시지와 제품 진열 동선을 각각 재구성','4개국 벤더 제작 · 배송 · 설치 일정 원격 조율','현장 설치 감독과 운영 인력 브리핑까지 실행'],
-      tags:['Trade Show','Vendor Mgmt','Logistics','Global']}],
-   title:'전시회 · 이벤트 · CX 센터',
-   summary:'4개국 전시회와 본사 CX 쇼룸을 한 사이클 안에 — 디자인, 공간 기획, 벤더, 물류, 현장 실행까지.',
-   meta:[
-     {label:'Role',value:'Marketing Manager — 부스 디자인 · 이벤트 기획 · CX 인테리어 · 벤더 코디네이션'},
-     {label:'Events',value:'ISC West 2026 (Las Vegas) · Intersec 2026 (Dubai) · SECON 2026 (Seoul) · Security Show 2026 (Tokyo)'},
-     {label:'Timeline',value:'2026 시즌 · 단일 사이클'},
-     {label:'Tools',value:'3D 렌더링 · 대형 인쇄 · 시공 감독 · 국제 물류'},
-     {label:'Extra',value:'본사 CX 센터 공간 기획 · 벽면 그래픽 · 제품 진열'}],
-   challengeIntro:'4개국 전시와 본사 쇼룸을 한 사이클 안에서 디자인 · 공간 기획 · 벤더 관리 · 물류 · 현장 실행으로 수렴시켜야 했습니다.',
-   challenges:[
-     {title:'4개국, 하나의 사이클',body:'미국 · UAE · 한국 · 일본 전시가 단일 기간에 겹쳤습니다.',critical:true},
-     {title:'공간 + 그래픽 동시 설계',body:'부스 구조와 대형 그래픽을 함께 설계해야 했습니다.'},
-     {title:'국제 벤더 관리',body:'4개국 벤더 · 물류 · 현장 설치를 원격에서 조율.'},
-     {title:'CX 센터 시공',body:'쇼룸 공간 기획부터 시공 감독까지 병행.'}],
-   approach:[
-     {n:'1',title:'브리프 & 공간 기획',body:'부스 목표와 동선 레이아웃 정의.'},
-     {n:'2',title:'3D 렌더링',body:'제작 확정 전에 직접 3D로 시각화.',hl:true},
-     {n:'3',title:'벤더 & 물류',body:'4개국 제작 · 배송 · 설치 일정 조율.'},
-     {n:'4',title:'현장 실행',body:'설치 감독, 제품 진열, 운영 브리핑.'}],
-   callout:'',
-   results:[{value:'4',label:'전시 참가 국가'},{value:'5',label:'이벤트 프로그램'},{value:'1',label:'CX 쇼룸 구축'}],
-   gallery:['ISC West 3D 렌더','ISC West 현장','Intersec 부스','SECON 부스','Tokyo 부스','CX 센터 벽면 그래픽','CX 제품 진열','ADI 배너 세트'],
-   skills:['3D Booth Design','Trade Show Mgmt','Intl Vendor Coordination','Environmental Design','Large-format Print','Bilingual Ops']},
-
-  {anchor:'case-5',num:'05',short:'AI-Built Apps',cats:['AI','Dev'],
-   title:'AI 기반 앱 개발 — 업무용 + 개인',
-   summary:'Claude API · Cursor · v0 · Vercel로 100% 단독 제작한 6개 앱. 사내 업무 자동화 3개, 개인 프로젝트 2개, Three.js 실험용 Lab 1개.',
-   meta:[
-     {label:'Role',value:'Marketing Manager — 100% 단독: 기획 · UI/UX · 개발 · 배포'},
-     {label:'Tools',value:'Claude AI · Claude Design · Cursor AI · Gemini · v0 · GitHub · Vercel'},
-     {label:'Stack',value:'React · Next.js · Three.js · React Three Fiber'},
-     {label:'Timeline',value:'2025 — 2026 · 6개 앱 배포'},
-     {label:'Deploy',value:'GitHub → Vercel CI/CD 파이프라인'}],
-   challengeIntro:'엔지니어도, 예산도, 본업 외 시간도 없었습니다 — 그래서 AI를 개발 레이어로 삼아 실제로 작동하는 소프트웨어를 출시했습니다.',
-   challenges:[
-     {title:'엔지니어 없음',body:'전담 개발자가 0명인 마케팅 팀.',critical:true},
-     {title:'예산 없음',body:'개발비 지출 없이 실제 소프트웨어를 출시해야 했습니다.'},
-     {title:'시간 없음',body:'풀타임 업무와 병행해야 하는 제작 일정.'},
-     {title:'프로덕션 품질',body:'데모가 아니라 팀이 실제로 쓰는 도구여야 했습니다.'}],
-   approach:[
-     {n:'1',title:'문제 정의',body:'업무용은 대체할 워크플로우를, 개인 프로젝트는 배우고 싶은 기술을 기준으로 출발.'},
-     {n:'2',title:'Claude Design — UI 목업',body:'HTML 레퍼런스로 내보내 디자인 기준선 확보.'},
-     {n:'3',title:'Cursor로 구현',body:'React / Next.js 코드베이스를 AI 페어링으로 작성.',hl:true},
-     {n:'4',title:'GitHub → Vercel 배포',body:'CI/CD로 실사용 URL까지 연결하고 팀에 배포.'}],
-   callout:'stevejung.dev',
-   results:[{value:'3',label:'사내 업무 자동화 앱'},{value:'3',label:'개인 · Lab 프로젝트'},{value:'15min',label:'스펙시트 검수 (기존 3시간)'}],
-   gallery:['Claude Design 작업 파일','Cursor AI 세션','GitHub 레포'],
-   skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
-   apps:[
-     {key:'accessory',group:'업무 자동화 · Internal',name:'악세서리 가이드 생성기',stack:'React · Next.js · Claude API',status:'IN USE · INTERNAL',link:'avycon-accessory-guide.vercel.app',
-      short:'제품별 호환 악세서리 문서 자동 생성',
-      body:'제품 SKU를 입력하면 호환되는 악세서리 목록과 설치 가이드 문서를 자동으로 생성합니다. 영업팀과 기술지원팀이 매번 수동으로 찾아 정리했던 작업을 대체했습니다.',
-      points:['100+ SKU 호환 매트릭스를 구조화된 데이터로 정규화','요청 대응 시간을 수십 분에서 수 분 단위로 단축','PDF · 웹 양쪽 포맷으로 즉시 출력'],
-      tags:['업무 자동화','문서 생성','사내 사용']},
-     {key:'specsheet',group:'업무 자동화 · Internal',name:'AI 스펙시트 검수기',stack:'Claude API · Next.js',status:'IN USE · INTERNAL',link:'ai-spec-review.vercel.app',
-      short:'스펙 오류·누락을 AI로 교차 검수',
-      body:'스펙시트 초안과 원본 제품 데이터를 대조해 수치 오류, 누락 항목, 표기 불일치를 찾아 근거와 함께 리포트합니다. B2B 하드웨어에서 스펙 오류는 곧 클레임이므로 가장 리스크가 큰 작업이었습니다. 여기서 한 단계 더 나아가, 이원화되어 있던 PDF 스펙시트와 리뉴얼 사이트의 제품 CMS 데이터를 맵핑해 하나의 통일된 스펙 데이터로 통합하고, 스펙시트 제작까지 자동화했습니다.',
-      points:[
-        '수 시간 걸리던 검수를 15–20분으로 축약',
-        '인증 배지(TAA · NDAA · UL · AI) 표기 규칙 자동 확인',
-        '오류 항목별 원본 근거를 함께 제시',
-        'PDF 스펙시트 ↔ 웹 CMS 제품 데이터를 맵핑해 단일 스펙 데이터로 통합',
-        '항목별 수정 옵션과 검수 리포트 문서 제공',
-        '엑셀·일러스트레이터 수동 작업을 대체 — 기존과 동일한 문서 스타일의 PDF 자동 생성'],
-      tags:['Claude API','품질 검수','웹 CMS 통합','PDF 자동화']},
-     {key:'material',group:'업무 자동화 · Internal',name:'Three.js 웹 3D 재질 편집기',stack:'Three.js · React Three Fiber',status:'IN USE · INTERNAL',link:'threejs-material-editor.vercel.app',
-      short:'웹 Three.js용 3D 모델 재질 편집기',
-      body:'웹에서 Three.js로 3D 모델을 띄울 때 쓸 재질을 브라우저에서 직접 편집하는 도구입니다. 모델을 불러와 재질과 라이팅을 실시간으로 조정하고, 그대로 웹에 적용할 설정값으로 내보냅니다.',
-      points:['GLB / OBJ 모델을 불러와 재질을 실시간 편집','메탈니스 · 러프니스 · 이미시브 · 환경광 파라미터 조정','웹 적용용 재질 설정값 · 프리셋으로 내보내기'],
-      tags:['Three.js','웹 3D','재질 워크플로우']},
-     {key:'english',group:'개인 프로젝트 · Personal',name:'영어 학습 앱',stack:'React · Claude API',status:'PERSONAL PROJECT',link:'midani-english.vercel.app',
-      short:'간격 반복 기반 개인 학습 도구',
-      body:'문장 단위 반복 학습 루프와 오답 기반 복습 스케줄을 갖춘 개인용 학습 도구입니다. 업무와 무관하게, 직접 매일 쓰고 싶은 도구를 만들며 상태 관리와 데이터 설계를 익혔습니다.',
-      points:['간격 반복(spaced repetition) 스케줄러 직접 구현','AI 문장 교정 및 예문 생성','학습 기록 로컬 저장 · 진도 시각화','Google 로그인으로 계정 관리 및 기기 간 학습 데이터 동기화'],
-      tags:['개인 프로젝트','학습 설계','상태 관리']},
-     {key:'streamix',group:'개인 프로젝트 · Personal',name:'STREAMIX 콘텐츠 브라우징 사이트',stack:'Next.js · Tailwind · Content API',status:'PERSONAL PROJECT',link:'streamix-green.vercel.app',
-      short:'영화·시리즈 API 기반 콘텐츠 소개 사이트',
-      body:'영화와 시리즈 콘텐츠 데이터 API를 연동해 만든 콘텐츠 소개 사이트입니다. 실시간 외부 데이터를 다루면서 B2B 하드웨어와 정반대 성격의 컨슈머 UI를 설계해봤습니다.',
-      points:['콘텐츠 데이터 API 연동 · 장르/인기순 큐레이션','히어로 · 캐러셀 · 상세 페이지 전체 플로우 설계','반응형 그리드 · 스켈레톤 로딩 · 키보드 내비게이션'],
-      tags:['개인 프로젝트','API 연동','컨슈머 UI']},
-     {key:'lab',group:'Lab · Three.js 기술 테스트',name:'Three.js 기술 테스트 Lab',stack:'Three.js · R3F · GLSL · Vercel',status:'ONGOING EXPERIMENTS',link:'stevejung-portfolio.vercel.app/lab',linkUrl:'stevejung-portfolio.vercel.app/lab/synapser-studio',
-      short:'포트폴리오 구현을 위한 Three.js 기술 테스트',
-      body:'포트폴리오에 적용할 Three.js 기술을 미리 검증하는 테스트 Lab입니다. 완성된 서비스가 아니라, 기법 하나하나를 독립 씬으로 만들어 배포하고 검증된 것만 실제 포트폴리오에 반영합니다.',
-      points:['Synapser Studio — 스크롤 연동 시네마틱 3D 씬 테스트','지오메트리 · GLSL 셰이더 · 파티클 · 포스트프로세싱 단위 검증','GitHub → Vercel 자동 배포로 테스트마다 공개 URL 확보'],
-      tags:['Three.js','기술 검증','R3F']}]},
-
-  {anchor:'case-6',num:'06',short:'Campaign & Video',cats:['Campaign','Video'],
-   banners:[
-     {key:'campaign',group:'Digital · Campaign',name:'디지털 캠페인',short:'연 6회 이상 시즌 캠페인을 키비주얼에서 멀티포맷까지 단독으로 전개.',
-      stack:'Photoshop · Illustrator · After Effects',
-      body:'연간 마케팅 캘린더에 맞춰 시즌 캠페인을 기획하고 제작했습니다. 하나의 키비주얼을 정한 뒤 이메일 헤더 · 웹 배너 · 랜딩 · 소셜까지 규격별로 파생시켜, 채널이 늘어나도 캠페인이 같은 얼굴로 보이게 유지했습니다.',
-      points:['연 6회 이상 시즌 캠페인 기획 · 제작','키비주얼 1종 → 이메일 · 웹 배너 · 랜딩 · 소셜 멀티포맷 확장','신제품 런칭과 전시 일정에 맞춘 캠페인 캘린더 운영','캠페인별 랜딩 · 리드 폼 연결로 전환 경로 확보'],
-      tags:['Campaign','Key Visual','Multi-format','Email']},
-     {key:'social',group:'Social · Content',name:'SNS 콘텐츠',short:'반복 가능한 템플릿 시스템으로 다채널 소셜 콘텐츠를 지속 운영.',
-      stack:'Template System · IG · FB · LinkedIn',
-      body:'매번 새로 디자인하는 방식에서 벗어나, 포스트 유형별 템플릿 세트를 만들어 운영 부담을 줄였습니다. 제품 소개 · 인증 · 전시 현장 · 기술 설명 등 콘텐츠 유형을 나누고 각각의 레이아웃 규칙을 정했습니다.',
-      points:['포스트 유형별 템플릿 시스템 구축 — 제작 시간 대폭 단축','1:1 / 4:5 / 9:16 규격 동시 대응','제품 · 인증 · 전시 · 기술 콘텐츠 유형별 톤 정의','채널별 발행 캘린더와 캠페인 연계 운영'],
-      tags:['Social','Template','Content Ops','Multi-channel']},
-     {key:'video',group:'Video · Production',name:'영상 제작',short:'브랜드 · 제품 데모 · 전시 하이라이트 영상을 기획부터 편집까지 감독.',
-      stack:'Premiere Pro · After Effects · Direction',
-      body:'브랜드 영상과 제품 데모, 전시 하이라이트 영상을 기획 · 콘티 · 편집 등을 감독했습니다. 특히 제품 데모는 기능 시연 순서를 다시 짜서, 스펙 설명보다 “실제로 무엇이 보이는가”를 먼저 전달하도록 구성했습니다.',
-      points:['브랜드 영상 — 기획 · 콘티 · 편집 등 감독','제품 데모 영상 시리즈 — 기능 중심 시연 구성','전시 하이라이트 영상 — 현장 소재를 채널 포맷으로 재편집','모션 그래픽 · 자막 · 다국어 버전 대응'],
-      tags:['Video','Direction','Motion','Editing']}],
-   title:'디지털 캠페인 · SNS · 영상',
-   summary:'연 6회 이상의 시즌 캠페인, IG/FB 콘텐츠 시리즈, 그리고 직접 기획·감독한 YouTube 영상.',
-   meta:[
-     {label:'Role',value:'Marketing Manager — 캠페인 전략 · 디자인 디렉션 · 영상 제작 감독'},
-     {label:'Channels',value:'Instagram · Facebook · YouTube · Email · Amazon (일부)'},
-     {label:'Cadence',value:'연 6회 이상 시즌 캠페인'},
-     {label:'Formats',value:'이메일 헤더 · 소셜 1:1 · 4:5 · 9:16 · 웹 배너'},
-     {label:'Video',value:'브랜드 영상 · 제품 데모 · 전시 하이라이트 (제작 Sherry Kim)'}],
-   challengeIntro:'B2B 고객을 소비자 채널(LinkedIn · IG · YouTube)에서 만나는 일 — 기술 하드웨어와 시각적 매력 사이의 디자인 언어를 세워야 했습니다.',
-   challenges:[
-     {title:'소비자 채널의 B2B',body:'소비자가 스크롤하는 자리에 기술 하드웨어를 놓는 문제.'},
-     {title:'비주얼 언어',body:'스펙 중심 제품과 스크롤을 멈추는 이미지 사이를 잇기.',critical:true},
-     {title:'멀티포맷 확장',body:'하나의 캠페인을 1:1 / 4:5 / 9:16 / 배너로 확장.'},
-     {title:'영상 제작 관리',body:'기획 · 콘티 · 편집 등 감독을 병행.'}],
-   approach:[
-     {n:'1',title:'캘린더 기반 시즌 에셋',body:'연간 마케팅 캘린더에 맞춘 이메일 헤더 / 소셜 / 웹 배너.'},
-     {n:'2',title:'SNS 콘텐츠 시리즈 템플릿화',body:'반복 가능한 포맷 시스템으로 제작 속도 확보.',hl:true},
-     {n:'3',title:'영상 기획 & 감독',body:'브랜드 · 제품 데모 · 전시 하이라이트 3개 카테고리 운영.'},
-     {n:'4',title:'성과 리뷰 & 반복',body:'채널별 반응을 다음 시즌 디자인에 반영.'}],
-   callout:'',
-   results:[{value:'6+',label:'연간 시즌 캠페인'},{value:'3',label:'영상 카테고리'},{value:'2',label:'운영 SNS 플랫폼'}],
-   gallery:['Black Friday 그래픽 세트','홀리데이 캠페인','소셜 포맷 (1:1/4:5/9:16)','YouTube 채널','제품 데모 썸네일','전시 하이라이트 영상'],
-   skills:['Campaign Design','Social Media Design','Video Production Planning','Creative Direction','Multi-channel Mgmt']},
-
-  {anchor:'case-7',num:'07',short:'Project Ops',cats:['PMS','Process'],
-   banners:[
-     {key:'pms',group:'PMS · Asana + Notion',name:'프로젝트 관리 시스템 구축',short:'Asana와 Notion을 결합해 업무 흐름과 조직 지식을 하나의 운영 체계로 정리.',
-      stack:'Asana · Notion · SOP',
-      body:'담당자와 마감, 진행 상태가 어디에도 남지 않던 업무 방식을 Asana 워크스페이스로 옮겼습니다. 프로젝트 · 태스크 · 마일스톤 구조를 정의하고, 반복 업무는 템플릿으로 만들어 매번 새로 설계하지 않아도 되게 했습니다. 여기에 Notion을 지식 레이어로 붙여 브랜드 에셋, 벤더 정보, 작업 SOP를 검색 가능한 형태로 축적했습니다.',
-      points:['Asana 워크스페이스 설계 — 프로젝트 · 태스크 · 마일스톤 구조 정의','반복 업무(카탈로그 · 캠페인 · 전시) 템플릿화로 착수 시간 단축','Notion 지식베이스 — 브랜드 에셋 · 벤더 DB · 작업 SOP 문서화','업무 가시성 확보로 병목과 일정 리스크를 사전에 식별','신규 인력이 문서만으로 업무에 붙을 수 있는 온보딩 체계'],
-      tags:['Asana','Notion','Process Design','Knowledge Base']},
-     {key:'remote',group:'Guides · Remote · Vendor',name:'브랜드 가이드 · 템플릿 기반 협업',short:'브랜드 가이드와 작업 템플릿으로 원격 · 외주 소통 기준을 세움.',
-      stack:'Brand Guide · Templates · Feedforward / Feedback',
-      body:'로고 · 컬러 · 타이포 · 적용 규정을 담은 AVYCON 브랜드 가이드와 작업 유형별 템플릿을 만들어 배포했습니다. 한국 원격 팀과 외주 업체에 매번 말로 설명하던 업무 지시를 이 문서가 대신하면서 해석 차이가 줄었습니다. 착수 전 피드포워드와 완료 후 피드백을 사이클로 고정해, 16–17시간 시차에서도 소통 왕복 없이 업무가 이어집니다.',
-      points:['AVYCON 브랜드 가이드 — 로고 · 컬러 · 타이포 규정','작업 유형별 템플릿과 브리핑 양식을 함께 배포','한국 원격 팀 · 외주 업체에 같은 기준으로 지시 전달','착수 전 피드포워드 · 완료 후 피드백을 사이클로 고정','16–17시간 시차에도 왕복 없이 이어지는 비동기 협업'],
-      tags:['Brand Guide','Templates','Feedforward','Remote']}],
-   title:'프로젝트 매니지먼트 시스템 운영',
-   summary:'Asana · Notion으로 업무와 지식을 체계화하고, 원격 · 외부 벤더 협업을 같은 프로세스 위에서 운영.',
-   meta:[
-     {label:'Role',value:'Marketing Manager — 팀 리드 · 원격 관리 · 벤더 코디네이터'},
-     {label:'Team',value:'Sally Park (제품 데이터) · Sherry Kim (영상) · Vicky (운영) + 순환 벤더'},
-     {label:'Model',value:'US ↔ KR 비동기 워크플로우 (16–17시간 시차)'},
-     {label:'Tools',value:'Asana · Notion · 바이링구얼 SOP'},
-     {label:'Span',value:'5년 · 조직 전환'}],
-   challengeIntro:'프로젝트 관리 시스템 없음, 단절된 한미 워크플로우, 임기응변식 벤더 관계, 사라지는 조직 지식, 그리고 반응적인 업무 문화.',
-   challenges:[
-     {title:'PM 시스템 부재',body:'워크스페이스도, 담당자도, 공유 가시성도 없었습니다.',critical:true},
-     {title:'한미 단절',body:'16–17시간 시차가 인수인계를 끊고 있었습니다.'},
-     {title:'조직 지식 유실',body:'모든 정보가 한 사람의 머릿속에 존재.'},
-     {title:'벤더 임기응변',body:'브리핑 기준도 QA 절차도 문서화되지 않은 상태.'}],
-   approach:[
-     {n:'1',title:'Asana',body:'프로젝트 워크스페이스, 태스크 오너십, 크로스팀 가시성, 반복 워크플로우 템플릿.'},
-     {n:'2',title:'Notion',body:'브랜드 가이드 허브, 벤더 디렉토리, SOP 문서화.',hl:true},
-     {n:'3',title:'비동기 프로토콜',body:'시차를 전제로 한 핸드오프 규칙과 바이링구얼 브리프.'},
-     {n:'4',title:'벤더 운영 체계',body:'5+ 외주를 동일한 브리핑 · QA · 승인 프로세스로 통합.'}],
-   callout:'',
-   results:[{value:'5+',label:'동시 벤더 관계'},{value:'2',label:'국가 · 원격 팀'},{value:'5yr',label:'조직 전환'}],
-   gallery:['Asana 프로젝트 보드','Asana 타임라인','브랜드 가이드 — 타이포그래피 시스템','브랜드 가이드 — 아이코노그래피 · 이미지','브랜드 가이드 — 코브랜딩 · 적용'],
-   skills:['Project Management','Knowledge Management','Remote Team Leadership','Vendor Management','Process Design','Crisis Management']}
-];
+// Copy comes from i18n/<locale>.js, picked by the language in the URL.
+// Falling back to Korean keeps the page working if a locale file is
+// missing, which is also what serves English until i18n/en.js lands.
+const COPY = ((window.SITE_COPY || {})[window.SITE_LOCALE]
+           || (window.SITE_COPY || {}).ko || {});
+const CASES = (COPY.caseStudy && COPY.caseStudy.cases) || [];
+const UI = (COPY.caseStudy && COPY.caseStudy.ui) || {};
 
 // Maps a case-study image code (e.g. 'C1-HOME-MAIN') to its source image path.
 // Filled in incrementally as image assignments come in per case.
@@ -1134,7 +809,7 @@ class Component extends DCLogic {
     const i = this.state.i, c = CASES[i];
     const prev = CASES[(i-1+CASES.length)%CASES.length], next = CASES[(i+1)%CASES.length];
     const cs = Object.assign({}, c, {
-      heroSlot: c.anchor+'-hero', heroSlotLabel: c.title+' — 히어로 이미지',
+      heroSlot: c.anchor+'-hero', heroSlotLabel: c.title+(UI.heroSlotSuffix||''),
       beforeSlot: c.anchor+'-before', afterSlot: c.anchor+'-after',
       codeBefore: 'C'+(+c.num)+'-BEFORE', codeAfter: 'C'+(+c.num)+'-AFTER',
       srcBefore: IMG_MAP['C'+(+c.num)+'-BEFORE'] || '', srcAfter: IMG_MAP['C'+(+c.num)+'-AFTER'] || '',
@@ -1254,7 +929,7 @@ class Component extends DCLogic {
       bg: k===i ? 'var(--accent)' : 'transparent',
       fg: k===i ? '#0a0a0b' : 'var(--muted)' }));
     const n=(c.apps||c.banners||[]).length||1;
-    return { cs, nav,
+    return { t: UI, cs, nav,
       lightboxOpen: !!this.state.lightbox,
       lightboxSrc: this.state.lightbox || '',
       closeLightbox: () => this.setState({ lightbox: null }),
