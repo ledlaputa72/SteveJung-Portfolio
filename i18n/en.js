@@ -69,10 +69,10 @@ window.SITE_COPY.en = {
         tags:['3D Render','Exhibition','Interior','Vendor Mgmt'],link:null,slot:'slot-booth',src:'/images/index.html/IDX-CASE4.png',slotLabel:'[IDX-CASE4] 3D booth renders · CX center'},
       {num:'05',anchor:'case-5',scene:'06',sceneName:'05 — AI-BUILT APPS',label:'Case 05 · AI-Built Apps',
         kicker:'AI-BUILT · INTERNAL + PERSONAL',title:'AI-Built Apps — Internal + Personal',
-        tagline:'No engineers, no budget, no time outside the day job — so I made AI the development layer and shipped software that actually runs. With the Claude API, Cursor, v0, and Vercel I built three internal automation tools (an accessory guide generator, a spec sheet reviewer, a Three.js material editor), two personal projects, and one Three.js experiment Lab, all alone. Not demos — tools the team uses, and spec review dropped from three hours to fifteen minutes.',
-        meta:[{k:'Role',v:'100% Solo'},{k:'Internal',v:'3 apps in use'},{k:'Personal',v:'2 apps + 1 Lab'}],
-        points:['Internal — accessory guide generator · AI spec sheet reviewer · Three.js material editor','Personal — English learning app · STREAMIX content browsing site','Lab — Three.js technique tests for the portfolio (Synapser Studio and others)'],
-        tags:['React','Next.js','Three.js','Claude API'],link:null,slot:'slot-apps',src:'/images/index.html/IDX-CASE6.png',slotLabel:'[IDX-CASE6] Six app screens / UI'},
+        tagline:'No engineers, no budget, no time outside the day job — so I made AI the development layer and shipped software that actually runs. With the Claude API, Cursor, v0, and Vercel I built three internal automation tools (an accessory guide generator, a spec sheet reviewer, a Three.js material editor), three personal projects, and one Three.js experiment Lab, all alone. Not demos — tools the team uses, and spec review dropped from three hours to fifteen minutes.',
+        meta:[{k:'Role',v:'100% Solo'},{k:'Internal',v:'3 apps in use'},{k:'Personal',v:'3 apps + 1 Lab'}],
+        points:['Internal — accessory guide generator · AI spec sheet reviewer · Three.js material editor','Personal — English learning app · STREAMIX content browsing · Starbucks Korea redesign','Lab — Three.js technique tests for the portfolio (Synapser Studio and others)'],
+        tags:['React','Next.js','Three.js','Claude API'],link:null,slot:'slot-apps',src:'/images/index.html/IDX-CASE6.png',slotLabel:'[IDX-CASE6] Seven app screens / UI'},
       {num:'06',anchor:'case-6',scene:'06',sceneName:'06 — DIGITAL CAMPAIGN',label:'Case 06 · Digital Campaign & Video',
         kicker:'CAMPAIGN · SOCIAL · VIDEO',title:'Digital Campaigns · Social · Video',
         tagline:'The work was putting B2B hardware onto the channels consumers actually scroll (LinkedIn · IG · YouTube). Six or more seasonal campaigns a year, each derived from one key visual into email, web banners, landing pages, and social at every required size, with a template system per post type that took the weight out of multi-channel operations. Brand, product demo, and show highlight videos were directed from concept and storyboard through the edit.',
@@ -296,12 +296,12 @@ window.SITE_COPY.en = {
 
   {anchor:'case-5',num:'05',short:'AI-Built Apps',cats:['AI','Dev'],
    title:'AI-Built Apps — Internal + Personal',
-   summary:'Six apps built 100% solo with the Claude API, Cursor, v0, and Vercel — three internal automation tools, two personal projects, and one Three.js experiment Lab.',
+   summary:'Seven apps built 100% solo with the Claude API, Cursor, v0, and Vercel — three internal automation tools, three personal projects, and one Three.js experiment Lab.',
    meta:[
      {label:'Role',value:'Marketing Manager — 100% solo: planning · UI/UX · development · deployment'},
      {label:'Tools',value:'Claude AI · Claude Design · Cursor AI · Gemini · v0 · GitHub · Vercel'},
      {label:'Stack',value:'React · Next.js · Three.js · React Three Fiber'},
-     {label:'Timeline',value:'2025 — 2026 · 6 apps shipped'},
+     {label:'Timeline',value:'2025 — 2026 · 7 apps shipped'},
      {label:'Deploy',value:'GitHub → Vercel CI/CD pipeline'}],
    challengeIntro:'No engineers, no budget, no time outside the day job — so I made AI the development layer and shipped software that actually runs.',
    challenges:[
@@ -315,7 +315,7 @@ window.SITE_COPY.en = {
      {n:'3',title:'Implemented in Cursor',body:'React / Next.js codebases written through AI pairing.',hl:true},
      {n:'4',title:'Shipped GitHub → Vercel',body:'CI/CD out to a live URL, then handed to the team.'}],
    callout:'stevejung.dev',
-   results:[{value:'3',label:'Internal automation apps'},{value:'3',label:'Personal · Lab projects'},{value:'15min',label:'Spec review (was 3 hours)'}],
+   results:[{value:'3',label:'Internal automation apps'},{value:'4',label:'Personal · Lab projects'},{value:'15min',label:'Spec review (was 3 hours)'}],
    gallery:['Claude Design working file','Cursor AI session','GitHub repo'],
    skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
    apps:[
@@ -354,7 +354,12 @@ window.SITE_COPY.en = {
       short:'Three.js techniques tested before they reach the portfolio',
       body:'A test Lab where I validate the Three.js techniques I plan to use in the portfolio. It is not a finished product — each technique becomes its own scene, gets deployed, and only the ones that hold up make it into the real site.',
       points:['Synapser Studio — a scroll-driven cinematic 3D scene test','Geometry, GLSL shaders, particles, and post-processing validated one at a time','GitHub → Vercel auto-deploy gives every experiment a public URL'],
-      tags:['Three.js','Technical Validation','R3F']}]},
+      tags:['Three.js','Technical Validation','R3F']},
+     {key:'starbucks',group:'Personal Project',name:'Starbucks Korea Redesign',stack:'React · Node.js · Netlify',status:'PERSONAL PROJECT',link:'ledlaputa-startbucks.netlify.app',
+      short:'A redesign concept for the Starbucks Korea site',
+      body:'A redesign of the Starbucks Korea website. Rather than stopping at mockups I built it in React and Node.js and deployed it to Netlify, so everything from the hero carousel to the mega menu and promotion sections behaves the way it would in real use.',
+      points:['Home hero carousel and promotion slider implemented','3-depth mega menu navigation designed across COFFEE, MENU, and the rest','Key sub-pages redesigned, including My Starbucks Rewards','GitHub → Netlify auto-deploy for a public URL'],
+      tags:['Personal Project','React','Redesign','Netlify']}]},
 
   {anchor:'case-6',num:'06',short:'Campaign & Video',cats:['Campaign','Video'],
    banners:[
