@@ -17,12 +17,12 @@ window.SITE_COPY.ko = {
   // Applied by i18n/locale.js, which loads after this file.
   head: {
     index: {
-      title: 'Steve Jung — B2B 하드웨어 마케팅 매니저',
-      description: '기획하고, 디자인하고, 코드를 쓰고, 배포합니다. 브랜드 · 인쇄 디자인부터 웹 개발, AI 자동화까지 — Steve Jung 포트폴리오와 케이스 스터디.'
+      title: 'Steve Jung — AI 마케팅 스페셜리스트 · 웹 개발 · UX 디자인 · 자동화',
+      description: 'Steve Jung — UX 디자인과 프론트엔드 개발, AI 자동화를 결합하는 AI 마케팅 스페셜리스트. B2B 테크 & 하드웨어. 포트폴리오: stevejung.dev'
     },
     caseStudy: {
       title: '케이스 스터디 — Steve Jung',
-      description: 'Steve Jung — B2B 하드웨어 마케팅 매니저. 제품 마케팅 · 브랜드 · 웹 개발 케이스 스터디.'
+      description: 'Steve Jung — AI 마케팅 스페셜리스트. B2B 테크 & 하드웨어 분야의 웹 개발 · UX 디자인 · 브랜드 · AI 자동화 케이스 스터디.'
     }
   },
   index: {

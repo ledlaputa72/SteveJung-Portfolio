@@ -18,12 +18,12 @@ window.SITE_COPY.en = {
   // Applied by i18n/locale.js, which loads after this file.
   head: {
     index: {
-      title: 'Steve Jung — B2B Hardware Marketing Manager',
-      description: 'Steve Jung — B2B Hardware Marketing Manager who plans, designs, codes, and ships. Portfolio and case studies.'
+      title: 'Steve Jung — AI Marketing Specialist · Web Dev · UX Design · Automation',
+      description: 'Steve Jung — AI Marketing Specialist combining UX design, front-end development, and AI-powered automation. B2B Tech & Hardware. Portfolio: stevejung.dev'
     },
     caseStudy: {
       title: 'Case Study — Steve Jung',
-      description: 'Steve Jung — B2B Hardware Marketing Manager. Case studies in product marketing, brand, and web development.'
+      description: 'Steve Jung — AI Marketing Specialist. Case studies in web development, UX design, brand, and AI-powered automation for B2B tech and hardware.'
     }
   },
   index: {
