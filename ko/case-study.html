@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Case Study — Steve Jung</title>
+<meta name="description" content="Steve Jung — B2B Hardware Marketing Manager. Case studies in product marketing, brand, and web development.">
+<script src="/i18n/locale.js"></script>
+<script src="/support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&family=IBM+Plex+Sans+KR:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="/image-slot.js"></script>
+<script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+<script src="https://unpkg.com/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{--bg:#0a0a0b;--bg2:#111114;--fg:#ece9e2;--muted:#8b887e;--dim:#5c5a53;--line:rgba(236,233,226,.12);--line2:rgba(236,233,226,.06);--accent:#d6ff3f;--mono:'Space Mono',monospace;--disp:'Bricolage Grotesque',sans-serif}
+  html{background:#0a0a0b;scroll-behavior:smooth}
+  body{background:#0a0a0b;color:#ece9e2;font-family:'IBM Plex Sans KR',sans-serif;font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+  a{color:#d6ff3f;text-decoration:none;transition:color .25s}
+  a:hover{color:#ece9e2}
+  ::selection{background:#d6ff3f;color:#000}
+  image-slot{--is-bg:#131316}
+  image-slot::part(empty){display:none}
+  .img-catch{position:absolute;inset:0;z-index:4}
+  /* All viewports: the media column and detail grid must be allowed to
+     shrink to their grid track. Their default min-width:auto inherits the
+     image-slot's ~300px intrinsic minimum, which pushed the detail pair
+     wider than the column at mid-size desktop widths. */
+  .cs-media-col,.cs-detail-grid,.cs-media-tile{min-width:0;max-width:100%}
+  /* Mobile layout. The hero's aspect-ratio:21/8 loses to its own
+     min-height:260px on a narrow screen, and the ratio then derives the
+     WIDTH from that height (260 x 21/8 = ~683px) — the banner rendered
+     almost twice the viewport and got clipped. Below 720px the hero takes
+     the container width and derives its height instead, with the banner
+     image full-bleed behind a vertical scrim so the overlaid copy stays
+     legible. The two detail tiles also collapse to one column, so the
+     section's main image and both details stack at an identical width
+     (the 1fr 1fr row overflowed at 207+207+14 inside a 350px column).
+     !important is required to beat the templated inline styles. */
+  @media (max-width:720px){
+    .cs-hero{aspect-ratio:auto!important;min-height:0!important;height:clamp(300px,86vw,360px)!important}
+    .cs-hero-media{width:100%!important}
+    .cs-hero-media::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;
+      background:linear-gradient(180deg,rgba(10,10,11,.28) 0%,rgba(10,10,11,.52) 26%,rgba(10,10,11,.88) 52%,rgba(10,10,11,.97) 74%)}
+    .cs-hero-grad{display:none}
+    .cs-hero-cta{width:100%!important;justify-content:flex-end!important;gap:8px!important;
+      padding:20px 20px 104px!important}
+    /* Pin the media column and all three tiles to the column width. A grid
+       or flex item's default min-width:auto lets an item's min-content push
+       it wider than its track, which is how the main image ended up wider
+       than the two details below it; zeroing that and clamping to 100%
+       makes the three tiles identical in width whatever the engine's
+       intrinsic sizing decides. */
+    /* repeat(auto-fit,minmax(300px,1fr)) cannot shrink a track below 300px,
+       so on a narrow screen the text/media columns overflowed the container
+       instead of fitting it. One flexible column that may shrink to zero
+       makes the media column exactly as wide as the copy above it. */
+    .cs-split{grid-template-columns:minmax(0,1fr)!important}
+    /* The media column becomes a single-column GRID. The gallery and the
+       two detail tiles — grid items with an aspect-ratio wrapper — render
+       correctly on iOS Safari; only the main tile, then a FLEX item, blew
+       up (Safari lets aspect-ratio derive a flex item's width from its
+       height). Same grid construction for all three tiles = the gallery's
+       exact behavior: image covers the frame edge-to-edge, no dead band. */
+    /* All-case-studies nav: one chip per row, so 07 sits under 06 instead
+       of sharing its line when the two happen to fit side by side. */
+    .cs-allnav{flex-direction:column;align-items:flex-start}
+    .cs-media-col{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:14px!important;min-width:0!important;width:100%!important;max-width:100%!important}
+    .cs-detail-grid{grid-template-columns:minmax(0,1fr)!important;width:100%!important;max-width:100%!important;min-width:0!important}
+    .cs-media-tile{width:100%!important;max-width:100%!important;min-width:0!important;overflow:hidden}
+  }
+  .lightbox-backdrop{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;padding:24px;cursor:zoom-out}
+  .lightbox-img{max-width:80vw;max-height:80vh;object-fit:contain;box-shadow:0 30px 80px rgba(0,0,0,.6);border-radius:4px;cursor:default}
+  .lightbox-close{position:fixed;top:24px;right:28px;background:rgba(10,10,11,.85);border:1px solid var(--line);color:#fff;width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;z-index:201}
+  @keyframes gaugeFill{from{width:0}to{width:100%}}
+  @keyframes glitchIn{
+    0%{opacity:0;text-shadow:none;transform:translateX(calc(var(--gx,4px) * -2))}
+    12%{opacity:1;text-shadow:calc(var(--gx,4px) * -1) 0 #49f0ff,var(--gx,4px) 0 #ff3d7f;transform:translateX(calc(var(--gx,4px) * 1.2))}
+    28%{text-shadow:var(--gx,4px) 0 #49f0ff,calc(var(--gx,4px) * -1) 0 #ff3d7f;transform:translateX(calc(var(--gx,4px) * -1))}
+    44%{text-shadow:calc(var(--gx,4px) * -.7) 0 #49f0ff,calc(var(--gx,4px) * .7) 0 #ff3d7f;transform:translateX(calc(var(--gx,4px) * .7))}
+    62%{text-shadow:calc(var(--gx,4px) * .5) 0 #49f0ff,calc(var(--gx,4px) * -.5) 0 #ff3d7f;transform:translateX(calc(var(--gx,4px) * -.4))}
+    80%{text-shadow:calc(var(--gx,4px) * -.25) 0 #49f0ff,calc(var(--gx,4px) * .25) 0 #ff3d7f;transform:translateX(calc(var(--gx,4px) * .2))}
+    100%{opacity:1;text-shadow:none;transform:translateX(0)}
+  }
+  @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-4%,3%)}50%{transform:translate(3%,-2%)}75%{transform:translate(-2%,4%)}100%{transform:translate(2%,-3%)}}
+</style>
+</helmet>
+
+<div id="om-progress" style="position:fixed;top:0;left:0;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;z-index:120;will-change:transform"></div>
+<div style="position:fixed;inset:-20%;pointer-events:none;z-index:110;opacity:.05;mix-blend-mode:overlay;background-image:url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22120%22 height=%22120%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.9%22 numOctaves=%222%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22/%3E%3C/svg%3E');background-size:140px;animation:grain 1.1s steps(3) infinite"></div>
+<canvas id="stage" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.7"></canvas>
+
+<header style="position:fixed;top:0;left:0;right:0;z-index:100;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(20px,4vw,54px);mix-blend-mode:difference">
+  <a data-lp="/" style="font-family:var(--mono);font-size:13px;letter-spacing:.14em;color:#fff">STEVE JUNG<span style="color:var(--accent)"> ▚</span></a>
+  <nav style="display:flex;gap:clamp(16px,2.4vw,34px);font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase">
+    <a data-lp="/" data-lp-hash="#studio" style="color:#fff">Studio</a>
+    <a data-lp="/" data-lp-hash="#work" style="color:#fff">Work</a>
+    <a data-lp="/" data-lp-hash="#contact" style="color:#fff">Contact</a>
+    <a id="lang-switch" href="/" title="Language" style="color:var(--accent);border:1px solid var(--line);border-radius:999px;padding:4px 10px;line-height:1.4">EN</a>
+  </nav>
+</header>
+
+<div style="display:none;position:fixed;right:clamp(14px,2vw,24px);bottom:clamp(14px,2vw,24px);z-index:115;flex-direction:column;align-items:flex-end;gap:10px">
+  <div id="om-glb-panel" style="display:none;background:rgba(10,10,11,.94);border:1px solid var(--line);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);padding:18px;width:262px;flex-direction:column;gap:12px">
+    <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent)">Load .glb model</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="file" accept=".glb,.gltf" onChange="{{ pick }}" style="font-family:var(--mono);font-size:10px;color:var(--fg);min-width:0;flex:1">
+      <button onClick="{{ resetGlb }}" title="모델 제거" style="font-family:var(--mono);font-size:10px;background:transparent;border:1px solid var(--line);color:var(--muted);padding:6px 10px;cursor:pointer;flex:none" style-hover="border-color:var(--accent);color:var(--accent)">✕</button>
+    </div>
+    <div style="font-family:var(--mono);font-size:9.5px;line-height:1.6;color:var(--dim);border-top:1px solid var(--line2);padding-top:10px">이 브라우저에 저장되어 새로고침 후에도 유지됩니다.</div>
+    <button onClick="{{ resetGlb }}" style="font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;background:transparent;border:1px solid var(--line);color:var(--muted);padding:9px;cursor:pointer">Reset to preset</button>
+  </div>
+  <button onClick="{{ toggleGlb }}" style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;background:rgba(10,10,11,.9);border:1px solid var(--line);color:var(--fg);padding:11px 16px;cursor:pointer;backdrop-filter:blur(10px)">◆ 3D Model</button>
+</div>
+
+<main style="position:relative;z-index:1;max-width:1180px;margin:0 auto;padding:0 clamp(20px,4vw,54px)">
+
+  <!-- BACK -->
+  <div style="padding-top:clamp(96px,14vh,140px)">
+    <a data-lp="/" data-lp-hash="#work" style="font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)" style-hover="color:var(--accent)">← Back to Work</a>
+  </div>
+
+  <!-- ① HERO VISUAL -->
+  <div class="cs-hero" onMouseEnter="{{ pauseRoll }}" onMouseLeave="{{ resumeRoll }}" style="margin-top:26px;position:relative;aspect-ratio:21/8;min-height:260px;border:1px solid var(--line);background:rgba(17,17,20,.6);overflow:hidden">
+    <sc-for list="{{ cs.bannerList }}" as="a" hint-placeholder-count="6">
+      <div style="position:absolute;inset:0;opacity:{{ a.op }};transition:opacity .7s ease;pointer-events:{{ a.pe }}">
+        <sc-if value="{{ a.hasBanner }}" hint-placeholder-val="{{ true }}">
+          <div class="cs-hero-media" style="position:absolute;top:0;right:0;bottom:0;width:70%;overflow:hidden">
+            <img src="{{ a.srcBanner }}" alt="" style="display:block;width:100%;height:100%;object-fit:cover;object-position:top">
+          </div>
+        </sc-if>
+        <svg class="cs-hero-grad" style="position:absolute;top:-2px;right:-2px;bottom:-2px;left:-2px;width:calc(100% + 4px);height:calc(100% + 4px);pointer-events:none" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="grad-{{ a.bannerSlot }}" gradientUnits="objectBoundingBox" x1="40%" y1="100%" x2="59.8%" y2="102%">
+              <stop offset="0%" stop-color="#000" stop-opacity="1"></stop>
+              <stop offset="100%" stop-color="#000" stop-opacity=".3"></stop>
+            </linearGradient>
+          </defs>
+          <rect x="0" y="0" width="100%" height="100%" fill="url(#grad-{{ a.bannerSlot }})"></rect>
+        </svg>
+        <button class="cs-hero-cta" onClick="{{ a.go }}" style="position:absolute;left:0;top:0;bottom:0;width:min(62%,660px);text-align:left;background:transparent;border:0;cursor:pointer;color:var(--fg);padding:clamp(22px,3.5vw,44px);display:flex;flex-direction:column;justify-content:center;gap:12px">
+          <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)">{{ a.no }} — {{ a.group }}</span>
+          <span data-glitch-title style="font-family:var(--disp);font-weight:800;font-size:clamp(1.5rem,3.6vw,2.9rem);letter-spacing:-.025em;line-height:1.08">{{ a.name }}</span>
+          <span style="font-size:clamp(.9rem,1.2vw,1.05rem);color:var(--muted);line-height:1.6;max-width:460px">{{ a.short }}</span>
+        </button>
+      </div>
+    </sc-for>
+    <div style="position:absolute;right:clamp(16px,2vw,26px);bottom:clamp(16px,2vw,26px);z-index:8;display:flex;gap:8px;align-items:center">
+      <button onClick="{{ prevSlide }}" style="font-family:var(--mono);font-size:12px;background:rgba(10,10,11,.7);border:1px solid var(--line);color:var(--fg);width:34px;height:34px;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent)">←</button>
+      <button onClick="{{ nextSlide }}" style="font-family:var(--mono);font-size:12px;background:rgba(10,10,11,.7);border:1px solid var(--line);color:var(--fg);width:34px;height:34px;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent)">→</button>
+    </div>
+    <div style="position:absolute;left:clamp(22px,3.5vw,44px);bottom:clamp(16px,2vw,22px);z-index:8;display:flex;flex-direction:column;gap:14px;align-items:flex-start">
+      <button onClick="{{ slideGo }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border:0;border-radius:999px;padding:13px 22px;cursor:pointer" style-hover="background:var(--fg)">View project <span>↓</span></button>
+      <div style="display:flex;gap:8px">
+        <sc-for list="{{ cs.bannerList }}" as="a" hint-placeholder-count="6">
+          <button onClick="{{ a.select }}" style="width:{{ a.dotW }};height:4px;background:{{ a.dotBg }};border:0;padding:0;cursor:pointer;transition:width .45s ease,background .45s ease;position:relative;overflow:hidden">
+            <span data-gauge style="position:absolute;left:0;top:0;bottom:0;width:0;background:var(--accent);display:block;animation:{{ a.gaugeAnim }};animation-play-state:{{ a.gaugeState }}"></span>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② TITLE -->
+  <section id="{{ cs.bodyId }}" style="padding:clamp(40px,7vw,72px) 0 0;scroll-margin-top:90px">
+    <div style="display:flex;flex-wrap:wrap;gap:10px;align-items:center">
+      <span style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;background:var(--accent);color:#0a0a0b;border-radius:999px;padding:6px 14px;font-weight:700">{{ cs.num }} / 07</span>
+      <sc-for list="{{ cs.cats }}" as="t" hint-placeholder-count="2">
+        <span style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 14px">{{ t }}</span>
+      </sc-for>
+    </div>
+    <h1 style="font-family:var(--disp);font-weight:800;font-size:clamp(2.1rem,6vw,4.4rem);letter-spacing:-.03em;line-height:1.02;margin-top:24px;text-wrap:pretty">{{ cs.title }}</h1>
+    <p style="max-width:720px;margin-top:22px;font-size:clamp(1rem,1.4vw,1.22rem);color:var(--muted);line-height:1.75">{{ cs.summary }}</p>
+  </section>
+
+  <!-- ③ META -->
+  <section style="padding:clamp(40px,6vw,64px) 0 0">
+    <sc-for list="{{ cs.meta }}" as="m" hint-placeholder-count="5">
+      <div style="display:grid;grid-template-columns:minmax(90px,120px) 1fr;gap:clamp(14px,3vw,40px);border-top:1px solid var(--line);padding:18px 0;align-items:baseline">
+        <div style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)">{{ m.label }}</div>
+        <div style="font-size:clamp(.95rem,1.15vw,1.05rem);color:var(--fg);line-height:1.6">{{ m.value }}</div>
+      </div>
+    </sc-for>
+    <div style="border-top:1px solid var(--line)"></div>
+  </section>
+
+  <!-- SPECIAL A — BEFORE / AFTER -->
+  <sc-if value="{{ cs.hasBeforeAfter }}" hint-placeholder-val="{{ false }}">
+  <section style="padding:clamp(44px,7vw,72px) 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px">
+    <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+      <image-slot id="{{ cs.beforeSlot }}" shape="rect" fit="cover" src="{{ cs.srcBefore }}" placeholder=""></image-slot>
+      <div class="img-catch" style="cursor:{{ cs.cursorBefore }}" onClick="{{ cs.openBefore }}"></div>
+      <span style="position:absolute;top:12px;left:12px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:#ece9e2;color:#0a0a0b;font-weight:700;padding:5px 11px;border-radius:999px;pointer-events:none">BEFORE</span>
+    </div>
+    <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--accent);background:rgba(17,17,20,.6)">
+      <image-slot id="{{ cs.afterSlot }}" shape="rect" fit="cover" src="{{ cs.srcAfter }}" placeholder=""></image-slot>
+      <div class="img-catch" style="cursor:{{ cs.cursorAfter }}" onClick="{{ cs.openAfter }}"></div>
+      <span style="position:absolute;top:12px;left:12px;z-index:5;font-family:var(--mono);font-size:10px;letter-spacing:.14em;background:var(--accent);color:#0a0a0b;font-weight:700;padding:5px 11px;border-radius:999px;pointer-events:none">AFTER</span>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- SPECIAL B — PER-ITEM DETAIL SECTIONS -->
+  <sc-if value="{{ cs.hasSections }}" hint-placeholder-val="{{ false }}">
+  <sc-for list="{{ cs.sectionList }}" as="a" hint-placeholder-count="6">
+    <section id="{{ a.id }}" style="padding:clamp(56px,9vw,104px) 0 0;scroll-margin-top:90px">
+      <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:baseline;border-top:1px solid var(--accent);padding-top:18px">
+        <span style="font-family:var(--disp);font-weight:800;font-size:clamp(2rem,5vw,3.4rem);line-height:.9;color:transparent;-webkit-text-stroke:1.2px var(--accent)">{{ a.no }}</span>
+        <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);border-radius:999px;padding:5px 12px">{{ a.group }}</span>
+        <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;color:var(--dim)">{{ a.status }}</span>
+      </div>
+      <div class="cs-split" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,4vw,48px);margin-top:26px;align-items:start">
+        <div>
+          <h3 style="font-family:var(--disp);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.1;text-wrap:pretty">{{ a.name }}</h3>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--accent);margin-top:12px">{{ a.stack }}</div>
+          <p style="max-width:600px;margin-top:18px;font-size:clamp(.98rem,1.2vw,1.1rem);color:var(--muted);line-height:1.75">{{ a.body }}</p>
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:26px">
+            <sc-for list="{{ a.points }}" as="pt" hint-placeholder-count="3">
+              <div style="display:flex;gap:14px;align-items:flex-start;border-top:1px solid var(--line);padding-top:14px">
+                <span style="font-family:var(--mono);font-size:11px;color:var(--accent);margin-top:3px">→</span>
+                <span style="font-size:.96rem;color:var(--fg);line-height:1.6">{{ pt }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:24px">
+            <sc-for list="{{ a.tags }}" as="t" hint-placeholder-count="3">
+              <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:8px 14px">{{ t }}</span>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:30px">
+            <sc-if value="{{ a.hasPdf }}" hint-placeholder-val="{{ false }}">
+              <button onClick="{{ a.openPdf }}" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border:0;border-radius:999px;padding:13px 22px;cursor:pointer" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></button>
+            </sc-if>
+            <sc-if value="{{ a.hasSiteLink }}" hint-placeholder-val="{{ false }}">
+              <a href="https://{{ a.siteUrl }}" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;background:var(--accent);color:#0a0a0b;font-weight:700;border-radius:999px;padding:13px 22px" style-hover="background:var(--fg)">{{ a.siteLabel }} <span>↗</span></a>
+            </sc-if>
+            <sc-if value="{{ a.hasCta }}" hint-placeholder-val="{{ false }}">
+              <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;color:var(--dim)">{{ a.siteLink }}</span>
+            </sc-if>
+          </div>
+        </div>
+        <div class="cs-media-col" style="display:flex;flex-direction:column;gap:14px">
+          <div class="cs-media-tile" style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+            <image-slot id="{{ a.slot }}" shape="rect" fit="cover" src="{{ a.srcMain }}" placeholder=""></image-slot>
+            <div class="img-catch" style="cursor:{{ a.cursorMain }}" onClick="{{ a.openMain }}"></div>
+          </div>
+          <!-- Unassigned detail slots are dropped; with one left the grid collapses to a single column -->
+          <sc-if value="{{ a.hasDetails }}" hint-placeholder-val="{{ true }}">
+          <div class="cs-detail-grid" style="display:grid;grid-template-columns:{{ a.detailCols }};gap:14px">
+            <sc-if value="{{ a.hasD1 }}" hint-placeholder-val="{{ true }}">
+            <div class="cs-media-tile" style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+              <image-slot id="{{ a.slot2 }}" shape="rect" fit="cover" src="{{ a.srcD1 }}" placeholder=""></image-slot>
+              <div class="img-catch" style="cursor:{{ a.cursorD1 }}" onClick="{{ a.openD1 }}"></div>
+            </div>
+            </sc-if>
+            <sc-if value="{{ a.hasD2 }}" hint-placeholder-val="{{ true }}">
+            <div class="cs-media-tile" style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+              <image-slot id="{{ a.slot3 }}" shape="rect" fit="cover" src="{{ a.srcD2 }}" placeholder=""></image-slot>
+              <div class="img-catch" style="cursor:{{ a.cursorD2 }}" onClick="{{ a.openD2 }}"></div>
+            </div>
+            </sc-if>
+          </div>
+          </sc-if>
+        </div>
+      </div>
+    </section>
+  </sc-for>
+  </sc-if>
+
+  <!-- ④ CHALLENGE -->
+  <section style="padding:clamp(50px,8vw,86px) 0 0">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">The Challenge</div>
+    <h2 style="font-family:var(--disp);font-weight:700;font-size:clamp(1.5rem,3.4vw,2.5rem);letter-spacing:-.02em;line-height:1.18;margin-top:18px;max-width:820px;text-wrap:pretty">{{ cs.challengeIntro }}</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;margin-top:32px">
+      <sc-for list="{{ cs.challenges }}" as="c" hint-placeholder-count="4">
+        <div style="border:1px solid {{ c.border }};background:rgba(17,17,20,.66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:24px;transition:border-color .45s ease">
+          <div style="display:flex;gap:8px;align-items:baseline">
+            <span style="color:{{ c.starFg }};font-size:12px;transition:color .5s ease">★</span>
+            <span style="position:relative;display:inline-block;padding:1px 6px;margin-left:-6px">
+              <span style="position:absolute;left:0;top:0;bottom:0;width:{{ c.fillW }};background:var(--accent);transition:width 1s cubic-bezier(.2,.7,.2,1)"></span>
+              <span style="position:relative;font-family:var(--disp);font-weight:600;font-size:1.08rem;letter-spacing:-.01em;color:{{ c.titleFg }};transition:color .12s ease">{{ c.title }}</span>
+            </span>
+          </div>
+          <div style="font-size:.93rem;color:var(--muted);line-height:1.65;margin-top:10px">{{ c.body }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ⑤ APPROACH -->
+  <section style="padding:clamp(50px,8vw,86px) 0 0">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">My Approach</div>
+    <h2 style="font-family:var(--disp);font-weight:700;font-size:clamp(1.7rem,4vw,3rem);letter-spacing:-.02em;margin-top:16px">어떻게 만들었나</h2>
+    <div style="margin-top:30px">
+      <sc-for list="{{ cs.approach }}" as="s" hint-placeholder-count="4">
+        <div data-approach-step style="display:grid;grid-template-columns:46px 1fr;gap:clamp(14px,2.5vw,28px);border-top:1px solid var(--line);padding:22px 0;align-items:start">
+          <div style="width:38px;height:38px;border-radius:50%;border:1px solid {{ s.numBorder }};background:{{ s.numBg }};color:{{ s.numFg }};display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;transition:background .45s ease,color .45s ease,border-color .45s ease">{{ s.n }}</div>
+          <div>
+            <div style="font-family:var(--disp);font-weight:600;font-size:clamp(1.05rem,1.7vw,1.3rem);letter-spacing:-.01em;line-height:1.3">{{ s.title }}</div>
+            <div style="font-size:.95rem;color:var(--muted);line-height:1.7;margin-top:8px">{{ s.body }}</div>
+          </div>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid var(--line)"></div>
+    </div>
+    <sc-if value="{{ cs.callout }}" hint-placeholder-val="">
+      <div style="margin-top:30px;border-left:2px solid var(--accent);background:rgba(17,17,20,.7);padding:22px 26px;display:flex;flex-wrap:wrap;gap:16px;align-items:center">
+        <span style="font-family:var(--mono);font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--dim)">Live Demo</span>
+        <a href="https://{{ cs.callout }}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:13.5px;letter-spacing:.04em">{{ cs.callout }} ↗</a>
+      </div>
+    </sc-if>
+  </section>
+
+  <!-- ⑥ RESULTS -->
+  <section style="padding:clamp(50px,8vw,86px) 0 0">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">Results</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-top:24px">
+      <sc-for list="{{ cs.results }}" as="r" hint-placeholder-count="3">
+        <div style="border:1px solid var(--line);background:rgba(17,17,20,.66);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:30px 26px">
+          <div style="font-family:var(--disp);font-weight:800;font-size:clamp(2.4rem,5vw,3.6rem);line-height:1;color:var(--accent);letter-spacing:-.03em">{{ r.value }}</div>
+          <div style="font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);margin-top:12px;line-height:1.5">{{ r.label }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ⑦ GALLERY (hidden while no image is assigned to any of its slots) -->
+  <sc-if value="{{ cs.hasGallery }}" hint-placeholder-val="{{ true }}">
+  <section style="padding:clamp(50px,8vw,86px) 0 0">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">Visual Gallery</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-top:24px">
+      <sc-for list="{{ cs.gallery }}" as="g" hint-placeholder-count="6">
+        <div style="position:relative;aspect-ratio:1426/1179;border:1px solid var(--line);background:rgba(17,17,20,.6)">
+          <image-slot id="{{ g.id }}" shape="rect" fit="cover" src="{{ g.src }}" placeholder=""></image-slot>
+          <div class="img-catch" style="cursor:{{ g.cursor }}" onClick="{{ g.open }}"></div>
+        </div>
+      </sc-for>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ⑧ SKILLS -->
+  <section style="padding:clamp(50px,8vw,86px) 0 0">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent)">Skills</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:22px">
+      <sc-for list="{{ cs.skills }}" as="s" hint-placeholder-count="6">
+        <span style="font-family:var(--mono);font-size:11.5px;letter-spacing:.06em;color:var(--fg);border:1px solid var(--line);border-radius:999px;padding:10px 18px">{{ s }}</span>
+      </sc-for>
+    </div>
+  </section>
+
+  <!-- ⑨ PREV / NEXT -->
+  <section style="padding:clamp(56px,9vw,100px) 0 0">
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:20px;align-items:center;border-top:1px solid var(--line);padding-top:34px">
+      <a href="#{{ cs.prevAnchor }}" style="color:var(--fg)" style-hover="color:var(--accent)">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted)">← Prev</div>
+        <div style="font-family:var(--disp);font-weight:600;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:-.01em;margin-top:8px">{{ cs.prevTitle }}</div>
+      </a>
+      <div style="font-family:var(--mono);font-size:12px;color:var(--dim);letter-spacing:.1em">{{ cs.num }} / 07</div>
+      <a href="#{{ cs.nextAnchor }}" style="color:var(--fg);text-align:right" style-hover="color:var(--accent)">
+        <div style="font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--muted)">Next →</div>
+        <div style="font-family:var(--disp);font-weight:600;font-size:clamp(1rem,1.8vw,1.4rem);letter-spacing:-.01em;margin-top:8px">{{ cs.nextTitle }}</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- ALL CASES -->
+  <section style="padding:clamp(50px,8vw,86px) 0 0">
+    <div style="font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted)">All case studies</div>
+    <div class="cs-allnav" style="display:flex;flex-wrap:wrap;gap:10px;margin-top:20px">
+      <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+        <a href="#{{ n.anchor }}" style="font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;border:1px solid {{ n.border }};background:{{ n.bg }};color:{{ n.fg }};border-radius:999px;padding:10px 18px">{{ n.num }} · {{ n.short }}</a>
+      </sc-for>
+    </div>
+  </section>
+
+  <footer style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:clamp(60px,10vw,120px);padding:26px 0 60px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dim)">
+    <span>STEVE JUNG © <span id="om-year">2026</span></span>
+    <span>B2B HARDWARE MARKETING · IRVINE, CA</span>
+    <a data-lp="/">← PORTFOLIO HOME</a>
+  </footer>
+
+  <!-- LIGHTBOX — full-size view for any non-banner image -->
+  <sc-if value="{{ lightboxOpen }}" hint-placeholder-val="{{ false }}">
+    <div class="lightbox-backdrop" onClick="{{ closeLightbox }}">
+      <img class="lightbox-img" src="{{ lightboxSrc }}" onClick="{{ stopClick }}">
+      <button class="lightbox-close" onClick="{{ closeLightbox }}">×</button>
+    </div>
+  </sc-if>
+
+  <!-- PDF MODAL — in-browser preview with download, same pattern as the resume modal -->
+  <sc-if value="{{ pdfModalOpen }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;inset:0;z-index:2000;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,40px);background:rgba(5,5,6,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)" onClick="{{ closePdf }}">
+      <div onClick="{{ stopClick }}" style="position:relative;width:min(940px,100%);height:min(90vh,100%);display:flex;flex-direction:column;background:var(--bg2);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:0 40px 120px rgba(0,0,0,.6)">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px clamp(14px,2vw,18px);border-bottom:1px solid var(--line);flex:none">
+          <span style="font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)">{{ pdfModalTitle }}</span>
+          <div style="display:flex;align-items:center;gap:10px">
+            <a href="{{ pdfModalUrl }}" download style="display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:10px 18px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;background:var(--accent);color:#0a0a0b;font-weight:700" style-hover="background:var(--fg)">Download ↓</a>
+            <button onClick="{{ closePdf }}" type="button" aria-label="Close" style="display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--fg);font-family:var(--mono);font-size:16px;line-height:1;cursor:pointer" style-hover="border-color:var(--accent);color:var(--accent)">✕</button>
+          </div>
+        </div>
+        <div style="flex:1;min-height:0;background:#525659">
+          <iframe src="{{ pdfModalUrl }}" title="{{ pdfModalTitle }}" style="width:100%;height:100%;border:0;display:block"></iframe>
+        </div>
+      </div>
+    </div>
+  </sc-if>
+
+</main>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d6ff3f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#d6ff3f&quot;,&quot;#49f0ff&quot;,&quot;#ff5c39&quot;,&quot;#c8a2ff&quot;,&quot;#ffffff&quot;],&quot;section&quot;:&quot;Look&quot;},&quot;object&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;icosahedron&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;torus&quot;,&quot;torusKnot&quot;],&quot;section&quot;:&quot;3D Background&quot;},&quot;glb&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D Background&quot;},&quot;glbScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D Background&quot;}}">
+const CASES = [
+  {anchor:'case-1',num:'01',short:'AVYCON Renewal',cats:['Web Dev','UX'],
+   banners:[
+     {key:'home',group:'Main Site · Home',name:'홈 · 글로벌 랜딩',short:'브랜드 히어로 · 제품 하이라이트 · 리드 폼까지 단일 CMS 위에서 4개 언어로 동작하는 메인 페이지.',
+      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',
+      body:'레거시 PHP 홈을 브랜드 히어로 · 제품 하이라이트 · 리드 캡처가 하나의 흐름으로 이어지는 랜딩으로 재설계했습니다. EN / KO / JA / ES가 각각 독립 도메인으로 흩어져 있던 구조를 단일 CMS 위로 통합해, 한 번의 콘텐츠 업데이트가 4개 언어에 동일하게 반영됩니다.',
+      points:['다중 언어를 단일 CMS · 단일 도메인 구조로 통합','히어로 → 제품 → 솔루션 → 문의로 이어지는 리드 전환 동선','메타태그 · canonical · 구조화 데이터를 회사 최초로 구축'],
+      tags:['Landing','Multilingual','SEO','Lead Gen']},
+     {key:'plan',group:'Planning · 138p Doc',name:'138페이지 사이트 기획서',short:'IA · 사이트맵 · 50+ 화면정의서 · 기능 명세까지 단독으로 작성한 기획 문서.',
+      stack:'IA · Sitemap · 화면정의서 · 기능 명세',
+      pdf:['docs','avycon-site-plan-v1-en.pdf'],
+      linkLabel:'View PDF',
+      body:'외주 개발사에 넘길 수 있는 수준의 기획서를 혼자 138페이지로 정리했습니다. 사이트맵과 정보 구조에서 시작해 50개 이상의 화면정의서, 데이터 필드 정의, 예외 케이스까지 문서화해 구현 단계의 해석 차이를 최소화했습니다.',
+      points:['사이트맵 · 3-depth 정보 구조 · URL 규칙 정의','50+ 화면정의서 — 화면별 요소 · 동작 · 예외 처리','CMS 데이터 필드와 제품 속성 스키마 사전 정의','런칭 후 운영 가이드까지 하나의 문서로 통합'],
+      tags:['IA','Documentation','Spec','Solo']},
+     {key:'figma',group:'Design · Figma',name:'Figma 와이어프레임 & 프로토타입',short:'전 페이지 와이어프레임과 이해관계자 리뷰용 인터랙티브 프리뷰 제작.',
+      stack:'Figma · Auto Layout · Prototype', link:'figma.com',linkUrl:'www.figma.com/design/qg1wJkbEBXuaFwFeMrU410/AVYCON-Renewal-wire-frame?node-id=0-1&m=dev&t=fKm007Ql8MFJAsrh-1',linkLabel:'Visit Figma project',
+      body:'기획서의 화면정의서를 그대로 Figma 와이어프레임으로 옮기고, 클릭 가능한 프로토타입으로 연결했습니다. 경영진과 영업팀이 문서 대신 실제 흐름을 보고 피드백할 수 있어 의사결정 속도가 크게 줄었습니다.',
+      points:['전 페이지 와이어프레임 — 데스크톱 · 모바일 대응','인터랙티브 프로토타입으로 이해관계자 리뷰 진행','컴포넌트 · Auto Layout 기반의 재사용 가능한 UI 세트','피드백을 화면정의서에 즉시 반영하는 단일 소스 운영'],
+      tags:['Figma','Wireframe','Prototype','UX']},
+     {key:'cms',group:'Data · CMS',name:'CMS 제품 데이터 연동',short:'100+ SKU 제품 정보를 CMS로 구조화하고 3-depth 라우팅 · 멀티 필터 · 5-SKU 비교로 연결.',
+      stack:'Wix CMS · Velo (JavaScript)', link:'avycon.com',linkUrl:'www.avycon.com/products/network_camera',
+      body:'외주사가 제품 페이지를 iframe으로 임베드하면서 필터 · 비교 · SEO가 모두 무력화된 상태였습니다. 제품 데이터를 CMS 컬렉션으로 정규화하고, Velo로 동적 라우팅과 필터를 직접 구현한 교정 데모를 만들어 방향을 되돌렸습니다.',
+      points:['100+ SKU를 CMS 컬렉션으로 정규화 · 속성 스키마 정의','main · sub · focal_length · size 멀티 필터 구현','5-SKU 스펙 비교 도구 · 페이지네이션 직접 개발','3-depth 동적 라우팅으로 제품 URL과 SEO 확보'],
+      tags:['CMS','Velo','Filtering','Product Data']},
+     {key:'structure',group:'Architecture',name:'사이트 구조 & 다국어 설계',short:'3-depth 메가메뉴, 4개 언어 통합 구조, SEO 인프라까지 사이트 전반의 구성 설계.',
+      stack:'IA · Mega Menu · SEO · i18n', link:'avycon.com',linkUrl:'www.avycon.com/ko',
+      body:'제품 · 솔루션 · 서포트 · 컴퍼니로 이어지는 전체 사이트 구조를 다시 세우고, 3-depth 메가메뉴로 탐색 경로를 단순화했습니다. 다국어는 언어별 사이트가 아니라 하나의 구조 위에서 언어 레이어로 동작하도록 설계했습니다.',
+      points:['3-depth 메가메뉴 — 제품군 · 솔루션 · 서포트 진입 통합','언어별 도메인 분리 → 단일 구조 + 언어 레이어로 전환','서포트 · 다운로드 문서 허브와 문의 라우팅 설계','전 페이지 SEO 규칙(메타 · canonical · 구조화 데이터) 표준화'],
+      tags:['Architecture','Mega Menu','i18n','SEO']}],
+   title:'AVYCON 웹사이트 리뉴얼',
+   summary:'레거시 PHP에서 Wix Studio 글로벌 플랫폼으로. 제한된 예산과 인력 안에서 개발비와 이후 운영·업데이트 비용까지 함께 고려해 Wix Studio + Velo를 택했고, 138페이지 세부 기획서와 Figma 와이어프레임 · 프로토타입을 제작해 외주 개발사와 함께 개발을 진행하며, 개발 아키텍처 가이드 제공과 오류 수정까지 직접 담당했습니다.',
+   meta:[
+     {label:'Role',value:'Marketing Manager & Project Lead — 기획 · 디자인 · 개발 디렉션 · Velo 구현'},
+     {label:'Timeline',value:'2025.10 기획(v1.0) / 개발 진행 중'},
+     {label:'Platform',value:'Legacy PHP (avycon.net) → Wix Studio (avycon.com)'},
+     {label:'Tech',value:'Wix Studio CMS · Wix Velo (JS) · Freshdesk API · Wix Login · Mega Menu'},
+     {label:'Deliverables',value:'138페이지 기획서 · Figma 와이어프레임 · 50+ 화면정의서 · Velo 데모'}],
+   challengeIntro:'SEO가 전무한 레거시 PHP 사이트, 분리 운영되던 다국어 도메인, 그리고 아키텍처 단계에서 CMS를 망가뜨린 외주사의 구현.',
+   challenges:[
+     {title:'SEO 인프라 부재',body:'메타태그 · canonical · 구조화 데이터가 레거시 사이트 전체에 존재하지 않았습니다.'},
+     {title:'다국어 비효율',body:'KO / JA / EN이 서로 독립된 3개 도메인으로 분리 운영되고 있었습니다.'},
+     {title:'마케팅 자동화 없음',body:'리드 폼 · CRM · 이메일 연동이 전혀 구축되지 않은 상태.'},
+     {title:'외주사의 기술적 오류',body:'iframe 임베드 방식이 디자인 단계부터 CMS 필터 · 비교 · SEO를 무력화시켰습니다.',critical:true}],
+   approach:[
+     {n:'1',title:'138페이지 기획서 단독 작성',body:'IA · Figma 와이어프레임 · 50+ 화면정의서를 혼자 정리했습니다.'},
+     {n:'2',title:'Figma 와이어프레임 설계',body:'이해관계자 리뷰용 인터랙티브 프리뷰까지 포함해 제작.'},
+     {n:'3',title:'Velo 교정 데모를 직접 개발',body:'3-depth 동적 라우팅, 멀티 필터(main·sub·focal_length·size), 5-SKU 비교 도구, 3-depth 메가메뉴, 페이지네이션.',hl:true},
+     {n:'4',title:'글로벌 다국어 구조 통합',body:'EN / KO / JA / ES를 단일 CMS 위로 통합.'}],
+   callout:'steve98031.wixstudio.com/website-1',
+   results:[{value:'4',label:'단일 CMS로 통합한 언어'},{value:'138',label:'페이지 기획 문서'},{value:'First',label:'회사 최초 SEO 구축'}],
+   gallery:['avycon.com 홈','제품 필터 화면','Figma 와이어프레임','Velo 데모 화면','CMS 어드민','다국어 버전'],
+   skills:['Strategic Planning','Wix Velo (JS)','CMS Architecture','Figma','Vendor Management','Global Marketing'],
+   beforeLabel:'avycon.net — Legacy PHP, iframe 임베드',afterLabel:'avycon.com — Wix Studio, 네이티브 CMS'},
+
+  {anchor:'case-2',num:'02',short:'Starllion Launch',cats:['Brand','Full-stack'],
+   banners:[
+     {key:'brand',group:'Brand · Identity',name:'브랜드 아이덴티티',short:'네이밍부터 S-마크 그라디언트 로고, 다크 네이비 / 로열 블루 팔레트까지 제로베이스에서 구축.',
+      stack:'Naming · Logo · Color System · Guideline', link:'starllion.com',
+      body:'하드웨어 카탈로그 톤에서 완전히 벗어난 SaaS 브랜드가 필요했습니다. 네이밍부터 로고, 컬러, 타이포, 그래픽 언어까지 에이전시 없이 직접 정의하고, 웹 · 앱 · 소셜에 동일하게 적용되는 가이드로 정리했습니다.',
+      points:['네이밍 · S-마크 그라디언트 로고 개발','다크 네이비 / 로열 블루 SaaS 팔레트 정의','웹 · 앱 · 스토어 · 소셜에 공통 적용되는 가이드 구축','$0 에이전시 — 브랜드 전 과정 단독 진행'],
+      tags:['Branding','Logo','Design System','SaaS']},
+     {key:'ia',group:'Planning · IA',name:'IA & 사이트 설계',short:'5개 대분류 / 30+ 하위 / 3-depth 구조를 기획 단계에서 확정.',
+      stack:'Sitemap · 3-depth IA · 화면 정의', link:'figma.com',linkUrl:'www.figma.com/design/3FRiAoALtMKfCFjAio4JNi/Starllion-wire-Frame?node-id=0-1&m=dev&t=Drt5dHXO49UJVcjd-1',linkLabel:'Visit Figma project',
+      body:'플랫폼 · 애널리틱스 · 솔루션 · 리소스 · 컴퍼니 5개 축으로 정보 구조를 세우고, 30개가 넘는 하위 페이지를 3-depth 안에서 탐색할 수 있게 정리했습니다. 페이지 템플릿을 먼저 정의해 콘텐츠가 늘어나도 구조가 흔들리지 않도록 설계했습니다.',
+      points:['5개 대분류 / 30+ 하위 / 3-depth 정보 구조 확정','페이지 유형별 템플릿 정의 — 확장 가능한 구조','URL · 네비게이션 · 내부 링크 규칙 표준화','런칭 이후 콘텐츠 추가를 고려한 IA 여유 설계'],
+      tags:['IA','Sitemap','Content Model','UX']},
+     {key:'platform',group:'Site · Platforms',name:'플랫폼 페이지',short:'클라우드 VMS 라인업을 기능 단위로 나눠 설명하는 핵심 섹션.',
+      stack:'Wix Studio · Velo · CMS', link:'starllion.com',linkUrl:'www.starllion.com/platforms/admin-portal',
+      body:'클라우드 VMS의 7개 플랫폼을 각각 독립 페이지로 구성하고, 공통 템플릿 위에서 기능 · 구성도 · 적용 시나리오를 일관된 순서로 설명합니다. 하드웨어 스펙 나열이 아니라 도입 후 무엇이 달라지는지를 앞에 두었습니다.',
+      points:['7개 플랫폼 페이지를 단일 템플릿으로 통일','기능 → 구성도 → 시나리오 순의 설명 구조','제품 비교와 문의 폼으로 이어지는 전환 동선','CMS 기반으로 스펙 업데이트를 운영팀이 직접 처리'],
+      tags:['SaaS Content','CMS','Velo','Conversion']},
+     {key:'analytics',group:'Site · Analytics',name:'애널리틱스 · 솔루션 페이지',short:'AI 분석 기능(5)과 산업별 솔루션을 시나리오 중심으로 구성.',
+      stack:'Content Design · Velo · SEO', link:'starllion.com',
+      body:'AI 분석 기능 5종과 리테일 · 시설 · 시티 등 산업별 솔루션을 별도 축으로 나눴습니다. 기능 페이지는 “무엇을 감지하는가”, 솔루션 페이지는 “어떤 현장에서 무엇을 해결하는가”로 서로 다른 질문에 답하도록 카피와 레이아웃을 분리했습니다.',
+      points:['AI 애널리틱스 5개 기능 페이지 구성','산업별 솔루션 시나리오 페이지 설계','기능 ↔ 솔루션 상호 링크로 탐색 경로 확장','전 페이지 SEO 메타 · 구조화 데이터 적용'],
+      tags:['Analytics','Solutions','Content','SEO']},
+     {key:'app',group:'Mobile · App',name:'iOS · Android 앱 런칭',short:'스토어 에셋과 딥링크까지 웹과 같은 시점에 오픈.',
+      stack:'App Store · Google Play · Deep Link', link:'starllion.com',linkUrl:'www.starllion.com/platforms/mobile-app',
+      body:'웹 런칭과 동시에 iOS · Android 앱을 스토어에 올렸습니다. 아이콘 · 스크린샷 · 스토어 카피 등 에셋 전체를 브랜드 가이드에 맞춰 제작하고, 웹에서 앱으로 이어지는 딥링크를 Velo로 직접 구현했습니다.',
+      points:['iOS · Android 스토어 에셋 일괄 제작','스토어 카피 · 키워드 · 스크린샷 최적화','웹 → 앱 딥링크 라우팅 직접 구현','웹 · 모바일 동시 런칭 일정 관리'],
+      tags:['Mobile','App Store','Deep Link','Launch']}],
+   title:'Starllion™ 클라우드 VMS 런칭',
+   summary:'제로베이스 SaaS 브랜드: 30+ 페이지, iOS/Android까지 — 에이전시 없이 100% 단독으로 런칭했습니다.',
+   meta:[
+     {label:'Role',value:'Marketing Manager — 브랜드 컨셉부터 프로덕션 런칭까지 단독 오너'},
+     {label:'Product',value:'Starllion™ Cloud VMS (AWS 기반 SaaS, 4,000+ 카메라 지원)'},
+     {label:'Timeline',value:'2024 — 2025 런칭'},
+     {label:'Tech',value:'Wix Studio · Wix Velo (JS) · 앱 딥링크 · 폼/라우팅/SEO 직접 구현'},
+     {label:'Scope',value:'브랜드 아이덴티티 · IA · Figma · 화면정의서 · 전체 구축 · iOS/Android'}],
+   challengeIntro:'하드웨어 카탈로그 미학과 차별화된 SaaS 브랜드를, 개발 예산도 에이전시도 없이 제로베이스에서 런칭해야 했습니다.',
+   challenges:[
+     {title:'제로 베이스, 제로 예산',body:'브랜드도, 에이전시도, 개발 예산도 없는 상태에서 시작.',critical:true},
+     {title:'하드웨어와의 차별화',body:'기존 하드웨어 카탈로그 톤에서 벗어난 SaaS 언어가 필요했습니다.'},
+     {title:'3-depth 정보 구조',document:'',body:'플랫폼 · 애널리틱스 · 솔루션까지 30+ 하위 페이지를 설계.'},
+     {title:'멀티채널 동시 런칭',body:'웹 · iOS · Android를 한 시점에 맞춰야 했습니다.'}],
+   approach:[
+     {n:'1',title:'브랜드 아이덴티티',body:'네이밍, S-마크 그라디언트 로고, 다크 네이비 / 로열 블루 팔레트.'},
+     {n:'2',title:'IA 설계',body:'5개 대분류 / 30+ 하위 / 3-depth: Platforms(7) · Analytics(5) · Solutions.'},
+     {n:'3',title:'Velo로 전체 구축',body:'폼 · 라우팅 · SEO · 앱 딥링크를 전부 JavaScript로 직접 구현.',hl:true},
+     {n:'4',title:'멀티채널 런칭',body:'웹 + iOS + Android 동시 오픈.'}],
+   callout:'starllion.com',
+   results:[{value:'30+',label:'라이브 페이지'},{value:'4',label:'리드 캡처 폼'},{value:'$0',label:'개발 외주 비용'}],
+   gallery:['starllion.com 홈','로고 / 브랜드 보드','플랫폼 상세 페이지','솔루션 버티컬','모바일 앱스토어','Figma 화면정의서'],
+   skills:['Brand Strategy','Information Architecture','Wix Velo','UX Design','SaaS Content','Multi-channel Launch']},
+
+  {anchor:'case-3',num:'03',short:'Print & Catalog',cats:['Print','Packaging'],
+   banners:[
+     {key:'catalog',group:'Print · Catalog',name:'연간 제품 카탈로그',short:'100+ SKU를 하나의 그리드 시스템으로 정리한 라인업 전체 카탈로그.',
+      stack:'InDesign · Photoshop · Illustrator',
+      pdf:['docs','avycon-product-catalog-2025.pdf'],
+      linkLabel:'View PDF',
+      body:'회사의 전 제품 라인업을 담는 연간 카탈로그를 매년 단독으로 설계·제작했습니다. 100개가 넘는 SKU를 같은 그리드와 위계 안에 정리해, 페이지가 늘어나도 읽는 방식이 달라지지 않도록 시스템을 먼저 세웠습니다.',
+      points:['100+ SKU를 단일 그리드 · 위계 시스템으로 통합','제품군별 챕터 구조와 색인 · 비교 표 설계','TAA · NDAA · UL · AI 인증 배지 규칙을 제품별로 정확히 적용','해외 인쇄 벤더 색교정 · 후가공 · 납기 관리'],
+      tags:['Catalog','InDesign','Grid System','Print Prod']},
+     {key:'flier',group:'Print · Flier',name:'제품 플라이어',short:'신제품 · 캠페인 단위로 제작한 단면 / 양면 플라이어 시리즈.',
+      stack:'InDesign · Illustrator · Print',
+      pdf:['docs','avycon-product-flyers.pdf'],
+      linkLabel:'View PDF',
+      body:'전시회와 영업 현장에서 바로 쓰이는 플라이어를 신제품과 캠페인 주기에 맞춰 제작했습니다. 카탈로그의 디자인 시스템을 그대로 축약해, 낱장으로 배포돼도 브랜드가 흐트러지지 않게 유지했습니다.',
+      points:['신제품 · 시즌 캠페인 단위의 단면 / 양면 플라이어','카탈로그 시스템을 축약한 1페이지 레이아웃 규칙','핵심 스펙과 차별점만 남기는 정보 우선순위 편집','전시 · 영업 · 메일 발송용 규격 동시 대응'],
+      tags:['Flier','Sales Collateral','Layout','Campaign']},
+     {key:'packaging',group:'Packaging',name:'제품 패키징',short:'박스 · 라벨 · 동봉물까지 라인업 전체를 아우르는 패키징 시스템.',
+      stack:'Dieline · Illustrator · Vendor Mgmt',
+      pdf:['docs','avycon-giftbox.pdf'],
+      linkLabel:'View PDF',
+      body:'제품 박스부터 라벨, 동봉 인쇄물까지 개봉 순간의 경험을 하나의 시스템으로 설계했습니다. 도무송(다이라인) 단위에서 벤더와 조율하며 소재 · 후가공 · 조립까지 실제 생산 조건에 맞춰 정리했습니다.',
+      points:['제품군별 박스 · 라벨 · 동봉물 패키징 시스템 구축','다이라인 설계와 소재 · 후가공 벤더 조율','리테일 키트 · 기프트 박스 등 특수 패키지 제작','바코드 · 인증 표기 · 다국어 라벨 규정 대응'],
+      tags:['Packaging','Dieline','Production','Brand']}],
+   title:'제품 카탈로그 & 인쇄물',
+   summary:'5년간 50개 이상의 인쇄물 — 100+ SKU 연간 카탈로그, 패키징, 기술 문서까지 단독 디자인·제작 관리.',
+   meta:[
+     {label:'Role',value:'Marketing Manager — 전체 인쇄물의 단독 디자이너 겸 제작 오너'},
+     {label:'Scope',value:'플라이어 · 연간 카탈로그 · Solution-by-Industry 카탈로그 · 패키징 · 스펙시트 · 매뉴얼 · QSG'},
+     {label:'Span',value:'5년 · 50+ 제작물'},
+     {label:'Tools',value:'InDesign · Illustrator · Photoshop · 인쇄 벤더 관리'},
+     {label:'Compliance',value:'TAA · NDAA · UL · AI 인증 배지 적용 관리'}],
+   challengeIntro:'B2B 하드웨어 인쇄물은 정확한 기술 스펙, 인증 배지 규정, 그리고 100+ SKU를 아우르는 브랜드 일관성을 동시에 만족해야 합니다.',
+   challenges:[
+     {title:'기술적 정확성',body:'데이터 오류 허용치 0의 스펙 전사 작업.'},
+     {title:'인증 컴플라이언스',body:'TAA · NDAA · UL · AI 배지를 제품별로 정확히 적용.',critical:true},
+     {title:'100+ SKU 일관성',body:'전 라인업에 걸친 그리드 · 위계 · 비주얼 시스템 유지.'},
+     {title:'인쇄 프로덕션',body:'해외 벤더와의 색교정 · 후가공 · 납기 관리.'}],
+   approach:[
+     {n:'1',title:'브리프 & 데이터 수집',body:'제품 스펙과 캠페인 요구사항을 정리.'},
+     {n:'2',title:'컨셉 & 레이아웃',body:'그리드 · 위계 · 비주얼 시스템 확립.'},
+     {n:'3',title:'디자인 시스템 적용',body:'전 SKU에 재사용 가능한 템플릿과 배지 규칙 구축.',hl:true},
+     {n:'4',title:'인쇄 감리 & 납품',body:'벤더 색교정, 후가공 확인, 최종 출고.'}],
+   callout:'',
+   results:[{value:'50+',label:'제작 인쇄물'},{value:'100+',label:'SKU 카탈로그'},{value:'5yr',label:'브랜드 일관성 유지'}],
+   gallery:['연간 카탈로그 표지','카탈로그 내지 스프레드','Solution-by-Industry 카탈로그','PTZ 플라이어','파노라마 / 피시아이 플라이어','Smart Defender™ 시리즈','NVR / DVR 플라이어','Kit Box 패키징','기프트 박스'],
+   skills:['B2B Print Design','Catalog Production','Packaging','Technical Documentation','Print Production Mgmt','Brand Stewardship']},
+
+  {anchor:'case-4',num:'04',short:'Trade Show & CX',cats:['3D','Events'],
+   banners:[
+     {key:'cx',group:'Space · CX Center',name:'본사 CX 센터 구축',short:'쇼룸 공간 기획부터 벽면 그래픽, 제품 진열, 시공 감독까지 주도.',
+      stack:'Space Planning · Graphics · 시공 감독',
+      body:'고객이 제품을 직접 보고 상담하는 본사 CX 쇼룸을 처음부터 만들었습니다. 동선과 존 구성을 기획하고, 벽면 그래픽과 제품 진열, 조명까지 결정한 뒤 시공 현장을 직접 감독했습니다.',
+      points:['방문 고객 동선과 존(제품 · 데모 · 상담) 구성 기획','벽면 대형 그래픽 · 사이니지 디자인 및 제작','제품 진열 계획과 데모 환경 세팅','시공 벤더 선정 · 일정 · 현장 감독'],
+      tags:['Showroom','Interior','Environmental','Ops']},
+     {key:'render',group:'3D · Interior',name:'3D 인테리어 & 부스 렌더링',short:'제작 확정 전 공간과 그래픽을 직접 3D로 시각화해 의사결정을 앞당김.',
+      stack:'3D Modeling · Rendering',
+      body:'부스와 쇼룸을 제작하기 전에 공간을 직접 3D로 모델링하고 렌더링했습니다. 도면만으로는 판단이 어려웠던 구조 · 그래픽 · 조명을 미리 확인할 수 있어, 현장에서 발생하던 수정과 비용을 크게 줄였습니다.',
+      points:['부스 · 쇼룸 공간을 직접 3D 모델링 · 렌더링','구조 · 그래픽 · 조명을 제작 전에 검증','경영진 · 벤더와 동일한 이미지를 공유해 의사결정 단축','현장 수정 최소화로 제작비 · 일정 리스크 감소'],
+      tags:['3D Render','Booth Design','Visualization','Pre-viz']},
+     {key:'shows',group:'Trade Show · 4 Countries',name:'해외 전시 4개국',short:'미국 · UAE · 한국 · 일본 전시를 한 사이클 안에서 디자인 · 물류 · 현장 실행.',
+      stack:'ISC West · Intersec · SECON · Security Show',
+      body:'4개국 전시가 한 기간에 겹치는 사이클을 원격에서 조율했습니다. 부스 구조와 대형 그래픽을 함께 설계하고, 각국 벤더 제작과 물류, 현장 설치, 제품 진열, 운영 브리핑까지 하나의 프로세스로 관리했습니다.',
+      points:['ISC West(US) · Intersec(UAE) · SECON(KR) · Security Show(JP)','시장별 메시지와 제품 진열 동선을 각각 재구성','4개국 벤더 제작 · 배송 · 설치 일정 원격 조율','현장 설치 감독과 운영 인력 브리핑까지 실행'],
+      tags:['Trade Show','Vendor Mgmt','Logistics','Global']}],
+   title:'전시회 · 이벤트 · CX 센터',
+   summary:'4개국 전시회와 본사 CX 쇼룸을 한 사이클 안에 — 디자인, 공간 기획, 벤더, 물류, 현장 실행까지.',
+   meta:[
+     {label:'Role',value:'Marketing Manager — 부스 디자인 · 이벤트 기획 · CX 인테리어 · 벤더 코디네이션'},
+     {label:'Events',value:'ISC West 2026 (Las Vegas) · Intersec 2026 (Dubai) · SECON 2026 (Seoul) · Security Show 2026 (Tokyo)'},
+     {label:'Timeline',value:'2026 시즌 · 단일 사이클'},
+     {label:'Tools',value:'3D 렌더링 · 대형 인쇄 · 시공 감독 · 국제 물류'},
+     {label:'Extra',value:'본사 CX 센터 공간 기획 · 벽면 그래픽 · 제품 진열'}],
+   challengeIntro:'4개국 전시와 본사 쇼룸을 한 사이클 안에서 디자인 · 공간 기획 · 벤더 관리 · 물류 · 현장 실행으로 수렴시켜야 했습니다.',
+   challenges:[
+     {title:'4개국, 하나의 사이클',body:'미국 · UAE · 한국 · 일본 전시가 단일 기간에 겹쳤습니다.',critical:true},
+     {title:'공간 + 그래픽 동시 설계',body:'부스 구조와 대형 그래픽을 함께 설계해야 했습니다.'},
+     {title:'국제 벤더 관리',body:'4개국 벤더 · 물류 · 현장 설치를 원격에서 조율.'},
+     {title:'CX 센터 시공',body:'쇼룸 공간 기획부터 시공 감독까지 병행.'}],
+   approach:[
+     {n:'1',title:'브리프 & 공간 기획',body:'부스 목표와 동선 레이아웃 정의.'},
+     {n:'2',title:'3D 렌더링',body:'제작 확정 전에 직접 3D로 시각화.',hl:true},
+     {n:'3',title:'벤더 & 물류',body:'4개국 제작 · 배송 · 설치 일정 조율.'},
+     {n:'4',title:'현장 실행',body:'설치 감독, 제품 진열, 운영 브리핑.'}],
+   callout:'',
+   results:[{value:'4',label:'전시 참가 국가'},{value:'5',label:'이벤트 프로그램'},{value:'1',label:'CX 쇼룸 구축'}],
+   gallery:['ISC West 3D 렌더','ISC West 현장','Intersec 부스','SECON 부스','Tokyo 부스','CX 센터 벽면 그래픽','CX 제품 진열','ADI 배너 세트'],
+   skills:['3D Booth Design','Trade Show Mgmt','Intl Vendor Coordination','Environmental Design','Large-format Print','Bilingual Ops']},
+
+  {anchor:'case-5',num:'05',short:'AI-Built Apps',cats:['AI','Dev'],
+   title:'AI 기반 앱 개발 — 업무용 + 개인',
+   summary:'Claude API · Cursor · v0 · Vercel로 100% 단독 제작한 6개 앱. 사내 업무 자동화 3개, 개인 프로젝트 2개, Three.js 실험용 Lab 1개.',
+   meta:[
+     {label:'Role',value:'Marketing Manager — 100% 단독: 기획 · UI/UX · 개발 · 배포'},
+     {label:'Tools',value:'Claude AI · Claude Design · Cursor AI · Gemini · v0 · GitHub · Vercel'},
+     {label:'Stack',value:'React · Next.js · Three.js · React Three Fiber'},
+     {label:'Timeline',value:'2025 — 2026 · 6개 앱 배포'},
+     {label:'Deploy',value:'GitHub → Vercel CI/CD 파이프라인'}],
+   challengeIntro:'엔지니어도, 예산도, 본업 외 시간도 없었습니다 — 그래서 AI를 개발 레이어로 삼아 실제로 작동하는 소프트웨어를 출시했습니다.',
+   challenges:[
+     {title:'엔지니어 없음',body:'전담 개발자가 0명인 마케팅 팀.',critical:true},
+     {title:'예산 없음',body:'개발비 지출 없이 실제 소프트웨어를 출시해야 했습니다.'},
+     {title:'시간 없음',body:'풀타임 업무와 병행해야 하는 제작 일정.'},
+     {title:'프로덕션 품질',body:'데모가 아니라 팀이 실제로 쓰는 도구여야 했습니다.'}],
+   approach:[
+     {n:'1',title:'문제 정의',body:'업무용은 대체할 워크플로우를, 개인 프로젝트는 배우고 싶은 기술을 기준으로 출발.'},
+     {n:'2',title:'Claude Design — UI 목업',body:'HTML 레퍼런스로 내보내 디자인 기준선 확보.'},
+     {n:'3',title:'Cursor로 구현',body:'React / Next.js 코드베이스를 AI 페어링으로 작성.',hl:true},
+     {n:'4',title:'GitHub → Vercel 배포',body:'CI/CD로 실사용 URL까지 연결하고 팀에 배포.'}],
+   callout:'stevejung.dev',
+   results:[{value:'3',label:'사내 업무 자동화 앱'},{value:'3',label:'개인 · Lab 프로젝트'},{value:'15min',label:'스펙시트 검수 (기존 3시간)'}],
+   gallery:['Claude Design 작업 파일','Cursor AI 세션','GitHub 레포'],
+   skills:['Claude API','Cursor AI','v0','React/Next.js','Three.js','Vercel CI/CD','GitHub'],
+   apps:[
+     {key:'accessory',group:'업무 자동화 · Internal',name:'악세서리 가이드 생성기',stack:'React · Next.js · Claude API',status:'IN USE · INTERNAL',link:'avycon-accessory-guide.vercel.app',
+      short:'제품별 호환 악세서리 문서 자동 생성',
+      body:'제품 SKU를 입력하면 호환되는 악세서리 목록과 설치 가이드 문서를 자동으로 생성합니다. 영업팀과 기술지원팀이 매번 수동으로 찾아 정리했던 작업을 대체했습니다.',
+      points:['100+ SKU 호환 매트릭스를 구조화된 데이터로 정규화','요청 대응 시간을 수십 분에서 수 분 단위로 단축','PDF · 웹 양쪽 포맷으로 즉시 출력'],
+      tags:['업무 자동화','문서 생성','사내 사용']},
+     {key:'specsheet',group:'업무 자동화 · Internal',name:'AI 스펙시트 검수기',stack:'Claude API · Next.js',status:'IN USE · INTERNAL',link:'ai-spec-review.vercel.app',
+      short:'스펙 오류·누락을 AI로 교차 검수',
+      body:'스펙시트 초안과 원본 제품 데이터를 대조해 수치 오류, 누락 항목, 표기 불일치를 찾아 근거와 함께 리포트합니다. B2B 하드웨어에서 스펙 오류는 곧 클레임이므로 가장 리스크가 큰 작업이었습니다. 여기서 한 단계 더 나아가, 이원화되어 있던 PDF 스펙시트와 리뉴얼 사이트의 제품 CMS 데이터를 맵핑해 하나의 통일된 스펙 데이터로 통합하고, 스펙시트 제작까지 자동화했습니다.',
+      points:[
+        '수 시간 걸리던 검수를 15–20분으로 축약',
+        '인증 배지(TAA · NDAA · UL · AI) 표기 규칙 자동 확인',
+        '오류 항목별 원본 근거를 함께 제시',
+        'PDF 스펙시트 ↔ 웹 CMS 제품 데이터를 맵핑해 단일 스펙 데이터로 통합',
+        '항목별 수정 옵션과 검수 리포트 문서 제공',
+        '엑셀·일러스트레이터 수동 작업을 대체 — 기존과 동일한 문서 스타일의 PDF 자동 생성'],
+      tags:['Claude API','품질 검수','웹 CMS 통합','PDF 자동화']},
+     {key:'material',group:'업무 자동화 · Internal',name:'Three.js 웹 3D 재질 편집기',stack:'Three.js · React Three Fiber',status:'IN USE · INTERNAL',link:'threejs-material-editor.vercel.app',
+      short:'웹 Three.js용 3D 모델 재질 편집기',
+      body:'웹에서 Three.js로 3D 모델을 띄울 때 쓸 재질을 브라우저에서 직접 편집하는 도구입니다. 모델을 불러와 재질과 라이팅을 실시간으로 조정하고, 그대로 웹에 적용할 설정값으로 내보냅니다.',
+      points:['GLB / OBJ 모델을 불러와 재질을 실시간 편집','메탈니스 · 러프니스 · 이미시브 · 환경광 파라미터 조정','웹 적용용 재질 설정값 · 프리셋으로 내보내기'],
+      tags:['Three.js','웹 3D','재질 워크플로우']},
+     {key:'english',group:'개인 프로젝트 · Personal',name:'영어 학습 앱',stack:'React · Claude API',status:'PERSONAL PROJECT',link:'midani-english.vercel.app',
+      short:'간격 반복 기반 개인 학습 도구',
+      body:'문장 단위 반복 학습 루프와 오답 기반 복습 스케줄을 갖춘 개인용 학습 도구입니다. 업무와 무관하게, 직접 매일 쓰고 싶은 도구를 만들며 상태 관리와 데이터 설계를 익혔습니다.',
+      points:['간격 반복(spaced repetition) 스케줄러 직접 구현','AI 문장 교정 및 예문 생성','학습 기록 로컬 저장 · 진도 시각화','Google 로그인으로 계정 관리 및 기기 간 학습 데이터 동기화'],
+      tags:['개인 프로젝트','학습 설계','상태 관리']},
+     {key:'streamix',group:'개인 프로젝트 · Personal',name:'STREAMIX 콘텐츠 브라우징 사이트',stack:'Next.js · Tailwind · Content API',status:'PERSONAL PROJECT',link:'streamix-green.vercel.app',
+      short:'영화·시리즈 API 기반 콘텐츠 소개 사이트',
+      body:'영화와 시리즈 콘텐츠 데이터 API를 연동해 만든 콘텐츠 소개 사이트입니다. 실시간 외부 데이터를 다루면서 B2B 하드웨어와 정반대 성격의 컨슈머 UI를 설계해봤습니다.',
+      points:['콘텐츠 데이터 API 연동 · 장르/인기순 큐레이션','히어로 · 캐러셀 · 상세 페이지 전체 플로우 설계','반응형 그리드 · 스켈레톤 로딩 · 키보드 내비게이션'],
+      tags:['개인 프로젝트','API 연동','컨슈머 UI']},
+     {key:'lab',group:'Lab · Three.js 기술 테스트',name:'Three.js 기술 테스트 Lab',stack:'Three.js · R3F · GLSL · Vercel',status:'ONGOING EXPERIMENTS',link:'stevejung-portfolio.vercel.app/lab',linkUrl:'stevejung-portfolio.vercel.app/lab/synapser-studio',
+      short:'포트폴리오 구현을 위한 Three.js 기술 테스트',
+      body:'포트폴리오에 적용할 Three.js 기술을 미리 검증하는 테스트 Lab입니다. 완성된 서비스가 아니라, 기법 하나하나를 독립 씬으로 만들어 배포하고 검증된 것만 실제 포트폴리오에 반영합니다.',
+      points:['Synapser Studio — 스크롤 연동 시네마틱 3D 씬 테스트','지오메트리 · GLSL 셰이더 · 파티클 · 포스트프로세싱 단위 검증','GitHub → Vercel 자동 배포로 테스트마다 공개 URL 확보'],
+      tags:['Three.js','기술 검증','R3F']}]},
+
+  {anchor:'case-6',num:'06',short:'Campaign & Video',cats:['Campaign','Video'],
+   banners:[
+     {key:'campaign',group:'Digital · Campaign',name:'디지털 캠페인',short:'연 6회 이상 시즌 캠페인을 키비주얼에서 멀티포맷까지 단독으로 전개.',
+      stack:'Photoshop · Illustrator · After Effects',
+      body:'연간 마케팅 캘린더에 맞춰 시즌 캠페인을 기획하고 제작했습니다. 하나의 키비주얼을 정한 뒤 이메일 헤더 · 웹 배너 · 랜딩 · 소셜까지 규격별로 파생시켜, 채널이 늘어나도 캠페인이 같은 얼굴로 보이게 유지했습니다.',
+      points:['연 6회 이상 시즌 캠페인 기획 · 제작','키비주얼 1종 → 이메일 · 웹 배너 · 랜딩 · 소셜 멀티포맷 확장','신제품 런칭과 전시 일정에 맞춘 캠페인 캘린더 운영','캠페인별 랜딩 · 리드 폼 연결로 전환 경로 확보'],
+      tags:['Campaign','Key Visual','Multi-format','Email']},
+     {key:'social',group:'Social · Content',name:'SNS 콘텐츠',short:'반복 가능한 템플릿 시스템으로 다채널 소셜 콘텐츠를 지속 운영.',
+      stack:'Template System · IG · FB · LinkedIn',
+      body:'매번 새로 디자인하는 방식에서 벗어나, 포스트 유형별 템플릿 세트를 만들어 운영 부담을 줄였습니다. 제품 소개 · 인증 · 전시 현장 · 기술 설명 등 콘텐츠 유형을 나누고 각각의 레이아웃 규칙을 정했습니다.',
+      points:['포스트 유형별 템플릿 시스템 구축 — 제작 시간 대폭 단축','1:1 / 4:5 / 9:16 규격 동시 대응','제품 · 인증 · 전시 · 기술 콘텐츠 유형별 톤 정의','채널별 발행 캘린더와 캠페인 연계 운영'],
+      tags:['Social','Template','Content Ops','Multi-channel']},
+     {key:'video',group:'Video · Production',name:'영상 제작',short:'브랜드 · 제품 데모 · 전시 하이라이트 영상을 기획부터 편집까지 감독.',
+      stack:'Premiere Pro · After Effects · Direction',
+      body:'브랜드 영상과 제품 데모, 전시 하이라이트 영상을 기획 · 콘티 · 편집 등을 감독했습니다. 특히 제품 데모는 기능 시연 순서를 다시 짜서, 스펙 설명보다 “실제로 무엇이 보이는가”를 먼저 전달하도록 구성했습니다.',
+      points:['브랜드 영상 — 기획 · 콘티 · 편집 등 감독','제품 데모 영상 시리즈 — 기능 중심 시연 구성','전시 하이라이트 영상 — 현장 소재를 채널 포맷으로 재편집','모션 그래픽 · 자막 · 다국어 버전 대응'],
+      tags:['Video','Direction','Motion','Editing']}],
+   title:'디지털 캠페인 · SNS · 영상',
+   summary:'연 6회 이상의 시즌 캠페인, IG/FB 콘텐츠 시리즈, 그리고 직접 기획·감독한 YouTube 영상.',
+   meta:[
+     {label:'Role',value:'Marketing Manager — 캠페인 전략 · 디자인 디렉션 · 영상 제작 감독'},
+     {label:'Channels',value:'Instagram · Facebook · YouTube · Email · Amazon (일부)'},
+     {label:'Cadence',value:'연 6회 이상 시즌 캠페인'},
+     {label:'Formats',value:'이메일 헤더 · 소셜 1:1 · 4:5 · 9:16 · 웹 배너'},
+     {label:'Video',value:'브랜드 영상 · 제품 데모 · 전시 하이라이트 (제작 Sherry Kim)'}],
+   challengeIntro:'B2B 고객을 소비자 채널(LinkedIn · IG · YouTube)에서 만나는 일 — 기술 하드웨어와 시각적 매력 사이의 디자인 언어를 세워야 했습니다.',
+   challenges:[
+     {title:'소비자 채널의 B2B',body:'소비자가 스크롤하는 자리에 기술 하드웨어를 놓는 문제.'},
+     {title:'비주얼 언어',body:'스펙 중심 제품과 스크롤을 멈추는 이미지 사이를 잇기.',critical:true},
+     {title:'멀티포맷 확장',body:'하나의 캠페인을 1:1 / 4:5 / 9:16 / 배너로 확장.'},
+     {title:'영상 제작 관리',body:'기획 · 콘티 · 편집 등 감독을 병행.'}],
+   approach:[
+     {n:'1',title:'캘린더 기반 시즌 에셋',body:'연간 마케팅 캘린더에 맞춘 이메일 헤더 / 소셜 / 웹 배너.'},
+     {n:'2',title:'SNS 콘텐츠 시리즈 템플릿화',body:'반복 가능한 포맷 시스템으로 제작 속도 확보.',hl:true},
+     {n:'3',title:'영상 기획 & 감독',body:'브랜드 · 제품 데모 · 전시 하이라이트 3개 카테고리 운영.'},
+     {n:'4',title:'성과 리뷰 & 반복',body:'채널별 반응을 다음 시즌 디자인에 반영.'}],
+   callout:'',
+   results:[{value:'6+',label:'연간 시즌 캠페인'},{value:'3',label:'영상 카테고리'},{value:'2',label:'운영 SNS 플랫폼'}],
+   gallery:['Black Friday 그래픽 세트','홀리데이 캠페인','소셜 포맷 (1:1/4:5/9:16)','YouTube 채널','제품 데모 썸네일','전시 하이라이트 영상'],
+   skills:['Campaign Design','Social Media Design','Video Production Planning','Creative Direction','Multi-channel Mgmt']},
+
+  {anchor:'case-7',num:'07',short:'Project Ops',cats:['PMS','Process'],
+   banners:[
+     {key:'pms',group:'PMS · Asana + Notion',name:'프로젝트 관리 시스템 구축',short:'Asana와 Notion을 결합해 업무 흐름과 조직 지식을 하나의 운영 체계로 정리.',
+      stack:'Asana · Notion · SOP',
+      body:'담당자와 마감, 진행 상태가 어디에도 남지 않던 업무 방식을 Asana 워크스페이스로 옮겼습니다. 프로젝트 · 태스크 · 마일스톤 구조를 정의하고, 반복 업무는 템플릿으로 만들어 매번 새로 설계하지 않아도 되게 했습니다. 여기에 Notion을 지식 레이어로 붙여 브랜드 에셋, 벤더 정보, 작업 SOP를 검색 가능한 형태로 축적했습니다.',
+      points:['Asana 워크스페이스 설계 — 프로젝트 · 태스크 · 마일스톤 구조 정의','반복 업무(카탈로그 · 캠페인 · 전시) 템플릿화로 착수 시간 단축','Notion 지식베이스 — 브랜드 에셋 · 벤더 DB · 작업 SOP 문서화','업무 가시성 확보로 병목과 일정 리스크를 사전에 식별','신규 인력이 문서만으로 업무에 붙을 수 있는 온보딩 체계'],
+      tags:['Asana','Notion','Process Design','Knowledge Base']},
+     {key:'remote',group:'Guides · Remote · Vendor',name:'브랜드 가이드 · 템플릿 기반 협업',short:'브랜드 가이드와 작업 템플릿으로 원격 · 외주 소통 기준을 세움.',
+      stack:'Brand Guide · Templates · Feedforward / Feedback',
+      body:'로고 · 컬러 · 타이포 · 적용 규정을 담은 AVYCON 브랜드 가이드와 작업 유형별 템플릿을 만들어 배포했습니다. 한국 원격 팀과 외주 업체에 매번 말로 설명하던 업무 지시를 이 문서가 대신하면서 해석 차이가 줄었습니다. 착수 전 피드포워드와 완료 후 피드백을 사이클로 고정해, 16–17시간 시차에서도 소통 왕복 없이 업무가 이어집니다.',
+      points:['AVYCON 브랜드 가이드 — 로고 · 컬러 · 타이포 규정','작업 유형별 템플릿과 브리핑 양식을 함께 배포','한국 원격 팀 · 외주 업체에 같은 기준으로 지시 전달','착수 전 피드포워드 · 완료 후 피드백을 사이클로 고정','16–17시간 시차에도 왕복 없이 이어지는 비동기 협업'],
+      tags:['Brand Guide','Templates','Feedforward','Remote']}],
+   title:'프로젝트 매니지먼트 시스템 운영',
+   summary:'Asana · Notion으로 업무와 지식을 체계화하고, 원격 · 외부 벤더 협업을 같은 프로세스 위에서 운영.',
+   meta:[
+     {label:'Role',value:'Marketing Manager — 팀 리드 · 원격 관리 · 벤더 코디네이터'},
+     {label:'Team',value:'Sally Park (제품 데이터) · Sherry Kim (영상) · Vicky (운영) + 순환 벤더'},
+     {label:'Model',value:'US ↔ KR 비동기 워크플로우 (16–17시간 시차)'},
+     {label:'Tools',value:'Asana · Notion · 바이링구얼 SOP'},
+     {label:'Span',value:'5년 · 조직 전환'}],
+   challengeIntro:'프로젝트 관리 시스템 없음, 단절된 한미 워크플로우, 임기응변식 벤더 관계, 사라지는 조직 지식, 그리고 반응적인 업무 문화.',
+   challenges:[
+     {title:'PM 시스템 부재',body:'워크스페이스도, 담당자도, 공유 가시성도 없었습니다.',critical:true},
+     {title:'한미 단절',body:'16–17시간 시차가 인수인계를 끊고 있었습니다.'},
+     {title:'조직 지식 유실',body:'모든 정보가 한 사람의 머릿속에 존재.'},
+     {title:'벤더 임기응변',body:'브리핑 기준도 QA 절차도 문서화되지 않은 상태.'}],
+   approach:[
+     {n:'1',title:'Asana',body:'프로젝트 워크스페이스, 태스크 오너십, 크로스팀 가시성, 반복 워크플로우 템플릿.'},
+     {n:'2',title:'Notion',body:'브랜드 가이드 허브, 벤더 디렉토리, SOP 문서화.',hl:true},
+     {n:'3',title:'비동기 프로토콜',body:'시차를 전제로 한 핸드오프 규칙과 바이링구얼 브리프.'},
+     {n:'4',title:'벤더 운영 체계',body:'5+ 외주를 동일한 브리핑 · QA · 승인 프로세스로 통합.'}],
+   callout:'',
+   results:[{value:'5+',label:'동시 벤더 관계'},{value:'2',label:'국가 · 원격 팀'},{value:'5yr',label:'조직 전환'}],
+   gallery:['Asana 프로젝트 보드','Asana 타임라인','브랜드 가이드 — 타이포그래피 시스템','브랜드 가이드 — 아이코노그래피 · 이미지','브랜드 가이드 — 코브랜딩 · 적용'],
+   skills:['Project Management','Knowledge Management','Remote Team Leadership','Vendor Management','Process Design','Crisis Management']}
+];
+
+// Maps a case-study image code (e.g. 'C1-HOME-MAIN') to its source image path.
+// Filled in incrementally as image assignments come in per case.
+const imgPath = (folder, file) => '/images/' + encodeURIComponent(folder) + '/' + encodeURIComponent(file);
+const docPath = (...parts) => '/pdf/' + parts.map(encodeURIComponent).join('/');
+const IMG_MAP = (() => {
+  const C1 = 'Case 1 — AVYCON';
+  const C2 = 'Case 2 — Starllion';
+  const C3 = 'Case 3 — Printing';
+  const C4 = 'Case 4 — Expo';
+  // C5/C6 folder names intentionally don't match these variable names — Case 5/6
+  // were swapped in content (AI apps is now case-5, Campaign/SNS is now case-6),
+  // but the folders on disk still carry their original "Case 6 — AI" / "Case 5 —
+  // SNS" titles. Naming these vars after the code prefix they serve (C5-*, C6-*)
+  // rather than the folder's own label keeps that prefix→var correspondence
+  // exact for anything that parses this file.
+  const C5 = 'Case 6 — AI';
+  const C6 = 'Case 5 — SNS';
+  const C7 = 'Case 7 — Asana';
+  return {
+    'C1-BEFORE': imgPath(C1, 'AVYCON0.png'),
+    'C1-AFTER': imgPath(C1, 'AVYCON1.png'),
+    'C1-HOME-BANNER': imgPath(C1, 'AVYCON1.png'),
+    'C1-HOME-MAIN': imgPath(C1, 'AVYCON3.png'),
+    'C1-HOME-D1': imgPath(C1, 'AVYCON4.png'),
+    'C1-HOME-D2': imgPath(C1, 'AVYCON6.png'),
+    'C1-PLAN-BANNER': imgPath(C1, 'Renewal4.png'),
+    'C1-PLAN-MAIN': imgPath(C1, 'Renewal1.png'),
+    'C1-PLAN-D1': imgPath(C1, 'Renewal2.png'),
+    'C1-PLAN-D2': imgPath(C1, 'Renewal3.png'),
+    'C1-FIGMA-BANNER': imgPath(C1, 'Figma2.png'),
+    'C1-FIGMA-MAIN': imgPath(C1, 'Figma1.png'),
+    'C1-FIGMA-D1': imgPath(C1, 'Figma3.png'),
+    'C1-FIGMA-D2': imgPath(C1, 'Figma2.png'),
+    'C1-CMS-BANNER': imgPath(C1, 'Wix1.png'),
+    'C1-CMS-MAIN': imgPath(C1, 'Wix1.png'),
+    'C1-CMS-D1': imgPath(C1, 'AVYCON3.png'),
+    'C1-CMS-D2': imgPath(C1, 'AVYCON4.png'),
+    'C1-STRUCTURE-BANNER': imgPath(C1, 'Wix5.png'),
+    'C1-STRUCTURE-MAIN': imgPath(C1, 'Wix5.png'),
+    'C1-STRUCTURE-D1': imgPath(C1, 'Wix3.png'),
+    'C1-STRUCTURE-D2': imgPath(C1, 'Wix6.png'),
+    'C1-GAL1': imgPath(C1, 'AVYCON10.png'),
+    'C1-GAL2': imgPath(C1, 'AVYCON2.png'),
+    'C1-GAL3': imgPath(C1, 'AVYCON5.png'),
+    'C1-GAL4': imgPath(C1, 'AVYCON7.png'),
+    'C1-GAL5': imgPath(C1, 'AVYCON8.png'),
+    'C1-GAL6': imgPath(C1, 'AVYCON9.png'),
+    'C2-BRAND-BANNER': imgPath(C2, 'Starllion1.png'),
+    'C2-BRAND-MAIN': imgPath(C2, 'Starllion1.png'),
+    'C2-BRAND-D1': imgPath(C2, 'Starllion Logo.png'),
+    'C2-BRAND-D2': imgPath(C2, 'Starllion Logo2.png'),
+    'C2-IA-BANNER': imgPath(C2, 'Figma4.png'),
+    'C2-IA-MAIN': imgPath(C2, 'Figma4.png'),
+    'C2-IA-D1': imgPath(C2, 'Figma5.png'),
+    'C2-IA-D2': imgPath(C2, 'Figma7.png'),
+    'C2-PLATFORM-BANNER': imgPath(C2, 'Starllion2.png'),
+    'C2-PLATFORM-MAIN': imgPath(C2, 'Starllion2.png'),
+    'C2-PLATFORM-D1': imgPath(C2, 'Starllion3.png'),
+    'C2-PLATFORM-D2': imgPath(C2, 'Starllion5.png'),
+    'C2-ANALYTICS-BANNER': imgPath(C2, 'Starllion6.png'),
+    'C2-ANALYTICS-MAIN': imgPath(C2, 'Starllion6.png'),
+    'C2-ANALYTICS-D1': imgPath(C2, 'Starllion7.png'),
+    'C2-ANALYTICS-D2': imgPath(C2, 'Starllion9.png'),
+    'C2-APP-BANNER': imgPath(C2, 'Starllion11.png'),
+    'C2-APP-MAIN': imgPath(C2, 'Starllion11.png'),
+    'C2-APP-D1': imgPath(C2, 'Starllion4.png'),
+    'C3-CATALOG-BANNER': imgPath(C3, 'Print1.png'),
+    'C3-CATALOG-MAIN': imgPath(C3, 'Print1.png'),
+    'C3-CATALOG-D1': imgPath(C3, 'Print2.png'),
+    'C3-CATALOG-D2': imgPath(C3, 'Print5.png'),
+    'C3-FLIER-BANNER': imgPath(C3, 'Product Flyers2.png'),
+    'C3-FLIER-MAIN': imgPath(C3, 'Product Flyers3.png'),
+    'C3-FLIER-D1': imgPath(C3, 'Product Flyers4.png'),
+    'C3-FLIER-D2': imgPath(C3, 'Product Flyers1.png'),
+    'C3-PACKAGING-BANNER': imgPath(C3, 'Giftbox4.png'),
+    'C3-PACKAGING-MAIN': imgPath(C3, 'Giftbox4.png'),
+    'C3-PACKAGING-D1': imgPath(C3, 'Giftbox3.png'),
+    'C3-PACKAGING-D2': imgPath(C3, 'Giftbox2.png'),
+    'C3-GAL1': imgPath(C3, 'Print3.png'),
+    'C3-GAL2': imgPath(C3, 'Print4.png'),
+    'C3-GAL3': imgPath(C3, 'Print6.png'),
+    'C3-GAL4': imgPath(C3, 'Catalog1.png'),
+    'C3-GAL5': imgPath(C3, 'Catalog2.png'),
+    'C3-GAL6': imgPath(C3, 'Catalog3.png'),
+    'C3-GAL7': imgPath(C3, 'Catalog4.png'),
+    'C3-GAL8': imgPath(C3, 'Catalog5.png'),
+    'C3-GAL9': imgPath(C3, 'Giftbox1.png'),
+    'C4-CX-BANNER': imgPath(C4, 'CX Center4.png'),
+    'C4-CX-MAIN': imgPath(C4, 'CX Center5.png'),
+    'C4-CX-D1': imgPath(C4, 'CX Center4.png'),
+    'C4-CX-D2': imgPath(C4, 'CX Center3.png'),
+    'C4-RENDER-BANNER': imgPath(C4, 'CX Center2.png'),
+    'C4-RENDER-MAIN': imgPath(C4, 'CX Center2.png'),
+    'C4-RENDER-D1': imgPath(C4, 'Demo room 6 - Rare side.png'),
+    'C4-RENDER-D2': imgPath(C4, 'Demo room 2 - Design.png'),
+    'C4-SHOWS-BANNER': imgPath(C4, 'SECON1.png'),
+    'C4-SHOWS-MAIN': imgPath(C4, 'SECON1.png'),
+    'C4-SHOWS-D1': imgPath(C4, 'SECON2.png'),
+    'C4-SHOWS-D2': imgPath(C4, 'SECON3.png'),
+    'C4-GAL1': imgPath(C4, 'CX Center1.png'),
+    'C4-GAL2': imgPath(C4, 'Demo room 5 - Window side.png'),
+    'C4-GAL3': imgPath(C4, 'Security Show Tokyo1.png'),
+    'C4-GAL4': imgPath(C4, 'Security Show Tokyo2.png'),
+    'C4-GAL5': imgPath(C4, 'Security Show Tokyo3.png'),
+    'C4-GAL6': imgPath(C4, 'Dubai2.png'),
+    'C4-GAL7': imgPath(C4, 'ISC West1.png'),
+    'C4-GAL8': imgPath(C4, 'ISC West3.png'),
+    'C5-ACCESSORY-BANNER': imgPath(C5, 'Accsory App1.png'),
+    'C5-ACCESSORY-MAIN': imgPath(C5, 'Accsory App1.png'),
+    'C5-ACCESSORY-D1': imgPath(C5, 'Accsory App2.png'),
+    'C5-ACCESSORY-D2': imgPath(C5, 'Accsory App4.png'),
+    'C5-SPECSHEET-BANNER': imgPath(C5, 'AI App4.png'),
+    'C5-SPECSHEET-MAIN': imgPath(C5, 'AI App4.png'),
+    'C5-SPECSHEET-D1': imgPath(C5, 'AI App1.png'),
+    'C5-SPECSHEET-D2': imgPath(C5, 'AI App3.png'),
+    'C5-MATERIAL-BANNER': imgPath(C5, 'ThreeJS App1.png'),
+    'C5-MATERIAL-MAIN': imgPath(C5, 'ThreeJS App1.png'),
+    'C5-MATERIAL-D1': imgPath(C5, 'ThreeJS App2.png'),
+    'C5-MATERIAL-D2': imgPath(C5, 'ThreeJS App4.png'),
+    'C5-GAL1': imgPath(C5, 'AI App2.png'),
+    'C5-GAL2': imgPath(C5, 'AI App5.png'),
+    'C5-GAL3': imgPath(C5, 'ThreeJS App5.png'),
+    'C5-ENGLISH-BANNER': imgPath(C5, 'english1.png'),
+    'C5-ENGLISH-MAIN': imgPath(C5, 'english2.png'),
+    'C5-ENGLISH-D1': imgPath(C5, 'english3.png'),
+    'C5-ENGLISH-D2': imgPath(C5, 'english4.png'),
+    'C5-STREAMIX-BANNER': imgPath(C5, 'movie2.png'),
+    'C5-STREAMIX-MAIN': imgPath(C5, 'movie1.png'),
+    'C5-STREAMIX-D1': imgPath(C5, 'movie3.png'),
+    'C5-STREAMIX-D2': imgPath(C5, 'movie4.png'),
+    'C5-LAB-BANNER': imgPath(C5, 'Lab2.png'),
+    'C5-LAB-MAIN': imgPath(C5, 'Lab2.png'),
+    'C5-LAB-D1': imgPath(C5, 'Lab1.png'),
+    'C5-LAB-D2': imgPath(C5, 'Lab3.png'),
+    'C6-CAMPAIGN-BANNER': imgPath(C6, 'SNS1.png'),
+    'C6-CAMPAIGN-MAIN': imgPath(C6, 'SNS1.png'),
+    'C6-CAMPAIGN-D1': imgPath(C6, 'SNS7.png'),
+    'C6-CAMPAIGN-D2': imgPath(C6, 'SNS8.png'),
+    'C6-SOCIAL-BANNER': imgPath(C6, 'SNS02.png'),
+    'C6-SOCIAL-MAIN': imgPath(C6, 'SNS02.png'),
+    'C6-SOCIAL-D1': imgPath(C6, 'SNS6.png'),
+    'C6-SOCIAL-D2': imgPath(C6, 'SNS11.png'),
+    'C6-VIDEO-BANNER': imgPath(C6, 'Youtubo3.png'),
+    'C6-VIDEO-MAIN': imgPath(C6, 'Youtubo3.png'),
+    'C6-VIDEO-D1': imgPath(C6, 'Youtubo4.png'),
+    'C6-VIDEO-D2': imgPath(C6, 'Youtubo2.png'),
+    'C6-GAL1': imgPath(C6, 'SNS3.png'),
+    'C6-GAL2': imgPath(C6, 'SNS01.png'),
+    'C6-GAL3': imgPath(C6, 'SNS03.png'),
+    'C6-GAL4': imgPath(C6, 'SNS10.png'),
+    'C6-GAL5': imgPath(C6, 'SNS12.png'),
+    'C6-GAL6': imgPath(C6, 'Youtubo5.png'),
+    'C7-PMS-BANNER': imgPath(C7, 'Asana1.png'),
+    'C7-PMS-MAIN': imgPath(C7, 'Asana1.png'),
+    'C7-PMS-D1': imgPath(C7, 'Asana4.png'),
+    'C7-PMS-D2': imgPath(C7, 'Asana2.png'),
+    'C7-REMOTE-BANNER': imgPath(C7, 'Beand1.png'),
+    'C7-REMOTE-MAIN': imgPath(C7, 'Beand1.png'),
+    'C7-REMOTE-D1': imgPath(C7, 'Beand2.png'),
+    'C7-REMOTE-D2': imgPath(C7, 'Beand3.png'),
+    'C7-GAL1': imgPath(C7, 'Asana3.png'),
+    'C7-GAL2': imgPath(C7, 'Asana5.png'),
+    'C7-GAL3': imgPath(C7, 'Beand4.png'),
+    'C7-GAL4': imgPath(C7, 'Beand5.png'),
+    'C7-GAL5': imgPath(C7, 'Beand6.png'),
+  };
+})();
+
+class Component extends DCLogic {
+  state = { i: 0, slide: 0, chal: 0, step: 0, lightbox: null, pdfModal: null };
+  componentDidMount(){
+    if (this.props.accentColor) document.documentElement.style.setProperty('--accent', this.props.accentColor);
+    const y = document.getElementById('om-year'); if (y) y.textContent = new Date().getFullYear();
+    this._sync();
+    this._roll = setInterval(()=>{
+      const cc=CASES[this.state.i]; const n=(cc.apps||cc.banners||[]).length;
+      if(n>1 && !this._paused) this.setState(s=>({slide:(s.slide+1)%n}), ()=>this._glitchTitle());
+    }, 4500);
+    this._chalRoll = setInterval(()=>this.setState(s=>({chal:s.chal+1})), 5000);   // Challenge 카드 순차 하이라이트
+    // html{scroll-behavior:smooth} turns scrollTo(0,0) into an animation
+    // that the case re-render (new content, new page height) can cut short
+    // mid-flight, leaving the new case loaded partway down. Jump instantly
+    // instead, and pin to top again once the re-render has committed.
+    this._toTop = () => {
+      const de = document.documentElement, prev = de.style.scrollBehavior;
+      de.style.scrollBehavior = 'auto';
+      window.scrollTo(0, 0);
+      requestAnimationFrame(() => { window.scrollTo(0, 0); de.style.scrollBehavior = prev; });
+    };
+    this._onHash = () => { this._sync(); this._toTop(); };
+    addEventListener('hashchange', this._onHash);
+    this._onScroll = () => {
+      const dh = document.documentElement.scrollHeight - innerHeight;
+      const p = dh > 0 ? Math.min(1, (scrollY||0)/dh) : 0;
+      const bar = document.getElementById('om-progress'); if (bar) bar.style.transform = 'scaleX('+p+')';
+    };
+    addEventListener('scroll', this._onScroll, {passive:true}); this._onScroll();
+    this._onStepScroll = () => {
+      const rows=[...document.querySelectorAll('[data-approach-step]')];
+      if(!rows.length) return;
+      // n개 항목을 화면 하단 80% → 상단 20% 사이에 균등 배분해 순차 하이라이트
+      const n=rows.length, vh=innerHeight;
+      const startAt=vh*0.80, endAt=vh*0.20;
+      const stepGap=n>1 ? (startAt-endAt)/(n-1) : 0;
+      let idx=0;
+      rows.forEach((r,k)=>{
+        const trigger=startAt - stepGap*k;               // 1번 80%, 2번 60%, 3번 40%, 4번 20%
+        if(r.getBoundingClientRect().top <= trigger) idx=k;
+      });
+      if(idx!==this.state.step) this.setState({step:idx});
+    };
+    addEventListener('scroll', this._onStepScroll, {passive:true});
+    setTimeout(this._onStepScroll, 600);
+    this._waitThree(0);
+    setTimeout(()=>this._restoreGlb(), 700);
+
+  }
+  _glitchTitle(){
+    const els=document.querySelectorAll('[data-glitch-title]');
+    const el=els[this.state.slide]; if(!el) return;
+    el.style.setProperty('--gx', (3+Math.random()*3).toFixed(2)+'px');   // 3px ~ 6px 랜덤
+    el.style.animation='none'; void el.offsetWidth;
+    el.style.animation='glitchIn .62s cubic-bezier(.2,.7,.2,1) both';
+  }
+  componentDidUpdate(prev){
+    if (this.props.accentColor && prev.accentColor !== this.props.accentColor)
+      document.documentElement.style.setProperty('--accent', this.props.accentColor);
+    if (this._swap && (prev.object !== this.props.object || prev.glb !== this.props.glb))
+      this._swap(this.props.object||'icosahedron', this.props.glb);
+    else if (prev.glbScale !== this.props.glbScale) this._applyGlbScale();
+  }
+  componentWillUnmount(){
+    clearInterval(this._roll);
+    clearInterval(this._chalRoll);
+    removeEventListener('hashchange', this._onHash);
+    removeEventListener('scroll', this._onScroll);
+    removeEventListener('scroll', this._onStepScroll);
+    removeEventListener('resize', this._onResize);
+    cancelAnimationFrame(this._raf);
+  }
+  _sync(){
+    const h = (location.hash || '').replace('#','');
+    const i = CASES.findIndex(c => c.anchor === h);
+    this.setState({ i: i < 0 ? 0 : i, slide: 0, chal: 0, step: 0 },
+      () => { if (this._toTop) this._toTop(); });
+  }
+  _waitThree(n){
+    if (window.THREE) {
+      if (window.__omCaseRaf) cancelAnimationFrame(window.__omCaseRaf);
+      window.__omCaseToken = (window.__omCaseToken || 0) + 1;   // 이전 루프 전부 자체 종료
+      return this._stage();
+    }
+    if (n > 80) return; setTimeout(()=>this._waitThree(n+1), 90);
+  }
+  _stage(){
+    const T = window.THREE, canvas = document.getElementById('stage'); if (!canvas) return;
+    const acc = new T.Color(getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#d6ff3f');
+    const renderer = new T.WebGLRenderer({canvas, antialias:true, alpha:true});
+    renderer.setClearColor(0x000000, 0);
+    const scene = new T.Scene(); scene.fog = new T.FogExp2(0x0a0a0b, .1);
+    const camera = new T.PerspectiveCamera(52, innerWidth/innerHeight, .1, 100); camera.position.set(0,0,5.2);
+    const resize=()=>{ renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.setSize(innerWidth,innerHeight,false); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); };
+    resize(); this._onResize=resize; addEventListener('resize',resize);
+    scene.add(new T.AmbientLight(0xffffff,.4));
+    const pl=new T.PointLight(acc,1.2,26); pl.position.set(3,3,4); scene.add(pl);
+    scene.add(new T.DirectionalLight(0xffffff,.4).translateX(2));
+    const g=new T.Group();
+    const mat=()=>new T.MeshStandardMaterial({color:0x101114,metalness:.9,roughness:.3,emissive:acc,emissiveIntensity:.04,flatShading:true});
+    const wire=(geo)=>new T.LineSegments(new T.WireframeGeometry(geo), new T.LineBasicMaterial({color:acc.clone(),transparent:true,opacity:.34,fog:false,toneMapped:false}));
+    const geoFor=(kind)=>({
+      icosahedron:[new T.IcosahedronGeometry(1.7,1),new T.IcosahedronGeometry(1.74,1)],
+      octahedron:[new T.OctahedronGeometry(1.8,0),new T.OctahedronGeometry(1.84,0)],
+      sphere:[new T.SphereGeometry(1.6,48,32),new T.SphereGeometry(1.64,24,16)],
+      torus:[new T.TorusGeometry(1.3,.44,64,32),new T.TorusGeometry(1.34,.46,32,14)],
+      torusKnot:[new T.TorusKnotGeometry(1.1,.34,200,32),new T.TorusKnotGeometry(1.14,.35,120,18)]
+    }[kind] || [new T.IcosahedronGeometry(1.7,1),new T.IcosahedronGeometry(1.74,1)]);
+    const loadGLB=(url)=>{
+      if(!url || !T.GLTFLoader) return;
+      new T.GLTFLoader().load(url,(gl)=>{
+        const o=gl.scene, box=new T.Box3().setFromObject(o), size=new T.Vector3(); box.getSize(size);
+        const base=3.4/Math.max(size.x,size.y,size.z||1);
+        const ctr=new T.Vector3(); box.getCenter(ctr);
+        o.traverse(n=>{ if(n.material) n.material.transparent=true; });
+        while(g.children.length) g.remove(g.children[0]);
+        g.add(o);
+        g.userData.glb={obj:o, base:base, ctr:ctr};
+        this._applyGlbScale();
+      },undefined,()=>{});
+    };
+    this._obj=g;
+    this._swap=(kind, glb)=>{
+      g.userData.glb=null;
+      while(g.children.length){ const ch=g.children[0]; g.remove(ch); if(ch.geometry) ch.geometry.dispose(); }
+      const G=geoFor(kind); g.add(new T.Mesh(G[0], mat())); g.add(wire(G[1]));
+      if(glb) loadGLB(glb);
+    };
+    const p=this.props||{};
+    this._swap(p.object||'icosahedron', p.glb);
+    const pts=[]; for(let k=0;k<90;k++) pts.push(new T.Vector3((Math.random()-.5)*9,(Math.random()-.5)*7,(Math.random()-.5)*6));
+    const stars=new T.Points(new T.BufferGeometry().setFromPoints(pts), new T.PointsMaterial({color:acc.clone(),size:.045,transparent:true,opacity:.5,fog:false,toneMapped:false}));
+    // 구의 중심을 기준으로 자유로운 축(360도)으로 아주 느리게 회전하는 별무리
+    const starAxis=new T.Vector3(Math.random()*2-1, Math.random()*2-1, Math.random()*2-1).normalize();
+    const starPivot=new T.Group(); starPivot.add(stars); scene.add(starPivot);
+    stars.frustumCulled=false;
+    const starBase=pts.map(v=>v.clone());               // 로컬 원본 좌표
+    const starAttr=stars.geometry.getAttribute('position');
+    const HIDE=new T.Vector3(0,0,-9999);                 // 프러스텀 밖으로 밀어 숨김
+    const _wp=new T.Vector3(), _ax=new T.Vector3(), _rel=new T.Vector3(), _proj=new T.Vector3();
+    let occR=2.9;
+    scene.add(g);
+    const clock=new T.Clock();
+    const myToken=window.__omCaseToken;
+    const loop=()=>{
+      if(window.__omCaseToken!==myToken) return;
+      const t=clock.getElapsedTime();
+      g.rotation.y=t*.18; g.rotation.x=Math.sin(t*.3)*.25;
+      starPivot.quaternion.setFromAxisAngle(starAxis, t*.018);   // 구 자전의 약 10%
+      // 카메라와 구 사이(구 실루엣 안쪽)에 들어온 파티클은 숨김
+      if(this._fcS===undefined) this._fcS=0;
+      if(this._fcS++%20===0 && this._obj){
+        const bs=new T.Box3().setFromObject(this._obj).getBoundingSphere(new T.Sphere());
+        if(bs.radius>0) occR=bs.radius*1.02;
+      }
+      _ax.copy(camera.position).negate().normalize();     // 카메라 → 구 중심 방향
+      for(let k=0;k<starBase.length;k++){
+        _wp.copy(starBase[k]).applyQuaternion(starPivot.quaternion);
+        _rel.copy(_wp).sub(camera.position);
+        const along=_rel.dot(_ax);
+        const camDist=camera.position.length();
+        let hide=false;
+        if(along>0 && along<camDist){                     // 카메라와 구 중심 사이
+          _proj.copy(_ax).multiplyScalar(along);
+          if(_rel.distanceTo(_proj)<occR) hide=true;      // 실루엣 안쪽
+        }
+        const src=hide?HIDE:_wp;
+        starAttr.setXYZ(k, src.x, src.y, src.z);
+      }
+      starAttr.needsUpdate=true;
+      starPivot.quaternion.identity();                    // 이미 좌표에 회전 반영됨
+      const p=(scrollY||0)/Math.max(1,document.documentElement.scrollHeight-innerHeight);
+      camera.position.y=-p*2.2; camera.position.z=5.2+p*2.4; camera.lookAt(0,0,0);
+      renderer.render(scene,camera); this._raf=window.__omCaseRaf=requestAnimationFrame(loop);
+    };
+    loop();
+  }
+  _scrollTo(id){
+    const el=document.getElementById(id); if(!el) return;
+    const y=el.getBoundingClientRect().top + (window.scrollY||0) - 84;
+    window.scrollTo({top:y, behavior:'smooth'});
+  }
+  _applyGlbScale(){
+    const g=this._obj, d=g && g.userData && g.userData.glb; if(!d) return;
+    const v=this.props.glbScale, mult=(typeof v==='number' && v>0)?v:1;
+    const s=d.base*mult;
+    d.obj.scale.setScalar(s);
+    d.obj.position.copy(d.ctr).multiplyScalar(-s);
+  }
+  _db(){
+    return new Promise((res,rej)=>{
+      const r=indexedDB.open('om-glb-case',1);
+      r.onupgradeneeded=()=>{ r.result.createObjectStore('models'); };
+      r.onsuccess=()=>res(r.result); r.onerror=()=>rej(r.error);
+    });
+  }
+  _applyFile(file, save){
+    const url=URL.createObjectURL(file);
+    if(this._blobUrl) URL.revokeObjectURL(this._blobUrl);
+    this._blobUrl=url;
+    if(this._swap) this._swap(this.props.object||'icosahedron', url);
+    if(save) this._db().then(db=>db.transaction('models','readwrite').objectStore('models').put(file,'model')).catch(()=>{});
+  }
+  async _restoreGlb(){
+    try{
+      const db=await this._db(), q=db.transaction('models','readonly').objectStore('models').get('model');
+      q.onsuccess=()=>{ if(q.result && this._swap) this._applyFile(q.result,false); };
+    }catch(e){}
+  }
+  async _resetGlb(){
+    try{ const db=await this._db(); db.transaction('models','readwrite').objectStore('models').delete('model'); }catch(e){}
+    if(this._swap) this._swap(this.props.object||'icosahedron','');
+  }
+  renderVals(){
+    const i = this.state.i, c = CASES[i];
+    const prev = CASES[(i-1+CASES.length)%CASES.length], next = CASES[(i+1)%CASES.length];
+    const cs = Object.assign({}, c, {
+      heroSlot: c.anchor+'-hero', heroSlotLabel: c.title+' — 히어로 이미지',
+      beforeSlot: c.anchor+'-before', afterSlot: c.anchor+'-after',
+      codeBefore: 'C'+(+c.num)+'-BEFORE', codeAfter: 'C'+(+c.num)+'-AFTER',
+      srcBefore: IMG_MAP['C'+(+c.num)+'-BEFORE'] || '', srcAfter: IMG_MAP['C'+(+c.num)+'-AFTER'] || '',
+      cursorBefore: IMG_MAP['C'+(+c.num)+'-BEFORE'] ? 'pointer' : 'default',
+      cursorAfter: IMG_MAP['C'+(+c.num)+'-AFTER'] ? 'pointer' : 'default',
+      openBefore: () => { const s = IMG_MAP['C'+(+c.num)+'-BEFORE']; if (s) this.setState({ lightbox: s }); },
+      openAfter: () => { const s = IMG_MAP['C'+(+c.num)+'-AFTER']; if (s) this.setState({ lightbox: s }); },
+      hasBeforeAfter: !!c.beforeLabel, hasApps: !!c.apps, plainHero: false, bodyId: c.anchor+'-body',
+      hasSections: !!(c.apps || (c.banners||[]).some(b=>b.body)),
+      sectionList: (c.apps || (c.banners||[]).filter(b=>b.body) || []).map((b,k)=>{
+        const isApp = !!c.apps;
+        const pre = isApp ? '' : c.anchor+'-';
+        return Object.assign({}, b, {
+          no: String(k+1).padStart(2,'0'),
+          id: (isApp?'app-':'sec-')+pre+b.key,
+          slot: (isApp?'appm-':'secm-')+pre+b.key,
+          slot2: (isApp?'apps2-':'secs2-')+pre+b.key,
+          slot3: (isApp?'apps3-':'secs3-')+pre+b.key,
+          codeMain: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN',
+          codeD1: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1',
+          codeD2: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2',
+          srcMain: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN'] || '',
+          srcD1: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] || '',
+          srcD2: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2'] || '',
+          cursorMain: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN'] ? 'pointer' : 'default',
+          cursorD1: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] ? 'pointer' : 'default',
+          cursorD2: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2'] ? 'pointer' : 'default',
+          hasD1: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'],
+          hasD2: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2'],
+          hasDetails: !!(IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] || IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']),
+          // A lone detail tile gets minmax(0,1fr) so the track's auto minimum
+          // can't push it past the main tile's width; the two-tile row keeps
+          // the 1fr 1fr sizing it has always had.
+          // minmax(0,1fr) on both tracks: a bare 1fr can't shrink below the
+          // image-slot's intrinsic ~300px min-content, so the two detail
+          // tiles rendered wider than the media column and spilled past it
+          // at mid-size desktop widths.
+          detailCols: (IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1'] && IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']) ? 'minmax(0, 1fr) minmax(0, 1fr)' : 'minmax(0, 1fr)',
+          openMain: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-MAIN']; if (s) this.setState({ lightbox: s }); },
+          openD1: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D1']; if (s) this.setState({ lightbox: s }); },
+          openD2: () => { const s = IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-D2']; if (s) this.setState({ lightbox: s }); },
+          status: b.status || (b.group||'').toUpperCase(),
+          hasPdf: !!b.pdf,
+          openPdf: () => { if (b.pdf) this.setState({ pdfModal: { url: docPath(...b.pdf), title: b.name } }); },
+          hasSiteLink: !b.pdf && !!(b.link || c.callout),
+          hasCta: !!(b.pdf || b.link || c.callout),
+          siteLink: b.pdf ? 'PDF Document' : (b.link || c.callout || 'stevejung.dev'),
+          siteUrl: b.linkUrl || b.link || c.callout || 'stevejung.dev',
+          siteLabel: b.linkLabel || ((b.link || c.callout) ? 'Visit site' : 'Portfolio site')
+        });
+      }),
+      bannerList: (c.apps || c.banners || []).map((b,k)=>{
+        const isApp = !!c.apps;
+        const target = isApp ? 'app-'+b.key : (b.body ? 'sec-'+c.anchor+'-'+b.key : c.anchor+'-body');
+        const sl = this.state.slide % Math.max(1,(c.apps||c.banners||[]).length);
+        return Object.assign({}, b, {
+          no: String(k+1).padStart(2,'0'),
+          group: b.group || (c.short||'').toUpperCase(),
+          bannerSlot: isApp ? 'appb-'+b.key : 'bnr-'+c.anchor+'-'+b.key,
+          codeBanner: 'C'+(+c.num)+'-'+b.key.toUpperCase()+'-BANNER',
+          srcBanner: IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-BANNER'] || '',
+          hasBanner: !!IMG_MAP['C'+(+c.num)+'-'+b.key.toUpperCase()+'-BANNER'],
+          op: k===sl ? 1 : 0,
+          pe: k===sl ? 'auto' : 'none',
+          gaugeAnim: k===sl ? 'gaugeFill 4.5s linear forwards' : 'none',
+          gaugeState: this.state.paused ? 'paused' : 'running',
+          dotW: k===sl ? '68px' : '14px',
+          dotBg: k===sl ? 'rgba(236,233,226,.22)' : 'rgba(236,233,226,.3)',
+          select: ()=>this.setState({slide:k}, ()=>this._glitchTitle()),
+          go: ()=>this._scrollTo(target)
+        });
+      }),
+      slideLink: ((c.apps||[])[this.state.slide]||{}).link || c.callout || 'stevejung.dev',
+      slideLinkLabel: ((c.apps||[])[this.state.slide]||{}).link ? 'Visit site' : 'Portfolio site',
+      appList: (c.apps||[]).map((a,k)=>Object.assign({}, a, {
+        no: String(k+1).padStart(2,'0'),
+        id: 'app-'+a.key,
+        bannerSlot: 'appb-'+a.key, slot: 'appm-'+a.key, slot2: 'apps2-'+a.key, slot3: 'apps3-'+a.key,
+        op: k===this.state.slide ? 1 : 0,
+        pe: k===this.state.slide ? 'auto' : 'none',
+        gaugeAnim: k===this.state.slide ? 'gaugeFill 4.5s linear forwards' : 'none',
+        gaugeState: this.state.paused ? 'paused' : 'running',
+        dotW: k===this.state.slide ? '68px' : '14px',
+        dotBg: k===this.state.slide ? 'rgba(236,233,226,.22)' : 'rgba(236,233,226,.3)',
+        select: ()=>this.setState({slide:k}, ()=>this._glitchTitle()),
+        siteLink: a.link || 'stevejung.dev',
+        siteLabel: a.link ? 'Visit site' : 'Portfolio site',
+        go: ()=>this._scrollTo('app-'+a.key)
+      })),
+      challenges: c.challenges.map((x, k) => {
+        const on = k === (this.state.chal % c.challenges.length);
+        return Object.assign({}, x, {
+          border: on ? 'var(--accent)' : 'var(--line)',
+          starFg: on ? 'var(--accent)' : 'var(--dim)',
+          fillW: on ? '100%' : '0%',
+          titleFg: on ? '#0a0a0b' : 'var(--fg)' });
+      }),
+      approach: c.approach.map((s, k) => {
+        const on = k === this.state.step;
+        return Object.assign({}, s, {
+          numBorder: on ? 'var(--accent)' : 'var(--line)',
+          numBg: on ? 'var(--accent)' : 'transparent',
+          numFg: on ? '#0a0a0b' : 'var(--muted)' });
+      }),
+      gallery: c.gallery.map((label, k) => {
+        const code = 'C'+(+c.num)+'-GAL'+(k+1);
+        const src = IMG_MAP[code] || '';
+        return { id: c.anchor+'-g'+k, label, code, src,
+          cursor: src ? 'pointer' : 'default',
+          open: () => { if (src) this.setState({ lightbox: src }); } };
+      }).filter(g => g.src),
+      hasGallery: c.gallery.some((_, k) => IMG_MAP['C'+(+c.num)+'-GAL'+(k+1)]),
+      prevAnchor: prev.anchor, prevTitle: prev.title, nextAnchor: next.anchor, nextTitle: next.title
+    });
+    const nav = CASES.map((x, k) => ({ anchor:x.anchor, num:x.num, short:x.short,
+      border: k===i ? 'var(--accent)' : 'var(--line)',
+      bg: k===i ? 'var(--accent)' : 'transparent',
+      fg: k===i ? '#0a0a0b' : 'var(--muted)' }));
+    const n=(c.apps||c.banners||[]).length||1;
+    return { cs, nav,
+      lightboxOpen: !!this.state.lightbox,
+      lightboxSrc: this.state.lightbox || '',
+      closeLightbox: () => this.setState({ lightbox: null }),
+      pdfModalOpen: !!this.state.pdfModal,
+      pdfModalUrl: (this.state.pdfModal && this.state.pdfModal.url) || '',
+      pdfModalTitle: (this.state.pdfModal && this.state.pdfModal.title) || 'PDF',
+      closePdf: () => this.setState({ pdfModal: null }),
+      stopClick: (e) => e.stopPropagation(),
+      pauseRoll: ()=>{ this._paused=true; this.setState({paused:true}); },
+      resumeRoll: ()=>{ this._paused=false; this.setState({paused:false}); },
+      slideGo: ()=>{ const list=c.apps||c.banners||[]; const a=list[this.state.slide % Math.max(1,list.length)] || {};
+        this._scrollTo(c.apps ? 'app-'+a.key : (a.body ? 'sec-'+c.anchor+'-'+a.key : c.anchor+'-body')); },
+      prevSlide: ()=>this.setState(s=>({slide:(s.slide-1+n)%n}), ()=>this._glitchTitle()),
+      nextSlide: ()=>this.setState(s=>({slide:(s.slide+1)%n}), ()=>this._glitchTitle()),
+      pick: (e)=>{ const f=e.target.files && e.target.files[0]; if(f) this._applyFile(f,true); },
+      resetGlb: ()=>this._resetGlb(),
+      toggleGlb: ()=>{ const p=document.getElementById('om-glb-panel'); if(p) p.style.display = p.style.display==='flex' ? 'none' : 'flex'; } };
+  }
+}
+</script>
+</body>
+</html>
