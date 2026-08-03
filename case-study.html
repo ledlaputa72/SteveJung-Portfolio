@@ -6,6 +6,7 @@
 <title>Case Study — Steve Jung</title>
 <meta name="description" content="Steve Jung — B2B Hardware Marketing Manager. Case studies in product marketing, brand, and web development.">
 <script src="/i18n/locale.js"></script>
+<script src="/i18n/en.js"></script>
 <script src="/i18n/ko.js"></script>
 <script src="/support.js"></script>
 </head>
@@ -417,10 +418,10 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;accentColor&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#d6ff3f&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;#d6ff3f&quot;,&quot;#49f0ff&quot;,&quot;#ff5c39&quot;,&quot;#c8a2ff&quot;,&quot;#ffffff&quot;],&quot;section&quot;:&quot;Look&quot;},&quot;object&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;icosahedron&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;options&quot;:[&quot;icosahedron&quot;,&quot;octahedron&quot;,&quot;sphere&quot;,&quot;torus&quot;,&quot;torusKnot&quot;],&quot;section&quot;:&quot;3D Background&quot;},&quot;glb&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;3D Background&quot;},&quot;glbScale&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.2,&quot;max&quot;:4,&quot;step&quot;:0.05,&quot;unit&quot;:&quot;×&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;3D Background&quot;}}">
 // Copy comes from i18n/<locale>.js, picked by the language in the URL.
-// Falling back to Korean keeps the page working if a locale file is
-// missing, which is also what serves English until i18n/en.js lands.
+// English is the default locale (served at the root), so it is also the
+// fallback if a locale file ever fails to load.
 const COPY = ((window.SITE_COPY || {})[window.SITE_LOCALE]
-           || (window.SITE_COPY || {}).ko || {});
+           || (window.SITE_COPY || {}).en || {});
 const CASES = (COPY.caseStudy && COPY.caseStudy.cases) || [];
 const UI = (COPY.caseStudy && COPY.caseStudy.ui) || {};
 

@@ -6,6 +6,7 @@
 <title>Steve Jung — B2B Hardware Marketing Manager</title>
 <meta name="description" content="Steve Jung — B2B Hardware Marketing Manager who plans, designs, codes, and ships. Portfolio and case studies.">
 <script src="/i18n/locale.js"></script>
+<script src="/i18n/en.js"></script>
 <script src="/i18n/ko.js"></script>
 <script src="/support.js"></script>
 </head>
@@ -836,10 +837,10 @@ class Component extends DCLogic {
   }
   renderVals(){
     // Copy comes from i18n/<locale>.js, picked by the language in the URL.
-    // Falling back to Korean keeps the page working if a locale file is
-    // missing, which is also what serves English until i18n/en.js lands.
+    // English is the default locale (served at the root), so it is also the
+    // fallback if a locale file ever fails to load.
     const COPY = ((window.SITE_COPY || {})[window.SITE_LOCALE]
-               || (window.SITE_COPY || {}).ko || {});
+               || (window.SITE_COPY || {}).en || {});
     const ui=(COPY.index && COPY.index.ui) || {};
     const cases=(COPY.index && COPY.index.cases) || [];
     const skills=(COPY.index && COPY.index.skills) || [];

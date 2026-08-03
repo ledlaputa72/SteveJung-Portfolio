@@ -181,7 +181,7 @@ window.SITE_COPY.ko = {
    challenges:[
      {title:'제로 베이스, 제로 예산',body:'브랜드도, 에이전시도, 개발 예산도 없는 상태에서 시작.',critical:true},
      {title:'하드웨어와의 차별화',body:'기존 하드웨어 카탈로그 톤에서 벗어난 SaaS 언어가 필요했습니다.'},
-     {title:'3-depth 정보 구조',document:'',body:'플랫폼 · 애널리틱스 · 솔루션까지 30+ 하위 페이지를 설계.'},
+     {title:'3-depth 정보 구조',body:'플랫폼 · 애널리틱스 · 솔루션까지 30+ 하위 페이지를 설계.'},
      {title:'멀티채널 동시 런칭',body:'웹 · iOS · Android를 한 시점에 맞춰야 했습니다.'}],
    approach:[
      {n:'1',title:'브랜드 아이덴티티',body:'네이밍, S-마크 그라디언트 로고, 다크 네이비 / 로열 블루 팔레트.'},
