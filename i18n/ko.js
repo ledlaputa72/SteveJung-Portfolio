@@ -22,7 +22,7 @@ window.SITE_COPY.ko = {
     },
     caseStudy: {
       title: '케이스 스터디 — Steve Jung',
-      description: 'Steve Jung — AI 마케팅 스페셜리스트. B2B 테크 & 하드웨어 분야의 웹 개발 · UX 디자인 · 브랜드 · AI 자동화 케이스 스터디.'
+      description: 'Steve Jung — 프로덕트 디자이너 & 크리에이티브 테크놀로지스트. B2B 테크 & 하드웨어 분야의 웹 개발 · UX 디자인 · 브랜드 · AI 자동화 케이스 스터디.'
     }
   },
   index: {
@@ -38,7 +38,7 @@ window.SITE_COPY.ko = {
       capabilitiesTitleL1: 'AI로 마케팅의 범위를 넓힙니다 —',
       capabilitiesTitleAccent: '결과로 증명합니다.',
       contactTitle: '함께 만들어요.',
-      contactLead: 'Irvine / OC 지역의 AI Marketing Solutions Engineer 및 Technical Marketing Manager 포지션을 찾고 있습니다.',
+      contactLead: 'Irvine / OC 지역의 Product Designer 및 Creative Technologist 포지션을 찾고 있습니다.',
       mailSubjectPrefix: 'Portfolio 문의 — '
     },
     cases: [

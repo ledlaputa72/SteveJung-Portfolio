@@ -23,7 +23,7 @@ window.SITE_COPY.en = {
     },
     caseStudy: {
       title: 'Case Study — Steve Jung',
-      description: 'Steve Jung — AI Marketing Specialist. Case studies in web development, UX design, brand, and AI-powered automation for B2B tech and hardware.'
+      description: 'Steve Jung — Product Designer & Creative Technologist. Case studies in web development, UX design, brand, and AI-powered automation for B2B tech and hardware.'
     }
   },
   index: {
@@ -39,7 +39,7 @@ window.SITE_COPY.en = {
       capabilitiesTitleL1: 'AI widens what marketing can cover —',
       capabilitiesTitleAccent: 'the results prove it.',
       contactTitle: 'Let’s build it.',
-      contactLead: 'Looking for AI Marketing Solutions Engineer and Technical Marketing Manager roles in Irvine / Orange County.',
+      contactLead: 'Looking for Product Designer and Creative Technologist roles in Irvine / Orange County.',
       mailSubjectPrefix: 'Portfolio inquiry — '
     },
     cases: [
