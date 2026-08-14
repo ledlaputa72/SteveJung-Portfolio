@@ -1,0 +1,5 @@
+# Static portfolio — everything is public.
+User-agent: *
+Allow: /
+
+Sitemap: https://stevejung.dev/sitemap.xml

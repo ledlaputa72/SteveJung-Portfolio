@@ -63,65 +63,19 @@
   window.localeSwitchPath = switchPath;
   window.localeOther = locale === DEFAULT ? 'ko' : DEFAULT;
 
-  document.documentElement.setAttribute('lang', locale);
-
-  // The path with the language prefix stripped: '/' or '/case-study'.
-  var page = location.pathname.replace(/^\/(en|ko)(?=\/|$)/, '') || '/';
-  var enHref = location.origin + (page === '/' ? '/' : page);
-  var koHref = location.origin + ('/ko' + (page === '/' ? '' : page));
-  var canonical = locale === DEFAULT ? enHref : koHref;
-
-  // hreflang pair + canonical, so each language is indexed as its own page
-  // and the two are understood as translations of one another.
-  (function seoTags() {
-    function link(rel, href, hreflang) {
-      var el = document.createElement('link');
-      el.setAttribute('rel', rel);
-      el.setAttribute('href', href);
-      if (hreflang) el.setAttribute('hreflang', hreflang);
-      document.head.appendChild(el);
-    }
-    link('canonical', canonical);
-    link('alternate', enHref, 'en');
-    link('alternate', koHref, 'ko');
-    link('alternate', enHref, 'x-default');
-  })();
-
-  // Title, description, and link-preview tags in the page's own language.
-  // The markup ships the English pair as its default; the copy files load
-  // before this one, so a Korean route is corrected synchronously in the
-  // head and never renders with the English title first.
-  (function headTags() {
-    var copy = (window.SITE_COPY || {})[locale] || (window.SITE_COPY || {}).en || {};
-    var head = (copy.head || {})[page === '/case-study' ? 'caseStudy' : 'index'];
-    if (!head) return;
-
-    function meta(attr, key, value) {
-      if (!value) return;
-      var el = document.head.querySelector('meta[' + attr + '="' + key + '"]');
-      if (!el) {
-        el = document.createElement('meta');
-        el.setAttribute(attr, key);
-        document.head.appendChild(el);
-      }
-      el.setAttribute('content', value);
-    }
-
-    if (head.title) document.title = head.title;
-    meta('name', 'description', head.description);
-
-    // Link previews (LinkedIn, Slack, KakaoTalk) read the Open Graph tags
-    // rather than <title>, so a shared /ko URL needs its own pair too.
-    meta('property', 'og:title', head.title);
-    meta('property', 'og:description', head.description);
-    meta('property', 'og:url', canonical);
-    meta('property', 'og:type', 'website');
-    meta('property', 'og:locale', locale === 'ko' ? 'ko_KR' : 'en_US');
-    meta('property', 'og:locale:alternate', locale === 'ko' ? 'en_US' : 'ko_KR');
-    meta('name', 'twitter:card', 'summary');
-    meta('name', 'twitter:title', head.title);
-    meta('name', 'twitter:description', head.description);
-  })();
+  // The head — lang, title, description, canonical, hreflang, Open Graph —
+  // is NOT set here. It is written into each HTML file at build time by
+  // tools/sync-locale-pages.mjs, from the same i18n/<locale>.js head
+  // sections, because the consumers cannot run JavaScript:
+  //
+  //   - LinkedIn, Slack and KakaoTalk preview bots never execute scripts, so
+  //     Open Graph tags injected at runtime were invisible to them.
+  //   - Google does not reliably honour a JS-injected hreflang; it wants the
+  //     tag in the served HTML, an HTTP header, or the sitemap.
+  //   - Bing and Naver largely do not render JS at all.
+  //
+  // Anything added here would also duplicate the static tags. Keep this file
+  // to what genuinely needs the URL at runtime: locale detection and links.
 
   // Rewrite links the templates declare as locale-relative. Markup uses
   // data-lp="/case-study" instead of a hard href so a single template can
