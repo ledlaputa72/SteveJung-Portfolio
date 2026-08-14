@@ -18,8 +18,8 @@ window.SITE_COPY.en = {
   // Applied by i18n/locale.js, which loads after this file.
   head: {
     index: {
-      title: 'Steve Jung — AI Marketing Specialist · Web Dev · UX Design · Automation',
-      description: 'Steve Jung — AI Marketing Specialist combining UX design, front-end development, and AI-powered automation. B2B Tech & Hardware. Portfolio: stevejung.dev'
+      title: 'Steve Jung — Product Designer & Creative Technologist | UX/UI · AI-Powered Automation',
+      description: 'Steve Jung — Product Designer & Creative Technologist combining UX design, front-end development, and AI-powered automation. B2B Tech & Hardware. Portfolio: stevejung.dev'
     },
     caseStudy: {
       title: 'Case Study — Steve Jung',

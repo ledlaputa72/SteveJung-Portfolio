@@ -17,8 +17,8 @@ window.SITE_COPY.ko = {
   // Applied by i18n/locale.js, which loads after this file.
   head: {
     index: {
-      title: 'Steve Jung — AI 마케팅 스페셜리스트 · 웹 개발 · UX 디자인 · 자동화',
-      description: 'Steve Jung — UX 디자인과 프론트엔드 개발, AI 자동화를 결합하는 AI 마케팅 스페셜리스트. B2B 테크 & 하드웨어. 포트폴리오: stevejung.dev'
+      title: 'Steve Jung — 프로덕트 디자이너 & 크리에이티브 테크놀로지스트 | UX/UI · AI 자동화',
+      description: 'Steve Jung — UX 디자인과 프론트엔드 개발, AI 자동화를 결합하는 프로덕트 디자이너 & 크리에이티브 테크놀로지스트. B2B 테크 & 하드웨어. 포트폴리오: stevejung.dev'
     },
     caseStudy: {
       title: '케이스 스터디 — Steve Jung',
