@@ -1,16 +1,48 @@
 # SteveJung-Portfolio
 
-Steve Jung's personal portfolio site — B2B Hardware Marketing Manager who plans, designs, codes, and ships.
+Steve Jung's personal portfolio site — Product Designer & Creative Technologist
+working across UX design, front-end development, and AI-powered automation.
+
+Static HTML/JS, bilingual (English + Korean), deployed on Vercel at
+[stevejung.dev](https://stevejung.dev). The pages need no build step; the one
+serverless function under `api/` does.
+
+## Routes
+
+| URL | File |
+| --- | --- |
+| `/` | `index.html` |
+| `/case-study` | `case-study.html` |
+| `/ko` | `ko/index.html` |
+| `/ko/case-study` | `ko/case-study.html` |
+
+`vercel.json` sets `cleanUrls`, `trailingSlash`, and the `api/` function's
+included files. There are no rewrites: the Korean routes are real files,
+because Vercel consults the filesystem before any rewrite rule.
 
 ## Structure
 
-- `index.html` — Main portfolio / landing page
-- `case-study.html` — Case studies page
-- `support.js` — Rendering runtime (loads React/ReactDOM/Babel from CDN, handles templating)
-- `image-slot.js` — Image placeholder component
-- `i18n/` — All site copy, per language; the pages and the AI agent both read from it
-- `ai-steve.js` — The floating AI chat widget
-- `api/ai-steve.js` — The widget's answer endpoint (Vercel serverless function)
+- `index.html`, `case-study.html` — the two page templates. They are also the
+  English pages as served.
+- `ko/` — **generated**. Korean copies of the two templates. Do not edit by
+  hand; see *Editing* below.
+- `i18n/en.js`, `i18n/ko.js` — all site copy per language, including the head
+  (title, description, Open Graph). The pages and the AI agent both read from it.
+- `i18n/locale.js` — locale runtime. Detects the language from the URL and
+  rewrites `data-lp` links so one template serves both languages.
+- `support.js` — rendering runtime (generated from `dc-runtime`; loads
+  React/ReactDOM/Babel from CDN and handles templating). Do not edit.
+- `image-slot.js` — `<image-slot>` image component, used for the case galleries
+  and lightbox.
+- `ai-steve.js` — the floating AI chat widget.
+- `api/ai-steve.js` — the widget's answer endpoint (Vercel serverless function).
+- `images/` — case screenshots and photos, one folder per case.
+- `pdf/` — the résumé and the portfolio PDFs linked from the contact section.
+  `pdf/docs/` holds the case-study documents.
+- `pdf/Case */` — original source archive. Kept in the repo, excluded from the
+  deployment by `.vercelignore`.
+- `tools/` — generators. Excluded from the deployment.
+- `sitemap.xml` — **generated**. `robots.txt`, `og-image.png` — hand-maintained.
 
 ## AI Steve
 
@@ -28,9 +60,35 @@ The endpoint needs `ANTHROPIC_API_KEY` set in the Vercel project's environment
 variables. Without it, the widget falls back to a "reach Steve directly"
 message, and the rest of the site is unaffected.
 
-## Status
+## Editing
 
-This is v1 of the site, exported from a design draft. Image slots (`<image-slot>`) currently render as placeholders — real images/screenshots need to be added over time by setting a `src` attribute on each `<image-slot>` tag, or by replacing the tag with a normal `<img>`.
+Edit the templates (`index.html`, `case-study.html`) and the copy files
+(`i18n/en.js`, `i18n/ko.js`), then regenerate:
+
+```bash
+node tools/sync-locale-pages.mjs
+```
+
+That writes `ko/`, stamps the static `<head>` into all four pages, and rewrites
+`sitemap.xml`. The head is static rather than script-injected because the
+things that read it — LinkedIn/Slack/KakaoTalk preview bots, Google's hreflang
+handling, Bing and Naver — do not reliably run JavaScript.
+
+To verify nothing is stale (exits non-zero if it is):
+
+```bash
+node tools/sync-locale-pages.mjs --check
+```
+
+Asset references in the templates must be root-absolute (`/images/…`,
+`/pdf/…`). A relative path resolves against `/ko/` and 404s on the Korean
+routes.
+
+### Image asset manager
+
+`node tools/asset-manager/build.mjs` builds a standalone page listing every
+image wired into the site, read from `case-study.html` and `index.html` so it
+cannot drift. Output is `tools/asset-manager/asset-manager.html` (git-ignored).
 
 ## Local preview
 
@@ -42,6 +100,13 @@ npx serve .
 
 Then open http://localhost:3000
 
+Note that `api/ai-steve.js` does not run under a plain static server; use
+`vercel dev` if you need the chat widget locally.
+
 ## Deployment
 
-Deployed via Vercel, connected to this GitHub repo. Every push to `main` triggers an automatic redeploy. The pages are still plain HTML/JS with no build step; `package.json` exists only so Vercel installs the dependencies the `api/` function needs.
+Deployed via Vercel, connected to this GitHub repo. Every push to `main`
+triggers an automatic redeploy. The pages are plain HTML/JS with no build step;
+`package.json` exists only so Vercel installs the dependencies the `api/`
+function needs. `.vercelignore` keeps the source archives (`pdf/Case*`,
+`tools/`) out of the deployment.

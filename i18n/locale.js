@@ -6,8 +6,9 @@
  *   /                 /case-study                 -> en
  *   /ko               /ko/case-study              -> ko
  *
- * Vercel rewrites the /ko paths onto the same HTML files (see vercel.json),
- * so the only thing that distinguishes the two is what this module reports.
+ * The /ko routes are served by real files under ko/, generated from the same
+ * templates by tools/sync-locale-pages.mjs, so the only thing that
+ * distinguishes the two at runtime is what this module reports.
  * Every asset reference is root-absolute (/images/..., /pdf/...), because a
  * relative one would resolve against /ko/ and 404 on the Korean routes.
  *

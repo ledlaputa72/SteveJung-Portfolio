@@ -1,10 +1,6 @@
 {
   "cleanUrls": true,
   "trailingSlash": false,
-  "rewrites": [
-    { "source": "/ko", "destination": "/index.html" },
-    { "source": "/ko/case-study", "destination": "/case-study.html" }
-  ],
   "functions": {
     "api/ai-steve.js": {
       "includeFiles": "{i18n,content}/**"
