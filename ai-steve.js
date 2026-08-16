@@ -96,36 +96,17 @@
   // Shapes only — the icon is solid purple, the source palettes are unused.
   var PRESETS = [PINK, TEAL, NAVY, SAGE];
 
+  // Teasers for the hover bubble. Opening the chat used to also drop a canned
+  // reply for the teaser's topic into the transcript; that second message said
+  // nothing the visitor had asked for, so the chat now opens on the greeting
+  // alone and every answer comes from /api/ai-steve.
   var HOVER_TOPICS = [
-    { text: 'Hi! Ask me anything about Steve', topic: null },
-    { text: 'Curious how Steve builds AI tools?', topic: 'ai-tools' },
-    { text: 'Want to see the live projects?', topic: 'projects' },
-    { text: 'I can tell you about the Starllion launch', topic: 'starllion' },
-    { text: 'Ask why Steve moved into product design', topic: 'career' }
+    { text: 'Hi! Ask me anything about Steve' },
+    { text: 'Curious how Steve builds AI tools?' },
+    { text: 'Want to see the live projects?' },
+    { text: 'I can tell you about the Starllion launch' },
+    { text: 'Ask why Steve moved into product design' }
   ];
-
-  var TOPIC_REPLIES = {
-    'ai-tools': {
-      text: 'Steve built an AI Spec Reviewer with the Claude API that cuts a 3-hour manual check down to 15 minutes.',
-      linkUrl: 'https://ai-spec-review.vercel.app',
-      linkLabel: 'Open AI Spec Reviewer ↗'
-    },
-    'projects': {
-      text: "Here's the full portfolio, built and deployed solo with Next.js and Three.js.",
-      linkUrl: 'https://stevejung.dev',
-      linkLabel: 'Visit stevejung.dev ↗'
-    },
-    'starllion': {
-      text: 'Starllion™ Cloud VMS went from zero to a full launch — brand, site, app listings, socials — in 15 days, solo.',
-      linkUrl: 'https://starllion.com',
-      linkLabel: 'Visit starllion.com ↗'
-    },
-    'career': {
-      text: 'Steve moved from marketing into product design because the AVYCON work kept pulling toward UX, front-end code, and shipped interfaces.',
-      linkUrl: 'https://www.linkedin.com/in/stevejung-dev',
-      linkLabel: "Steve's LinkedIn ↗"
-    }
-  };
 
   var QUICK_CHIPS = [
     'See AI projects',
@@ -344,10 +325,17 @@
     '#ai-steve .ais-typing i:nth-child(3){animation-delay:.4s}',
     '@keyframes ais-blink{0%,60%,100%{opacity:.25}30%{opacity:1}}',
 
+    /* Chips sat at #1c1c1c against #1e1e1e bubbles, so a tappable option and a
+       thing the agent said were the same dark slab. They now sit well above the
+       bubbles in lightness, which is what separates a control from a message.
+       Deliberately not olive: that colour means "this takes you somewhere" on
+       the link chips, and two olive pills doing different jobs would just move
+       the confusion rather than fix it. */
     '#ai-steve .ais-chips{display:flex;flex-wrap:wrap;gap:7px;padding-left:36px}',
-    '#ai-steve .ais-chip{padding:6px 12px;border-radius:999px;background:#1c1c1c;',
-      'border:1px solid #2c2c2c;color:#EDEAE0;font-size:11.5px;cursor:pointer;font-family:inherit}',
-    '#ai-steve .ais-chip:hover{border-color:#C6D94D;color:#C6D94D}',
+    '#ai-steve .ais-chip{padding:6px 13px;border-radius:999px;background:#343434;',
+      'border:1px solid #4d4d4d;color:#EDEAE0;font-size:11.5px;cursor:pointer;',
+      'font-family:inherit}',
+    '#ai-steve .ais-chip:hover{background:#404040;border-color:#C6D94D;color:#C6D94D}',
 
     '#ai-steve .ais-inputrow{flex:0 0 auto;display:flex;align-items:center;gap:8px;',
       'padding:11px 12px;border-top:1px solid #232323}',
@@ -589,7 +577,6 @@
   // ------------------------------------------------------ hover + bubble
 
   var lastTopicIdx = -1;
-  var pendingTopic = null; // consumed by the next openChat()
 
   function onEnter() {
     hoverTarget = 1;
@@ -599,7 +586,6 @@
       while (i === lastTopicIdx) i = Math.floor(Math.random() * HOVER_TOPICS.length);
     }
     lastTopicIdx = i;
-    pendingTopic = HOVER_TOPICS[i].topic;
     bubble.textContent = HOVER_TOPICS[i].text;
     bubble.classList.add('is-shown');
   }
@@ -708,9 +694,6 @@
     root.classList.add('is-open');
     bubble.classList.remove('is-shown');
 
-    var topic = pendingTopic;
-    pendingTopic = null; // consumed: reopening later must not repeat it
-
     if (!chatStarted) {
       chatStarted = true;
       var greetingText =
@@ -725,17 +708,6 @@
           playGreetingExpressionOnce(greeting.eyeR, greeting.mouth);
         }, 380); // just after the panel finishes expanding
       }
-    }
-
-    // Only ever opens a conversation. Dropped into one already underway it
-    // reads as an answer to whatever was just asked, which is how a teaser
-    // about the AI tools ended up under a question about the career move.
-    if (topic && TOPIC_REPLIES[topic] && !asked) {
-      setTimeout(function () {
-        var r = TOPIC_REPLIES[topic];
-        addAi(r.text, [{ label: r.linkLabel, url: r.linkUrl }], false);
-        remember('assistant', r.text);
-      }, 700);
     }
 
     setTimeout(function () { inputEl.focus(); }, 340);
@@ -776,9 +748,6 @@
    */
   var inFlight = null;     // AbortController for the answer being waited on
   var stoppedByUser = false;
-  // Sticky: a stopped turn is popped from `history`, so that can't stand in for
-  // "this visitor has started talking" when deciding to drop a teaser reply.
-  var asked = false;
 
   /** Swaps the arrow for a stop square; the button stays live either way. */
   function setSending(sending) {
@@ -797,7 +766,6 @@
   function send(text) {
     var msg = String(text || '').trim();
     if (!msg || inFlight) return;
-    asked = true;
     removeChips();
     addUser(msg);
     inputEl.value = '';
@@ -825,7 +793,14 @@
       signal: controller ? controller.signal : undefined
     })
       .then(function (res) {
-        if (!res.ok) throw new Error('HTTP ' + res.status);
+        if (!res.ok) {
+          var err = new Error('HTTP ' + res.status);
+          err.status = res.status;
+          return res.text().then(function (body) {
+            err.body = body.slice(0, 300);
+            throw err;
+          }, function () { throw err; });
+        }
         return res.json();
       })
       .then(function (data) {
@@ -834,21 +809,31 @@
         addAi(reply, data && data.links, false);
         remember('assistant', reply);
       })
-      .catch(function () {
+      .catch(function (err) {
         stopTyping();
         history.pop(); // drop the turn that never got an answer
         if (stoppedByUser) {
           // Their own doing — an apology would be noise. Put the question back
           // so it can be edited and sent again.
           inputEl.value = msg;
-        } else {
-          addAi(
-            "That took too long. Try again, or reach Steve directly and he’ll "
-            + 'answer himself.',
-            [{ label: "Steve's LinkedIn ↗", url: 'https://www.linkedin.com/in/stevejung-dev' }],
-            false
-          );
+          return;
         }
+        // A visitor gets one friendly line either way, but the two failures
+        // have different causes and the console says which: a status means the
+        // route answered and refused, no status means nothing came back at all.
+        var timedOut = err && err.name === 'AbortError';
+        if (window.console && console.error) {
+          console.error('[ai-steve] request failed',
+            timedOut ? '(timed out after 45s)' : ('status ' + ((err && err.status) || 'none')),
+            (err && err.body) || (err && err.message) || err);
+        }
+        addAi(
+          timedOut
+            ? "That took too long. Try again, or reach Steve directly and he’ll answer himself."
+            : "Something went wrong on my end. Try again in a moment, or reach Steve directly.",
+          [{ label: "Steve's LinkedIn ↗", url: 'https://www.linkedin.com/in/stevejung-dev' }],
+          false
+        );
       })
       .then(function () {
         clearTimeout(timer);
