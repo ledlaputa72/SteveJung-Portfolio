@@ -69,15 +69,23 @@ function buildLinkCatalog(copy, prefix) {
   // never "/ko/", which would redirect before the fragment is applied.
   const home = prefix || '/';
 
-  add(home + '#top', 'Home', 'Landing — who Steve is and what he does');
-  add(home + '#work', 'Work', 'The seven case studies, as cards');
-  add(home + '#studio', 'Studio', 'How Steve works: strategy through shipped code');
-  add(home + '#contact', 'Contact', 'Email and availability');
-  add('/pdf/Steve-Jung-Resume.pdf', 'Résumé (PDF)', "Steve's full résumé");
+  // The "about" text is what the model routes on, so each generic destination
+  // says when it is the right answer — otherwise the index reads as a safe
+  // catch-all and wins over the case study that actually answers the question.
+  add(home + '#top', 'Home',
+    'The landing page. For questions about Steve overall, not about a project.');
+  add(home + '#work', 'Work',
+    'Index of all seven cases as cards. Only for questions spanning several projects — never to answer about one.');
+  add(home + '#studio', 'Studio',
+    'How Steve works: strategy through shipped code. For questions about process or working style.');
+  add(home + '#contact', 'Contact', 'Email and the roles Steve is open to.');
+  add('/pdf/Steve-Jung-Resume.pdf', 'Résumé (PDF)',
+    'Full résumé. For questions about career history, dates, or titles.');
 
   (copy.index && copy.index.cases || []).forEach((c) => {
     const name = c.title || c.label || c.anchor;
-    add(home + '#' + c.anchor, name, [c.kicker, c.tagline].filter(Boolean).join(' — '));
+    add(home + '#' + c.anchor, name, 'Summary card on the home page — '
+      + [c.kicker, c.tagline].filter(Boolean).join(' — '));
   });
 
   (copy.caseStudy && copy.caseStudy.cases || []).forEach((c) => {
@@ -165,10 +173,19 @@ function systemPrompt(locale) {
     'How to answer:',
     "- Use only the site content below. If it does not cover something, say so and point to Steve's contact or résumé rather than guessing.",
     '- Reply in the language the visitor wrote in.',
-    '- Be brief: two to four sentences. Lead with the answer, then the evidence — a number, a stack, a shipped outcome.',
     '- Speak about Steve in the third person. Never invent employers, dates, metrics, or project names.',
-    '- Attach at most two links, and only from the catalog. Send the visitor to the most specific page that answers them — a case study over the home page. Omit links when none genuinely fit.',
-    '- Use each link\'s exact "url" value verbatim.',
+    '',
+    'Length — the reply renders in a chat bubble about 240px wide, so length is',
+    'the difference between something read and something scrolled past:',
+    '- Keep the whole answer under 60 words. Two or three sentences, one idea each.',
+    '- Lead with the direct answer. Then give ONE piece of evidence — a number, a stack, or a shipped outcome — and stop.',
+    '- Do not inventory. If several projects qualify, name the strongest one and let the link carry the rest.',
+    '',
+    'Links:',
+    '- Attach at most two, and only from the catalog, using each "url" value verbatim.',
+    '- If the question is about one project, link that project\'s own case study. Do not answer it with the Work index or the home page — those are for questions that genuinely span several projects, or are about Steve rather than a piece of work.',
+    '- Prefer a /case-study# link over a home-page anchor when both cover the same project: the case study is the fuller read.',
+    '- Omit links entirely when none genuinely fit.',
     '',
     '=== LINK CATALOG ===',
     links.map((l) => l.url + ' | ' + l.label + (l.about ? ' | ' + l.about : '')).join('\n'),
