@@ -280,24 +280,24 @@
        the bubble cannot run off a narrow screen. */
     '#ai-steve .ais-bubble{position:absolute;right:80px;bottom:24px;',
       'width:max-content;max-width:min(215px,calc(100vw - 132px));',
-      'padding:9px 13px;border-radius:14px 14px 2px 14px;background:#1e1e1e;',
+      'padding:9px 13px;border-radius:14px;background:#1e1e1e;',
       'border:1px solid #2c2c2c;color:#EDEAE0;font-size:12.5px;line-height:1.45;',
       'white-space:normal;',
       'opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;',
       'pointer-events:none}',
-    /* Tail: a right-angle triangle hanging off the bottom-right corner. Its
-       vertical side continues the bubble's right edge, so the tip is the
-       closest point to the blob and reads as aimed at it. Two layers — the
-       outer one carries the border colour, the inner one sits 1px inside it in
-       the fill colour, which is how the 1px outline continues around a
-       diagonal edge. */
+    /* Tail: a right-angle triangle off the upper part of the right edge, its
+       vertical side flush with that edge and the tip reaching down-right into
+       the blob's top-left. Two layers — the outer one carries the border
+       colour, the inner one sits 1px inside it in the fill colour and overlaps
+       the bubble's own border, which is how the 1px outline carries around the
+       diagonal without a seam at the join. */
     '#ai-steve .ais-bubble::before,#ai-steve .ais-bubble::after{content:"";',
       'position:absolute;width:0;height:0;border-left-style:solid;',
-      'border-top-style:solid;border-left-color:transparent}',
-    '#ai-steve .ais-bubble::before{top:100%;right:0;',
-      'border-left-width:14px;border-top-width:15px;border-top-color:#2c2c2c}',
-    '#ai-steve .ais-bubble::after{top:calc(100% - 1px);right:1px;',
-      'border-left-width:12px;border-top-width:13px;border-top-color:#1e1e1e}',
+      'border-top-style:solid;border-top-color:transparent}',
+    '#ai-steve .ais-bubble::before{left:calc(100% + 1px);top:11px;',
+      'border-left-width:13px;border-top-width:15px;border-left-color:#2c2c2c}',
+    '#ai-steve .ais-bubble::after{left:100%;top:12px;',
+      'border-left-width:11px;border-top-width:13px;border-left-color:#1e1e1e}',
     '#ai-steve .ais-bubble.is-shown{opacity:1;transform:translateY(0)}',
     '#ai-steve.is-open .ais-bubble{opacity:0}',
 
