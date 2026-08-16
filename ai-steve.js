@@ -273,9 +273,16 @@
     '#ai-steve.is-open .ais-icon{opacity:0;pointer-events:none}',
 
     /* --- hover speech bubble --- */
-    '#ai-steve .ais-bubble{position:absolute;right:80px;bottom:24px;max-width:230px;',
+    /* width:max-content is load-bearing — the bubble is absolutely positioned
+       inside a root only as wide as the 72px icon, so without it the shrink-to-fit
+       width collapses to a few characters and max-width never applies. The cap
+       keeps the longest teaser to about two lines, and yields to the viewport so
+       the bubble cannot run off a narrow screen. */
+    '#ai-steve .ais-bubble{position:absolute;right:80px;bottom:24px;',
+      'width:max-content;max-width:min(215px,calc(100vw - 132px));',
       'padding:9px 13px;border-radius:14px 14px 4px 14px;background:#1e1e1e;',
-      'border:1px solid #2c2c2c;color:#EDEAE0;font-size:12.5px;white-space:normal;',
+      'border:1px solid #2c2c2c;color:#EDEAE0;font-size:12.5px;line-height:1.45;',
+      'white-space:normal;',
       'opacity:0;transform:translateY(6px);transition:opacity .25s ease,transform .25s ease;',
       'pointer-events:none}',
     '#ai-steve .ais-bubble.is-shown{opacity:1;transform:translateY(0)}',
@@ -708,6 +715,16 @@
     }
 
     setTimeout(function () { inputEl.focus(); }, 340);
+    // Bound on the next tick so the click that opened the panel doesn't
+    // immediately close it again.
+    setTimeout(function () {
+      if (chatOpen) document.addEventListener('pointerdown', onOutsidePointer);
+    }, 0);
+  }
+
+  /** A press anywhere outside the widget dismisses the panel. */
+  function onOutsidePointer(e) {
+    if (!root.contains(e.target)) closeChat();
   }
 
   function closeChat() {
@@ -715,6 +732,7 @@
     chatOpen = false;
     root.classList.remove('is-open');
     hoverTarget = 0;
+    document.removeEventListener('pointerdown', onOutsidePointer);
   }
 
   /**
