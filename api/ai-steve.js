@@ -7,9 +7,11 @@
  * nothing to regenerate. vercel.json ships i18n/ with this function so the read
  * resolves at runtime.
  *
- * The model answers in the visitor's language and returns links only from the
- * catalog built below, so a reply can never invent a route. Structured outputs
- * enforce that shape rather than asking the model to format it by hand.
+ * Replies are English-only for now (see PINNED_LOCALE) and carry links only
+ * from the catalog built below, so a reply can never invent a route.
+ * Structured outputs enforce that shape rather than asking the model to format
+ * it by hand. Briefing notes in content/ tell the agent what a recruiter is
+ * really asking; they are reference, never a script.
  *
  * Requires ANTHROPIC_API_KEY in the environment.
  */
@@ -22,6 +24,14 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const MODEL = 'claude-opus-5';
 const LOCALES = { en: '', ko: '/ko' }; // locale -> path prefix
+
+/**
+ * Korean support is built but parked: every request is answered from the
+ * English copy, with English links, in English. Set this to null to go back to
+ * following the page's locale — the per-locale knowledge base, link catalog
+ * and briefing notes are all still wired up behind it.
+ */
+const PINNED_LOCALE = 'en';
 const MAX_MESSAGE_CHARS = 1000;
 const MAX_HISTORY_TURNS = 12;
 
@@ -48,6 +58,21 @@ function loadCopy(locale) {
   const copy = sandbox.window.SITE_COPY && sandbox.window.SITE_COPY[locale];
   if (!copy) throw new Error('i18n/' + locale + '.js did not define SITE_COPY.' + locale);
   return copy;
+}
+
+/**
+ * Briefing notes on what recruiters are really asking and which evidence
+ * answers it. Optional on purpose — if the file doesn't make it into the
+ * bundle the agent still answers from the site copy, it just loses the
+ * routing hints, which is a better failure than a 500.
+ */
+function loadNotes() {
+  const candidates = [
+    path.join(__dirname, '..', 'content', 'recruiter-notes.md'),
+    path.join(process.cwd(), 'content', 'recruiter-notes.md')
+  ];
+  const file = candidates.find((p) => fs.existsSync(p));
+  return file ? fs.readFileSync(file, 'utf8') : '';
 }
 
 /** An external link in the copy is stored bare ("starllion.com"). */
@@ -148,13 +173,29 @@ function buildSiteContext(copy) {
   return lines.join('\n');
 }
 
+/**
+ * The notes cite routes in their English form. A Korean visitor's catalog only
+ * contains /ko paths, so an un-rewritten hint would be dropped by the
+ * allowlist and the reply would lose its link. Anchoring on the backtick keeps
+ * this to the cited routes and leaves prose — and /pdf paths — alone.
+ */
+function localizeNotes(text, prefix) {
+  if (!prefix || !text) return text;
+  return text
+    .replace(/`\/case-study#/g, '`' + prefix + '/case-study#')
+    .replace(/`\/#/g, '`' + prefix + '#');
+}
+
 const cache = new Map();
+let rawNotes;
 function siteData(locale) {
+  if (rawNotes === undefined) rawNotes = loadNotes();
   if (!cache.has(locale)) {
     const copy = loadCopy(locale);
     cache.set(locale, {
       context: buildSiteContext(copy),
-      links: buildLinkCatalog(copy, LOCALES[locale])
+      links: buildLinkCatalog(copy, LOCALES[locale]),
+      notes: localizeNotes(rawNotes, LOCALES[locale])
     });
   }
   return cache.get(locale);
@@ -163,7 +204,7 @@ function siteData(locale) {
 // ---------------------------------------------------------------- prompt
 
 function systemPrompt(locale) {
-  const { context, links } = siteData(locale);
+  const { context, links, notes } = siteData(locale);
   return [
     "You are AI Steve, the assistant on Steve Jung's portfolio site (stevejung.dev).",
     "Steve is a Product Designer and Creative Technologist who plans, designs, builds, and ships —",
@@ -172,7 +213,7 @@ function systemPrompt(locale) {
     '',
     'How to answer:',
     "- Use only the site content below. If it does not cover something, say so and point to Steve's contact or résumé rather than guessing.",
-    '- Reply in the language the visitor wrote in.',
+    '- Always answer in English, whatever language the visitor writes in. If they wrote in another language, answer their question in English anyway — do not apologise for the language or refuse.',
     '- Speak about Steve in the third person. Never invent employers, dates, metrics, or project names.',
     '',
     'Length — the reply renders in a chat bubble about 240px wide, so length is',
@@ -190,6 +231,21 @@ function systemPrompt(locale) {
     '=== LINK CATALOG ===',
     links.map((l) => l.url + ' | ' + l.label + (l.about ? ' | ' + l.about : '')).join('\n'),
     '',
+    // Notes on what a recruiter is really asking and which proof answers it.
+    // Deliberately framed as reference: recited notes would make every visitor
+    // get the same paragraph, which is worse than no notes at all.
+    ...(notes ? [
+      '=== BRIEFING NOTES (reference — never a script) ===',
+      'Read these for what a question is really after and where to point. They are',
+      'not answers and their wording is not yours: compose every reply fresh from',
+      'the site content, in your own words. Two visitors asking the same question',
+      'should get two differently-worded replies. Where a note and the site content',
+      'disagree, the site content wins. A question these notes do not cover is',
+      'answered the same way as any other — from the site content.',
+      '',
+      notes,
+      ''
+    ] : []),
     '=== SITE CONTENT ===',
     context
   ].join('\n');
@@ -198,14 +254,14 @@ function systemPrompt(locale) {
 const REPLY_SCHEMA = {
   type: 'object',
   properties: {
-    answer: { type: 'string', description: "The reply, in the visitor's language." },
+    answer: { type: 'string', description: 'The reply, in English.' },
     links: {
       type: 'array',
       description: 'At most two links, taken verbatim from the catalog. Empty when none fit.',
       items: {
         type: 'object',
         properties: {
-          label: { type: 'string', description: 'Short chip text, 3-5 words, in the visitor\'s language.' },
+          label: { type: 'string', description: 'Short chip text in English, 3-5 words.' },
           url: { type: 'string', description: 'Exact url from the catalog.' }
         },
         required: ['label', 'url'],
@@ -232,7 +288,8 @@ module.exports = async function handler(req, res) {
   const message = String(body.message || '').trim().slice(0, MAX_MESSAGE_CHARS);
   if (!message) return res.status(400).json({ error: 'message is required' });
 
-  const locale = LOCALES[body.locale] === undefined ? 'en' : body.locale;
+  const locale = PINNED_LOCALE
+    || (LOCALES[body.locale] === undefined ? 'en' : body.locale);
 
   // Only role and text survive from the client; anything else is discarded.
   const history = (Array.isArray(body.history) ? body.history : [])
