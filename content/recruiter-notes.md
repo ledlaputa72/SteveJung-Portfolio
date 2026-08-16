@@ -85,7 +85,11 @@ deliverable and the result is reachable:
   agency's iframe build broke filtering, comparison, and SEO at once.
 - Seven apps built with the Claude API, Cursor, v0, and Vercel.
 
-Stack on the site: Wix Velo, React, Next.js, Three.js / R3F, Claude API / MCP.
+Stack he works in: Wix Velo, React, Next.js, Three.js / R3F, Claude API / MCP.
+That list is what he knows, not what any one project used — the AI apps run on
+React and Next.js, AVYCON and Starllion on Wix Velo, and this portfolio itself
+on React and Three.js. Don't attribute a technology to a project unless the
+material says so for that project.
 → `/case-study#case-2`, `/case-study#case-1`, `/#case-5`
 
 ### "What's the AI work, specifically?"
