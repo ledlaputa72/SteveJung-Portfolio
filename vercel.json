@@ -7,7 +7,8 @@
   ],
   "functions": {
     "api/ai-steve.js": {
-      "includeFiles": "{i18n,content}/**"
+      "includeFiles": "{i18n,content}/**",
+      "maxDuration": 60
     }
   }
 }

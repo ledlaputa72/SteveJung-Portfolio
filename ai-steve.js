@@ -359,7 +359,11 @@
     '#ai-steve .ais-send{flex:0 0 auto;width:34px;height:34px;border:0;border-radius:50%;',
       'background:#C6D94D;color:#131313;cursor:pointer;display:flex;align-items:center;',
       'justify-content:center}',
-    '#ai-steve .ais-send:disabled{opacity:.45;cursor:default}'
+    '#ai-steve .ais-send:disabled{opacity:.45;cursor:default}',
+    /* Stop state: reads as an interruption rather than the accent-coloured
+       "go", and stays fully live so the answer is always escapable. */
+    '#ai-steve .ais-send.is-stop{background:#2c2c2c;color:#EDEAE0}',
+    '#ai-steve .ais-send.is-stop:hover{background:#3a3a3a}'
   ].join('');
 
   // ------------------------------------------------------------------ build
@@ -391,14 +395,18 @@
     class: 'ais-input', type: 'text', placeholder: 'Ask about Steve…',
     'aria-label': 'Message AI Steve', autocomplete: 'off'
   });
-  var sendBtn = el('button', { class: 'ais-send', type: 'button', 'aria-label': 'Send' }, [
-    svgEl('svg', { viewBox: '0 0 24 24', width: 15, height: 15, 'aria-hidden': 'true' }, [
-      svgEl('path', {
-        d: 'M5 12h13M12 5l7 7-7 7', fill: 'none', stroke: 'currentColor',
-        'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
-      })
-    ])
+  var sendArrow = svgEl('svg', { viewBox: '0 0 24 24', width: 15, height: 15, 'aria-hidden': 'true' }, [
+    svgEl('path', {
+      d: 'M5 12h13M12 5l7 7-7 7', fill: 'none', stroke: 'currentColor',
+      'stroke-width': 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+    })
   ]);
+  // Shown while an answer is in flight — the same button stops the request
+  // rather than going dead, so a slow reply is always escapable.
+  var stopSquare = svgEl('svg', { viewBox: '0 0 24 24', width: 15, height: 15, 'aria-hidden': 'true' }, [
+    svgEl('rect', { x: 7, y: 7, width: 10, height: 10, rx: 1.5, fill: 'currentColor' })
+  ]);
+  var sendBtn = el('button', { class: 'ais-send', type: 'button', 'aria-label': 'Send' }, [sendArrow]);
   var closeBtn = el('button', {
     class: 'ais-close', type: 'button', 'aria-label': 'Close the chat', text: '×'
   });
@@ -719,7 +727,10 @@
       }
     }
 
-    if (topic && TOPIC_REPLIES[topic]) {
+    // Only ever opens a conversation. Dropped into one already underway it
+    // reads as an answer to whatever was just asked, which is how a teaser
+    // about the AI tools ended up under a question about the career move.
+    if (topic && TOPIC_REPLIES[topic] && !asked) {
       setTimeout(function () {
         var r = TOPIC_REPLIES[topic];
         addAi(r.text, [{ label: r.linkLabel, url: r.linkUrl }], false);
@@ -763,17 +774,45 @@
    * Ask /api/ai-steve. The route answers from the site's own copy and returns
    * links drawn from a fixed catalog, so a reply can only point at real pages.
    */
+  var inFlight = null;     // AbortController for the answer being waited on
+  var stoppedByUser = false;
+  // Sticky: a stopped turn is popped from `history`, so that can't stand in for
+  // "this visitor has started talking" when deciding to drop a teaser reply.
+  var asked = false;
+
+  /** Swaps the arrow for a stop square; the button stays live either way. */
+  function setSending(sending) {
+    sendBtn.replaceChildren(sending ? stopSquare : sendArrow);
+    sendBtn.setAttribute('aria-label', sending ? 'Stop generating' : 'Send');
+    sendBtn.classList.toggle('is-stop', sending);
+  }
+
+  /** Abandon the answer in flight and hand the input straight back. */
+  function stopSending() {
+    if (!inFlight) return;
+    stoppedByUser = true;
+    inFlight.abort();
+  }
+
   function send(text) {
     var msg = String(text || '').trim();
-    if (!msg) return;
+    if (!msg || inFlight) return;
+    asked = true;
     removeChips();
     addUser(msg);
     inputEl.value = '';
-    sendBtn.disabled = true;
 
     var sent = history.slice();
     remember('user', msg);
     var stopTyping = addTyping();
+
+    // A request that never settles would otherwise spin the dots forever with
+    // no way out, so it is bounded and cancellable.
+    var controller = typeof AbortController === 'function' ? new AbortController() : null;
+    inFlight = controller;
+    stoppedByUser = false;
+    setSending(true);
+    var timer = setTimeout(function () { if (controller) controller.abort(); }, 45000);
 
     fetch('/api/ai-steve', {
       method: 'POST',
@@ -782,7 +821,8 @@
         message: msg,
         history: sent,
         locale: window.SITE_LOCALE || 'en'
-      })
+      }),
+      signal: controller ? controller.signal : undefined
     })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -797,22 +837,33 @@
       .catch(function () {
         stopTyping();
         history.pop(); // drop the turn that never got an answer
-        addAi(
-          "I couldn't reach my brain just then. Try again in a moment, or "
-          + 'reach Steve directly and he’ll answer himself.',
-          [{ label: "Steve's LinkedIn ↗", url: 'https://www.linkedin.com/in/stevejung-dev' }],
-          false
-        );
+        if (stoppedByUser) {
+          // Their own doing — an apology would be noise. Put the question back
+          // so it can be edited and sent again.
+          inputEl.value = msg;
+        } else {
+          addAi(
+            "That took too long. Try again, or reach Steve directly and he’ll "
+            + 'answer himself.',
+            [{ label: "Steve's LinkedIn ↗", url: 'https://www.linkedin.com/in/stevejung-dev' }],
+            false
+          );
+        }
       })
       .then(function () {
-        sendBtn.disabled = false;
+        clearTimeout(timer);
+        inFlight = null;
+        setSending(false);
         inputEl.focus();
       });
   }
 
   iconBtn.addEventListener('click', openChat);
   closeBtn.addEventListener('click', closeChat);
-  sendBtn.addEventListener('click', function () { send(inputEl.value); });
+  sendBtn.addEventListener('click', function () {
+    if (inFlight) stopSending();
+    else send(inputEl.value);
+  });
   inputEl.addEventListener('keydown', function (e) {
     if (e.key === 'Enter') { e.preventDefault(); send(inputEl.value); }
   });
