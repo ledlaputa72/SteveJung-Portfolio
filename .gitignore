@@ -3,3 +3,9 @@ node_modules/
 .vercel
 .claude/
 tools/asset-manager/asset-manager.html
+
+# ANTHROPIC_API_KEY for api/ai-steve.js lives in Vercel's environment
+# variables. `vercel env pull` writes a local copy here — it must never be
+# committed.
+.env
+.env.*

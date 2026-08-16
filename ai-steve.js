@@ -15,8 +15,9 @@
  * frame writes SVG attributes directly — no per-frame re-render, same as the
  * prototype.
  *
- * The reply in send() is a stub that calls /api/ai-steve; that route is the
- * separate piece of work described under "Next steps" in the spec.
+ * send() calls /api/ai-steve, which answers from i18n/<locale>.js — the same
+ * copy the pages render — and returns links chosen from a fixed catalog of the
+ * site's own routes, so a reply can only ever point somewhere that exists.
  */
 (function () {
   'use strict';
@@ -310,10 +311,18 @@
       'border-radius:14px 4px 14px 14px;background:#8B5CF6;color:#fff;font-size:13px;',
       'white-space:pre-wrap}',
 
+    '#ai-steve .ais-links{display:flex;flex-wrap:wrap;gap:6px}',
     '#ai-steve .ais-link{display:inline-block;padding:6px 11px;border-radius:999px;',
       'background:#24261a;border:1px solid #3a3d24;color:#C6D94D;font-size:11.5px;',
       'text-decoration:none}',
     '#ai-steve .ais-link:hover{background:#2b2e1e}',
+
+    '#ai-steve .ais-typing{display:flex;gap:4px;padding:12px}',
+    '#ai-steve .ais-typing i{width:5px;height:5px;border-radius:50%;background:#888;',
+      'animation:ais-blink 1.2s infinite}',
+    '#ai-steve .ais-typing i:nth-child(2){animation-delay:.2s}',
+    '#ai-steve .ais-typing i:nth-child(3){animation-delay:.4s}',
+    '@keyframes ais-blink{0%,60%,100%{opacity:.25}30%{opacity:1}}',
 
     '#ai-steve .ais-chips{display:flex;flex-wrap:wrap;gap:7px;padding-left:36px}',
     '#ai-steve .ais-chip{padding:6px 12px;border-radius:999px;background:#1c1c1c;',
@@ -584,21 +593,40 @@
 
   function scrollDown() { msgsEl.scrollTop = msgsEl.scrollHeight; }
 
-  /** An AI row: avatar + bubble, with an optional link chip underneath. */
-  function addAi(text, link, animatable) {
+  /**
+   * An AI row: avatar + bubble, with link chips underneath. `links` is an
+   * array of { label, url }; a same-origin url opens in this tab so the
+   * visitor keeps the open chat, an external one opens in a new tab.
+   */
+  function addAi(text, links, animatable) {
     var avatar = avatarSvg(26);
     var body = el('div', { class: 'ais-ai-body' }, [
       el('div', { class: 'ais-ai-txt', text: text })
     ]);
-    if (link) {
-      body.appendChild(el('a', {
-        class: 'ais-link', href: link.linkUrl, target: '_blank',
-        rel: 'noopener noreferrer', text: link.linkLabel
-      }));
+    var list = links || [];
+    if (list.length) {
+      body.appendChild(el('div', { class: 'ais-links' }, list.map(function (l) {
+        var external = /^https?:\/\//.test(l.url);
+        var attrs = { class: 'ais-link', href: l.url, text: l.label };
+        if (external) { attrs.target = '_blank'; attrs.rel = 'noopener noreferrer'; }
+        return el('a', attrs);
+      })));
     }
     msgsEl.appendChild(el('div', { class: 'ais-ai' }, [avatar.svg, body]));
     scrollDown();
     return animatable ? avatar : null;
+  }
+
+  /** Bouncing dots while /api/ai-steve is answering. Returns a remover. */
+  function addTyping() {
+    var row = el('div', { class: 'ais-ai' }, [
+      avatarSvg(26).svg,
+      el('div', { class: 'ais-ai-txt ais-typing' },
+        [el('i'), el('i'), el('i')])
+    ]);
+    msgsEl.appendChild(row);
+    scrollDown();
+    return function () { if (row.parentNode) row.parentNode.removeChild(row); };
   }
 
   function addUser(text) {
@@ -657,10 +685,10 @@
 
     if (!chatStarted) {
       chatStarted = true;
-      var greeting = addAi(
-        "Hi, I'm AI Steve. Ask me about Steve's work, projects, or how he got here.",
-        null, true
-      );
+      var greetingText =
+        "Hi, I'm AI Steve. Ask me about Steve's work, projects, or how he got here.";
+      var greeting = addAi(greetingText, null, true);
+      remember('assistant', greetingText);
       addChips();
 
       if (!greetingPlayed && greeting) {
@@ -674,7 +702,8 @@
     if (topic && TOPIC_REPLIES[topic]) {
       setTimeout(function () {
         var r = TOPIC_REPLIES[topic];
-        addAi(r.text, r, false);
+        addAi(r.text, [{ label: r.linkLabel, url: r.linkUrl }], false);
+        remember('assistant', r.text);
       }, 700);
     }
 
@@ -689,9 +718,19 @@
   }
 
   /**
-   * Stub. The real answer comes from /api/ai-steve, which is not built yet —
-   * see "Next steps" in the spec. Until that route exists the fetch 404s and
-   * the catch below is what the visitor sees.
+   * Conversation so far, sent with each turn so follow-ups ("what about the
+   * second one?") resolve. The route caps and re-validates this; the cap here
+   * just keeps the request small.
+   */
+  var history = [];
+  function remember(role, content) {
+    history.push({ role: role, content: content });
+    if (history.length > 12) history = history.slice(-12);
+  }
+
+  /**
+   * Ask /api/ai-steve. The route answers from the site's own copy and returns
+   * links drawn from a fixed catalog, so a reply can only point at real pages.
    */
   function send(text) {
     var msg = String(text || '').trim();
@@ -701,23 +740,36 @@
     inputEl.value = '';
     sendBtn.disabled = true;
 
+    var sent = history.slice();
+    remember('user', msg);
+    var stopTyping = addTyping();
+
     fetch('/api/ai-steve', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: msg })
+      body: JSON.stringify({
+        message: msg,
+        history: sent,
+        locale: window.SITE_LOCALE || 'en'
+      })
     })
       .then(function (res) {
         if (!res.ok) throw new Error('HTTP ' + res.status);
         return res.json();
       })
       .then(function (data) {
-        addAi(data && data.reply ? data.reply : "Sorry, I didn't catch that.", null, false);
+        stopTyping();
+        var reply = data && data.reply ? data.reply : "Sorry, I didn't catch that.";
+        addAi(reply, data && data.links, false);
+        remember('assistant', reply);
       })
       .catch(function () {
+        stopTyping();
+        history.pop(); // drop the turn that never got an answer
         addAi(
-          "I'm not wired up to the API yet — that's the next step. In the meantime, "
+          "I couldn't reach my brain just then. Try again in a moment, or "
           + 'reach Steve directly and he’ll answer himself.',
-          { linkUrl: 'https://www.linkedin.com/in/stevejung-dev', linkLabel: "Steve's LinkedIn ↗" },
+          [{ label: "Steve's LinkedIn ↗", url: 'https://www.linkedin.com/in/stevejung-dev' }],
           false
         );
       })

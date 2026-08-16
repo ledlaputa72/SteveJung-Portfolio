@@ -1,0 +1,14 @@
+{
+  "name": "stevejung-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Dependencies for the serverless functions under api/. The site itself is static HTML and has no build step.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "sync-locales": "node tools/sync-locale-pages.mjs",
+    "check-locales": "node tools/sync-locale-pages.mjs --check"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.117.1"
+  }
+}
