@@ -822,15 +822,24 @@
         // have different causes and the console says which: a status means the
         // route answered and refused, no status means nothing came back at all.
         var timedOut = err && err.name === 'AbortError';
+        var status = err && err.status;
         if (window.console && console.error) {
           console.error('[ai-steve] request failed',
-            timedOut ? '(timed out after 45s)' : ('status ' + ((err && err.status) || 'none')),
+            timedOut ? '(timed out after 45s)' : ('status ' + (status || 'none')),
             (err && err.body) || (err && err.message) || err);
         }
+        var line;
+        if (timedOut) {
+          line = 'That took too long. Try again, or reach Steve directly and he’ll answer himself.';
+        } else if (status === 429) {
+          // Busy, not broken — say so, or the visitor reads it as the site failing.
+          line = "I'm getting more questions than I can keep up with just now. "
+            + 'Give it a minute and ask again.';
+        } else {
+          line = 'Something went wrong on my end. Try again in a moment, or reach Steve directly.';
+        }
         addAi(
-          timedOut
-            ? "That took too long. Try again, or reach Steve directly and he’ll answer himself."
-            : "Something went wrong on my end. Try again in a moment, or reach Steve directly.",
+          line,
           [{ label: "Steve's LinkedIn ↗", url: 'https://www.linkedin.com/in/stevejung-dev' }],
           false
         );

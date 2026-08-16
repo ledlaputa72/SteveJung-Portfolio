@@ -35,7 +35,10 @@ const PINNED_LOCALE = 'en';
 const MAX_MESSAGE_CHARS = 1000;
 const MAX_HISTORY_TURNS = 12;
 
-const client = new Anthropic();
+// A visitor is watching a typing indicator, so failing fast beats retrying:
+// the SDK's default two retries with backoff turn a rate-limited workspace
+// into a minute-long hang and then an error anyway.
+const client = new Anthropic({ maxRetries: 1, timeout: 30000 });
 
 // ------------------------------------------------------------- site copy
 
@@ -85,10 +88,15 @@ const absolute = (url) => (/^https?:\/\//.test(url) ? url : 'https://' + url);
 function buildLinkCatalog(copy, prefix) {
   const links = [];
   const seen = new Set();
+  // The catalog is routing data, not content: `about` only has to be enough to
+  // tell one destination from another. Full taglines here cost more than the
+  // whole site context does.
   const add = (url, label, about) => {
     if (!url || seen.has(url)) return;
     seen.add(url);
-    links.push({ url, label, about });
+    let hint = String(about || '').replace(/\s+/g, ' ').trim();
+    if (hint.length > 120) hint = hint.slice(0, 117).replace(/[\s,;·—-]+$/, '') + '…';
+    links.push({ url, label, about: hint });
   };
   // trailingSlash is off in vercel.json, so the locale root is "/" or "/ko" —
   // never "/ko/", which would redirect before the fragment is applied.
@@ -151,26 +159,62 @@ function walk(node, fn) {
   else if (node && typeof node === 'object') Object.values(node).forEach((n) => walk(n, fn));
 }
 
-/** The copy tree flattened to labelled lines — readable by the model, cheap to cache. */
+/**
+ * What the agent needs to know, rather than everything the site says.
+ *
+ * Flattening the whole copy tree sent ~24k tokens per question — case-study
+ * body prose, page metadata and dev-only UI strings included — which is both
+ * far more than a 60-word answer needs and enough, a few questions in, to run
+ * a workspace into its per-minute token limit. Answers come from the headline
+ * facts: what each case was, its scale, and its outcome. The long-form prose
+ * lives one click away, which is what the links are for.
+ */
 function buildSiteContext(copy) {
-  const lines = [];
-  const render = (node, trail) => {
-    if (node == null) return;
-    if (typeof node === 'string' || typeof node === 'number') {
-      const text = String(node).trim();
-      if (text) lines.push(trail + ': ' + text);
-      return;
-    }
-    if (Array.isArray(node)) {
-      node.forEach((child, i) => render(child, trail + '[' + i + ']'));
-      return;
-    }
-    if (typeof node === 'object') {
-      Object.keys(node).forEach((k) => render(node[k], trail ? trail + '.' + k : k));
-    }
+  const out = [];
+  const put = (label, value) => {
+    if (value == null) return;
+    const text = String(value).trim();
+    if (text) out.push(label + ': ' + text);
   };
-  render(copy, '');
-  return lines.join('\n');
+  const list = (label, arr, fn) => {
+    (arr || []).forEach((item) => { const v = fn(item); if (v) out.push(label + ': ' + v); });
+  };
+
+  const ui = (copy.index && copy.index.ui) || {};
+  out.push('## Positioning');
+  // Skip the dev* keys — they are debug-panel strings, not anything about Steve.
+  ['heroLead', 'heroLeadAccent', 'manifestoTitleL1', 'manifestoTitleL2',
+    'manifestoTitleAccent', 'manifestoBody', 'capabilitiesTitleL1',
+    'capabilitiesTitleAccent', 'contactTitle', 'contactLead'
+  ].forEach((k) => put(k, ui[k]));
+
+  out.push('', '## Skills');
+  list('skill', copy.index && copy.index.skills,
+    (g) => g.head + ': ' + (g.items || []).join(', '));
+
+  out.push('', '## Cases (home page)');
+  (copy.index && copy.index.cases || []).forEach((c) => {
+    out.push('');
+    put('case ' + c.anchor, [c.num, c.title, c.kicker].filter(Boolean).join(' · '));
+    put('  summary', c.tagline);
+    put('  facts', (c.meta || []).map((m) => m.k + ' ' + m.v).join(' · '));
+    (c.points || []).forEach((p) => put('  point', p));
+    put('  live', c.link);
+  });
+
+  out.push('', '## Case studies (detail page)');
+  (copy.caseStudy && copy.caseStudy.cases || []).forEach((c) => {
+    out.push('');
+    put('case-study ' + c.anchor, c.title || c.short);
+    put('  summary', c.summary);
+    put('  facts', (c.meta || []).map((m) => m.label + ' ' + m.value).join(' · '));
+    put('  tags', (c.tags || []).join(', '));
+    // Section headlines only. Each banner's body is several paragraphs and is
+    // what the /case-study# links exist to show.
+    list('  section', c.banners, (b) => [b.name, b.short].filter(Boolean).join(' — '));
+  });
+
+  return out.join('\n');
 }
 
 /**
@@ -216,13 +260,17 @@ function systemPrompt(locale) {
     '- Always answer in English, whatever language the visitor writes in. If they wrote in another language, answer their question in English anyway — do not apologise for the language or refuse.',
     '- Speak about Steve in the third person. Never invent employers, dates, metrics, or project names.',
     '',
-    'Length — the reply renders in a chat bubble about 240px wide, so length is',
-    'the difference between something read and something scrolled past:',
-    '- Keep the whole answer under 60 words. Two or three sentences, one idea each.',
-    '- Lead with the direct answer. Then give ONE piece of evidence — a number, a stack, or a shipped outcome — and stop.',
+    'Shape of a reply — you are opening a conversation, not filing a report. The',
+    'text answers enough to be worth reading; the page behind the link is where',
+    'the detail lives, and getting the visitor there is the point:',
+    '- Answer the intent of the question first, in your own words.',
+    '- Under 60 words. Two or three sentences, one idea each.',
+    '- Give ONE piece of evidence — a number, a stack, or a shipped outcome — then hand off to the link.',
+    '- Close by pointing at what the link holds, naturally and in the sentence rather than as an instruction. "The full build is in the case study" reads well; "click the button below" does not.',
     '- Do not inventory. If several projects qualify, name the strongest one and let the link carry the rest.',
+    '- Never try to fit the whole case into the bubble. An answer that needs scrolling has already failed.',
     '',
-    'Links:',
+    'Links — the reply is the invitation, these are where it leads:',
     '- Attach at most two, and only from the catalog, using each "url" value verbatim.',
     '- If the question is about one project, link that project\'s own case study. Do not answer it with the Work index or the home page — those are for questions that genuinely span several projects, or are about Steve rather than a piece of work.',
     '- Prefer a /case-study# link over a home-page anchor when both cover the same project: the case study is the fuller read.',
@@ -338,9 +386,16 @@ module.exports = async function handler(req, res) {
 
     return res.status(200).json({ reply: parsed.answer, links });
   } catch (err) {
-    console.error('ai-steve:', err);
-    const status = err instanceof Anthropic.RateLimitError ? 429 : 502;
-    return res.status(status).json({ error: 'upstream_failed' });
+    // The status and error name are what a failing widget is diagnosed from,
+    // so log enough to tell a rate limit from a bad key from a model error.
+    console.error('ai-steve:', err && err.name, err && err.status, err && err.message);
+    if (err instanceof Anthropic.RateLimitError) {
+      return res.status(429).json({ error: 'rate_limited' });
+    }
+    if (err instanceof Anthropic.AuthenticationError) {
+      return res.status(401).json({ error: 'bad_api_key' });
+    }
+    return res.status(502).json({ error: 'upstream_failed' });
   }
 };
 
