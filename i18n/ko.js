@@ -47,7 +47,7 @@ window.SITE_COPY.ko = {
         tagline:'레거시 PHP에서 Wix Studio 글로벌 플랫폼으로. 제한된 예산 안에서 개발과 이후 운영·업데이트까지 감당할 수 있는 구조를 택하고, 138페이지 세부 기획서와 Figma 와이어프레임 · 프로토타입으로 외주 개발사를 디렉팅하며 아키텍처 가이드와 오류 수정까지 직접 담당했습니다.',
         meta:[{k:'Role',v:'Project Lead · Velo Dev'},{k:'Year',v:'2025 —'},{k:'Platform',v:'Wix Studio · Velo'}],
         points:['138페이지 기획서 · Figma 와이어프레임 · 50+ 화면정의서를 단독 작성','외주사의 iframe 오류를 진단하고 CMS 네이티브 Velo 데모로 개발 방향을 교정','4개 언어(EN/KO/JA/ES) 통합 · 회사 최초 구조화 SEO · 제품 필터·비교 시스템'],
-        tags:['Wix Velo','CMS','Figma','SEO'],link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',slot:'slot-avycon',src:'/images/index.html/IDX-CASE1.png',slotLabel:'[IDX-CASE1] AVYCON 리뉴얼 화면 / 와이어프레임'},
+        tags:['Wix Velo','CMS','Figma','SEO'],link:'avycon.com',linkUrl:'avycon.com',slot:'slot-avycon',src:'/images/index.html/IDX-CASE1.png',slotLabel:'[IDX-CASE1] AVYCON 리뉴얼 화면 / 와이어프레임'},
       {num:'02',anchor:'case-2',scene:'04',sceneName:'02 — STARLLION LAUNCH',label:'Case 02 · Starllion Launch',
         kicker:'BRAND · IA · FULL-STACK',title:'Starllion™ 클라우드 VMS 런칭',
         tagline:'하드웨어 카탈로그 톤과 완전히 다른 SaaS 브랜드를, 개발 예산도 외주 에이전시도 없이 제로베이스에서 만들었습니다. 네이밍·로고·컬러 시스템부터 5개 대분류 30+ 페이지의 3-depth IA를 직접 설계하고, 폼·라우팅·SEO·앱 딥링크를 전부 Velo JavaScript로 구현했습니다. 웹·iOS·Android·5개 소셜 채널까지 한 시점에 맞춰 단독으로 런칭했습니다.',
@@ -103,7 +103,7 @@ window.SITE_COPY.ko = {
   {anchor:'case-1',num:'01',short:'AVYCON Renewal',cats:['Web Dev','UX'],
    banners:[
      {key:'home',group:'Main Site · Home',name:'홈 · 글로벌 랜딩',short:'브랜드 히어로 · 제품 하이라이트 · 리드 폼까지 단일 CMS 위에서 4개 언어로 동작하는 메인 페이지.',
-      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',
+      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'avycon.com',
       body:'레거시 PHP 홈을 브랜드 히어로 · 제품 하이라이트 · 리드 캡처가 하나의 흐름으로 이어지는 랜딩으로 재설계했습니다. EN / KO / JA / ES가 각각 독립 도메인으로 흩어져 있던 구조를 단일 CMS 위로 통합해, 한 번의 콘텐츠 업데이트가 4개 언어에 동일하게 반영됩니다.',
       points:['다중 언어를 단일 CMS · 단일 도메인 구조로 통합','히어로 → 제품 → 솔루션 → 문의로 이어지는 리드 전환 동선','메타태그 · canonical · 구조화 데이터를 회사 최초로 구축'],
       tags:['Landing','Multilingual','SEO','Lead Gen']},

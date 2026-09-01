@@ -48,7 +48,7 @@ window.SITE_COPY.en = {
         tagline:'From legacy PHP to a global Wix Studio platform. Inside a fixed budget I chose an architecture the team could keep running and updating after launch, then wrote a 138-page specification with Figma wireframes and prototypes — directing the outside development agency while handling the architecture guidance and the bug fixes myself.',
         meta:[{k:'Role',v:'Project Lead · Velo Dev'},{k:'Year',v:'2025 —'},{k:'Platform',v:'Wix Studio · Velo'}],
         points:['Sole author of a 138-page spec, Figma wireframes, and 50+ screen definitions','Diagnosed the agency’s iframe implementation and corrected course with a native CMS Velo demo','Four languages (EN/KO/JA/ES) unified · the company’s first structured SEO · product filtering and comparison'],
-        tags:['Wix Velo','CMS','Figma','SEO'],link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',slot:'slot-avycon',src:'/images/index.html/IDX-CASE1.png',slotLabel:'[IDX-CASE1] AVYCON renewal screens / wireframes'},
+        tags:['Wix Velo','CMS','Figma','SEO'],link:'avycon.com',linkUrl:'avycon.com',slot:'slot-avycon',src:'/images/index.html/IDX-CASE1.png',slotLabel:'[IDX-CASE1] AVYCON renewal screens / wireframes'},
       {num:'02',anchor:'case-2',scene:'04',sceneName:'02 — STARLLION LAUNCH',label:'Case 02 · Starllion Launch',
         kicker:'BRAND · IA · FULL-STACK',title:'Starllion™ Cloud VMS Launch',
         tagline:'A SaaS brand with a tone nothing like the hardware catalog, built from zero with no development budget and no agency. I defined the naming, logo, and color system, designed a 3-depth IA spanning five sections and 30+ pages, and implemented every form, route, SEO tag, and app deep link in Velo JavaScript. Web, iOS, Android, and five social channels went live on the same date — solo.',
@@ -104,7 +104,7 @@ window.SITE_COPY.en = {
   {anchor:'case-1',num:'01',short:'AVYCON Renewal',cats:['Web Dev','UX'],
    banners:[
      {key:'home',group:'Main Site · Home',name:'Home · Global Landing',short:'Brand hero, product highlights, and lead capture running in four languages on a single CMS.',
-      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'www.avycon.com/home-test-2',
+      stack:'Wix Studio · Velo · Multilingual CMS', link:'avycon.com',linkUrl:'avycon.com',
       body:'The legacy PHP home page was rebuilt as a landing page where the brand hero, product highlights, and lead capture read as one continuous flow. EN / KO / JA / ES had been scattered across independent domains; consolidating them onto a single CMS means one content update now lands identically in all four languages.',
       points:['Multiple languages consolidated onto a single CMS and a single domain','A lead path that runs hero → products → solutions → inquiry','Meta tags, canonicals, and structured data built for the first time in the company'],
       tags:['Landing','Multilingual','SEO','Lead Gen']},
