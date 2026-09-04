@@ -251,7 +251,7 @@ window.SITE_COPY.ko = {
      {n:'4',title:'인쇄 감리 & 납품',body:'벤더 색교정, 후가공 확인, 최종 출고.'}],
    callout:'',
    results:[{value:'50+',label:'제작 인쇄물'},{value:'100+',label:'SKU 카탈로그'},{value:'5yr',label:'브랜드 일관성 유지'}],
-   gallery:['연간 카탈로그 표지','카탈로그 내지 스프레드','Solution-by-Industry 카탈로그','PTZ 플라이어','파노라마 / 피시아이 플라이어','Smart Defender™ 시리즈','NVR / DVR 플라이어','Kit Box 패키징','기프트 박스'],
+   gallery:['연간 카탈로그 표지','카탈로그 내지 스프레드','Solution-by-Industry 카탈로그','PTZ 플라이어','파노라마 / 피시아이 플라이어','Smart Defender™ 시리즈','NVR / DVR 플라이어','Kit Box 패키징','기프트 박스','불릿 카메라 리테일 박스','비디오 도어벨 패키징','돔 카메라 박스 다이라인'],
    skills:['B2B Print Design','Catalog Production','Packaging','Technical Documentation','Print Production Mgmt','Brand Stewardship']},
 
   {anchor:'case-4',num:'04',short:'Trade Show & CX',cats:['3D','Events'],

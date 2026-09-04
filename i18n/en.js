@@ -252,7 +252,7 @@ window.SITE_COPY.en = {
      {n:'4',title:'Press check & delivery',body:'Vendor color proofing, finishing sign-off, and final shipment.'}],
    callout:'',
    results:[{value:'50+',label:'Printed pieces produced'},{value:'100+',label:'SKUs in the catalog'},{value:'5yr',label:'Of brand consistency'}],
-   gallery:['Annual catalog cover','Catalog interior spread','Solution-by-Industry catalog','PTZ flier','Panoramic / fisheye flier','Smart Defender™ series','NVR / DVR flier','Kit box packaging','Gift box'],
+   gallery:['Annual catalog cover','Catalog interior spread','Solution-by-Industry catalog','PTZ flier','Panoramic / fisheye flier','Smart Defender™ series','NVR / DVR flier','Kit box packaging','Gift box','Bullet camera retail box','Video doorbell packaging','Dome camera box dieline'],
    skills:['B2B Print Design','Catalog Production','Packaging','Technical Documentation','Print Production Mgmt','Brand Stewardship']},
 
   {anchor:'case-4',num:'04',short:'Trade Show & CX',cats:['3D','Events'],
