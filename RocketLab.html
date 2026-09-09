@@ -308,6 +308,52 @@ main{ max-width:720px; flex:1; min-width:0; margin:0 auto; padding:28px 40px 120
 
 .qa-block + .qa-block{ margin-top:9pt; padding-top:8pt; border-top:1px solid var(--rule); }
 
+/* ---------- ASK-LIST CALLOUTS (e.g. "questions for you" turn) ---------- */
+.ask-list{ margin-top:8pt; display:flex; flex-direction:column; gap:8pt; }
+.ask-item{
+  display:flex; gap:10pt;
+  background:var(--paper);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:9pt 12pt;
+}
+.ask-index{
+  font-family:'Source Serif 4',serif;
+  font-size:10.5pt;
+  font-weight:600;
+  color:var(--brass-deep);
+  flex:none;
+  line-height:1.3;
+}
+.ask-text{ flex:1; min-width:0; }
+.ask-en{
+  font-family:'Source Serif 4',serif;
+  font-size:12.5pt;
+  line-height:1.32;
+  color:#141210;
+  font-weight:450;
+  margin:0 0 4pt;
+}
+.ask-kr{
+  font-family:'Noto Sans KR','Inter',sans-serif;
+  font-size:9pt;
+  line-height:1.32;
+  color:rgba(0,0,0,0.5);
+  margin:0;
+}
+.ask-closing{
+  margin-top:10pt;
+  padding-top:9pt;
+  border-top:1px dashed var(--rule);
+}
+.ask-closing .text-en{
+  font-style:italic;
+  font-size:12pt;
+  color:var(--ink-soft);
+}
+.ask-closing .text-kr{ margin-top:5pt; }
+.tts-source{ display:none; }
+
 body.kr-hidden .text-kr{ display:none; }
 
 /* ---------- SUMMARY / CLOSING PAGE ---------- */
@@ -857,19 +903,50 @@ body.kr-hidden .text-kr{ display:none; }
           <div class="text-en" id="tts-q15-0"><p>Do you have any questions for me?</p></div>
           <div class="text-kr"><p>저에게 궁금하신 점 있으신가요?</p></div>
         </div>
-        <div class="turn speaker-steve">
-          <div class="turn-header">
-            <div class="speaker-label">Steve</div>
-            
+            <div class="turn speaker-steve">
+              <div class="turn-header">
+                <div class="speaker-label">Steve</div>
+                
             <button class="tts-btn" data-target="tts-q15-1" aria-label="Play this answer aloud" type="button">
               <svg class="tts-icon-play" viewBox="0 0 24 24" width="13" height="13"><path fill="currentColor" d="M4 9v6h4l5 5V4L8 9H4z"/><path fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" d="M15.5 8.5a5 5 0 010 7"/></svg>
               <svg class="tts-icon-stop" viewBox="0 0 24 24" width="13" height="13"><rect x="5" y="5" width="14" height="14" fill="currentColor"/></svg>
               <span class="tts-label">Listen</span>
             </button>
-          </div>
-          <div class="text-en" id="tts-q15-1"><p>Yes, I have a couple of questions, if that&#x27;s okay.</p><p>What would success look like for the Brand Designer in the first six months?</p><p>And what types of projects would the Brand Designer be working on most frequently?</p><p>If there&#x27;s time — I&#x27;m also curious how the Brand Design team typically collaborates with engineering and the other technical teams.</p><p>And lastly, could you also tell me what the next steps in the interview process would be?</p></div>
-          <div class="text-kr"><p>네, 괜찮으시다면 몇 가지 여쭤보고 싶습니다.</p><p>Brand Designer로서 첫 6개월 동안 성공적인 모습은 어떤 것일까요?</p><p>그리고 Brand Designer가 가장 자주 맡게 될 프로젝트 유형은 어떤 것들인가요?</p><p>시간이 좀 더 있다면 — Brand Design 팀이 엔지니어링 및 다른 기술 팀과 보통 어떻게 협업하는지도 궁금합니다.</p><p>마지막으로, 이후 인터뷰 프로세스의 다음 단계는 어떻게 되는지도 알려주실 수 있을까요?</p></div>
-        </div>
+              </div>
+              <div class="tts-source" id="tts-q15-1">Yes, I have a couple of questions, if that&#x27;s okay. What would success look like for the Brand Designer in the first six months? And what types of projects would the Brand Designer be working on most frequently? If there&#x27;s time — I&#x27;m also curious how the Brand Design team typically collaborates with engineering and the other technical teams. And lastly, could you also tell me what the next steps in the interview process would be? Sounds great. Thank you again for your time. I&#x27;m really excited about the opportunity, and I look forward to hearing from you. Have a great rest of your day.</div>
+              <div class="text-en"><p>Yes, I have a couple of questions, if that&#x27;s okay.</p></div>
+              <div class="text-kr"><p>네, 괜찮으시다면 몇 가지 여쭤보고 싶습니다.</p></div>
+              <div class="ask-list"><div class="ask-item">
+                      <span class="ask-index">01</span>
+                      <div class="ask-text">
+                        <p class="ask-en">What would success look like for the Brand Designer in the first six months?</p>
+                        <p class="ask-kr">Brand Designer로서 첫 6개월 동안 성공적인 모습은 어떤 것일까요?</p>
+                      </div>
+                    </div><div class="ask-item">
+                      <span class="ask-index">02</span>
+                      <div class="ask-text">
+                        <p class="ask-en">And what types of projects would the Brand Designer be working on most frequently?</p>
+                        <p class="ask-kr">그리고 Brand Designer가 가장 자주 맡게 될 프로젝트 유형은 어떤 것들인가요?</p>
+                      </div>
+                    </div><div class="ask-item">
+                      <span class="ask-index">03</span>
+                      <div class="ask-text">
+                        <p class="ask-en">If there&#x27;s time — I&#x27;m also curious how the Brand Design team typically collaborates with engineering and the other technical teams.</p>
+                        <p class="ask-kr">시간이 좀 더 있다면 — Brand Design 팀이 엔지니어링 및 다른 기술 팀과 보통 어떻게 협업하는지도 궁금합니다.</p>
+                      </div>
+                    </div><div class="ask-item">
+                      <span class="ask-index">04</span>
+                      <div class="ask-text">
+                        <p class="ask-en">And lastly, could you also tell me what the next steps in the interview process would be?</p>
+                        <p class="ask-kr">마지막으로, 이후 인터뷰 프로세스의 다음 단계는 어떻게 되는지도 알려주실 수 있을까요?</p>
+                      </div>
+                    </div></div>
+              
+                <div class="ask-closing">
+                  <p class="text-en">Sounds great. Thank you again for your time. I&#x27;m really excited about the opportunity, and I look forward to hearing from you. Have a great rest of your day.</p>
+                  <p class="text-kr">좋습니다. 다시 한번 시간 내주셔서 감사드립니다. 이 기회에 대해 정말 기대가 크고, 연락 주시길 기다리겠습니다. 남은 하루도 좋은 시간 되세요.</p>
+                </div>
+            </div>
     </section></div>
       
     <section class="summary-block" id="summary">
