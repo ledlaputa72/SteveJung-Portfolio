@@ -56,7 +56,7 @@ body{
   display:none;
   position:fixed; inset:0;
   background:rgba(30,26,20,0.4);
-  z-index:40;
+  z-index:47;
 }
 .site-title{
   font-family:'Source Serif 4',serif;
@@ -142,9 +142,24 @@ body.resizing{ cursor:col-resize; user-select:none; }
 /* ---------- MOBILE (off-canvas TOC) ---------- */
 @media (max-width: 768px){
   .mobile-menu-btn{ display:inline-flex; }
-  .site-header{ padding:18px 16px 16px; }
-  .site-title{ font-size:18px; }
-  .kr-toggle{ padding:6px 10px; font-size:11px; }
+
+  .site-header{
+    position:sticky;
+    top:0;
+    z-index:45;
+    padding:10px 12px;
+  }
+  .header-top{ align-items:center; }
+  .header-title-row{ align-items:center; gap:10px; flex:1; min-width:0; }
+  .site-title{
+    font-size:14px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .site-subtitle{ display:none; }
+  .mobile-menu-btn{ width:30px; height:30px; }
+  .kr-toggle{ padding:5px 9px; font-size:10.5px; flex:none; }
   .kr-toggle .dot{ display:none; }
 
   .layout{ display:block; }
