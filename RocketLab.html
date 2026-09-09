@@ -30,10 +30,15 @@ body{
 
 /* ---------- NAV / TOC (screen only) ---------- */
 .site-header{
-  position:sticky; top:0; z-index:10;
   background:var(--paper);
   border-bottom:1px solid var(--rule);
-  padding:28px 40px 20px;
+  padding:28px 40px 24px;
+}
+.header-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
 }
 .site-title{
   font-family:'Source Serif 4',serif;
@@ -45,34 +50,58 @@ body{
 .site-subtitle{
   font-size:13px;
   color:var(--ink-soft);
-  margin:0 0 18px;
+  margin:0;
 }
-.toc{
-  list-style:none;
+
+/* ---------- LAYOUT: left sidebar TOC + content ---------- */
+.layout{
   display:flex;
-  flex-wrap:wrap;
-  gap:8px 10px;
-  margin:0; padding:0;
+  align-items:flex-start;
+  gap:44px;
+  max-width:1080px;
+  margin:0 auto;
+  padding:0 40px;
 }
-.toc li a{
-  display:flex; align-items:center; gap:8px;
+.sidebar-toc{
+  position:sticky;
+  top:24px;
+  width:230px;
+  flex:none;
+  padding-top:28px;
+  max-height:calc(100vh - 48px);
+  overflow-y:auto;
+}
+.sidebar-toc .toc{
+  list-style:none;
+  margin:0; padding:0;
+  border-top:1px solid var(--rule);
+}
+.sidebar-toc .toc li{ border-bottom:1px solid var(--rule); }
+.sidebar-toc .toc li a{
+  display:flex; align-items:baseline; gap:10px;
   text-decoration:none;
   color:var(--ink);
-  background:var(--paper-deep);
-  border:1px solid var(--rule);
-  border-radius:3px;
-  padding:7px 12px;
-  font-size:13px;
-  transition:background .15s ease, border-color .15s ease;
+  padding:8px 4px;
+  font-size:12.5px;
+  line-height:1.35;
+  transition:background .15s ease, padding-left .15s ease;
 }
-.toc li a:hover{ background:#E6DFCF; border-color:var(--brass); }
-.toc-num{ color:var(--brass-deep); font-weight:600; font-variant-numeric:tabular-nums; }
+.sidebar-toc .toc li a:hover{ background:var(--paper-deep); padding-left:8px; }
+.sidebar-toc .toc li a.active{
+  background:var(--paper-deep);
+  padding-left:8px;
+  box-shadow:inset 3px 0 0 var(--brass);
+}
+.sidebar-toc .toc li a.active .toc-num,
+.sidebar-toc .toc li a.active .toc-title{ color:var(--ink); font-weight:600; }
+.toc-num{ color:var(--brass-deep); font-weight:600; font-variant-numeric:tabular-nums; width:18px; flex:none; }
 .toc-star{ color:var(--brass); }
-.toc-summary-link{ background:var(--ink) !important; color:var(--paper) !important; border-color:var(--ink) !important; }
+.toc-summary-link{ font-weight:600; }
+.toc-summary-link .toc-num{ display:none; }
 
 .kr-toggle{
   display:inline-flex; align-items:center; gap:8px;
-  margin-top:16px;
+  flex:none;
   border:1px solid var(--rule);
   background:var(--paper-deep);
   border-radius:3px;
@@ -92,7 +121,7 @@ body{
 body.kr-hidden .kr-toggle .dot{ background:#B9B2A0; }
 
 /* ---------- MAIN CONTENT ---------- */
-main{ max-width:760px; margin:0 auto; padding:12px 40px 120px; }
+main{ max-width:720px; flex:1; min-width:0; padding:28px 0 120px; }
 
 .page-group{ padding-top:36px; }
 .page-group + .page-group{ border-top:1px solid var(--rule); margin-top:20px; }
@@ -100,7 +129,7 @@ main{ max-width:760px; margin:0 auto; padding:12px 40px 120px; }
 .qa-block{ padding:24px 0 8px; }
 .qa-header{
   display:flex; align-items:baseline; gap:14px;
-  margin-bottom:6pt;
+  margin-bottom:5pt;
 }
 .qa-number{
   font-family:'Source Serif 4',serif;
@@ -130,8 +159,13 @@ main{ max-width:760px; margin:0 auto; padding:12px 40px 120px; }
   margin-bottom:8pt;
 }
 
-.turn{ margin-bottom:11pt; padding-left:14px; border-left:2px solid var(--rule); }
-.turn.speaker-steve{ border-left-color:var(--brass); }
+.turn{ margin-bottom:7pt; padding-left:14px; border-left:2px solid var(--rule); }
+.turn.speaker-steve{
+  border-left-color:var(--brass);
+  background:var(--paper-deep);
+  padding:6pt 14px 6pt 14px;
+  border-radius:0 3px 3px 0;
+}
 
 .speaker-label{
   font-size:9.5pt;
@@ -143,15 +177,30 @@ main{ max-width:760px; margin:0 auto; padding:12px 40px 120px; }
 .speaker-recruiter .speaker-label{ color:var(--recruiter); }
 .speaker-steve .speaker-label{ color:var(--brass-deep); }
 
+.speaker-recruiter .text-en{
+  font-size:11pt;
+  color:var(--ink-soft);
+  font-weight:400;
+}
+.speaker-recruiter .text-kr{ font-size:8.5pt; }
+
 .text-en{
   font-family:'Source Serif 4',serif;
-  font-size:13.5pt;
-  line-height:1.4;
+  font-size:11.5pt;
+  line-height:1.26;
   color:var(--ink);
   font-weight:400;
 }
-.text-en p{ margin:0 0 6pt; }
+.text-en p{ margin:0 0 5pt; }
 .text-en p:last-child{ margin-bottom:0; }
+
+.speaker-steve .text-en{
+  font-size:13.5pt;
+  line-height:1.4;
+  color:#141210;
+  font-weight:450;
+}
+.speaker-steve .text-en p{ margin:0 0 8pt; }
 
 .text-kr{
   font-family:'Noto Sans KR','Inter',sans-serif;
@@ -236,9 +285,11 @@ body.kr-hidden .text-kr{ display:none; }
 
 /* ---------- PRINT ---------- */
 @media print{
-  @page{ size: letter; margin: 0.75in 0.75in; }
+  @page{ size: letter; margin: 0.55in 0.7in; }
   body{ background:#fff; }
   .site-header{ display:none; }
+  .sidebar-toc{ display:none; }
+  .layout{ display:block; max-width:none; padding:0; margin:0; gap:0; }
   .kr-toggle{ display:none !important; }
   .text-kr{ display:none !important; }
   main{ max-width:none; padding:0; margin:0; }
@@ -261,18 +312,25 @@ body.kr-hidden .text-kr{ display:none; }
 </head>
 <body>
   <header class="site-header">
-    <p class="site-title">Rocket Lab — Brand Designer</p>
-    <p class="site-subtitle">15-Minute Phone Screening · Question &amp; Answer Prep</p>
-    <ul class="toc">
-      <li><a href="#q1"><span class="toc-num">01</span><span class="toc-title">Greeting</span></a></li><li><a href="#q2"><span class="toc-num">02</span><span class="toc-title">Tell me about yourself. <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q3"><span class="toc-num">03</span><span class="toc-title">Why are you interested in Rocket Lab?</span></a></li><li><a href="#q4"><span class="toc-num">04</span><span class="toc-title">Tell me about your brand design experience.</span></a></li><li><a href="#q5"><span class="toc-num">05</span><span class="toc-title">Tell me about a brand project you&#x27;re particularly proud of. <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q6"><span class="toc-num">06</span><span class="toc-title">How do you approach complex technical subjects? <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q7"><span class="toc-num">07</span><span class="toc-title">Do you have experience with physical production and vendors? <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q8"><span class="toc-num">08</span><span class="toc-title">You don&#x27;t have aerospace experience. How would you approach that?</span></a></li><li><a href="#q9"><span class="toc-num">09</span><span class="toc-title">How do you manage multiple projects in a fast-paced environment?</span></a></li><li><a href="#q10"><span class="toc-num">10</span><span class="toc-title">How do you handle feedback?</span></a></li><li><a href="#q11"><span class="toc-num">11</span><span class="toc-title">What additional skills would you bring to this role?</span></a></li><li><a href="#q12"><span class="toc-num">12</span><span class="toc-title">Why are you looking to leave your current role?</span></a></li><li><a href="#q13"><span class="toc-num">13</span><span class="toc-title">What is your biggest strength?</span></a></li><li><a href="#q16"><span class="toc-num">16</span><span class="toc-title">Do you have any questions for me? <span class="toc-star">&#9733;</span></span></a></li><li><a href="#summary" class="toc-summary-link"><span class="toc-title">Closing Summary</span></a></li>
-    </ul>
-    <button class="kr-toggle" id="krToggle" type="button" aria-pressed="true">
-      <span class="dot"></span>
-      <span id="krToggleLabel">Korean translation: On</span>
-    </button>
+    <div class="header-top">
+      <div>
+        <p class="site-title">Rocket Lab — Brand Designer</p>
+        <p class="site-subtitle">15-Minute Phone Screening · Question &amp; Answer Prep</p>
+      </div>
+      <button class="kr-toggle" id="krToggle" type="button" aria-pressed="true">
+        <span class="dot"></span>
+        <span id="krToggleLabel">Korean translation: On</span>
+      </button>
+    </div>
   </header>
-  <main>
-    <div class="page-group compact">
+  <div class="layout">
+    <nav class="sidebar-toc">
+      <ul class="toc">
+        <li><a href="#q1"><span class="toc-num">01</span><span class="toc-title">Greeting</span></a></li><li><a href="#q2"><span class="toc-num">02</span><span class="toc-title">Tell me about yourself. <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q3"><span class="toc-num">03</span><span class="toc-title">Why are you interested in Rocket Lab?</span></a></li><li><a href="#q4"><span class="toc-num">04</span><span class="toc-title">Tell me about your brand design experience.</span></a></li><li><a href="#q5"><span class="toc-num">05</span><span class="toc-title">Tell me about a brand project you&#x27;re particularly proud of. <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q6"><span class="toc-num">06</span><span class="toc-title">How do you approach complex technical subjects? <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q7"><span class="toc-num">07</span><span class="toc-title">Do you have experience with physical production and vendors? <span class="toc-star">&#9733;</span></span></a></li><li><a href="#q8"><span class="toc-num">08</span><span class="toc-title">You don&#x27;t have aerospace experience. How would you approach that?</span></a></li><li><a href="#q9"><span class="toc-num">09</span><span class="toc-title">How do you manage multiple projects in a fast-paced environment?</span></a></li><li><a href="#q10"><span class="toc-num">10</span><span class="toc-title">How do you handle feedback?</span></a></li><li><a href="#q11"><span class="toc-num">11</span><span class="toc-title">What additional skills would you bring to this role?</span></a></li><li><a href="#q12"><span class="toc-num">12</span><span class="toc-title">Why are you looking to leave your current role?</span></a></li><li><a href="#q13"><span class="toc-num">13</span><span class="toc-title">What is your biggest strength?</span></a></li><li><a href="#q16"><span class="toc-num">16</span><span class="toc-title">Do you have any questions for me? <span class="toc-star">&#9733;</span></span></a></li><li><a href="#summary" class="toc-summary-link"><span class="toc-num"></span><span class="toc-title">Closing Summary — What Should Stick</span></a></li>
+      </ul>
+    </nav>
+    <main>
+      <div class="page-group compact">
     <section class="qa-block" id="q1">
       <div class="qa-header">
         <span class="qa-number">01</span>
@@ -525,7 +583,7 @@ body.kr-hidden .text-kr{ display:none; }
           <div class="text-kr"><p>네, 괜찮으시다면 몇 가지 여쭤보고 싶습니다.</p><p>Brand Designer로서 첫 6개월 동안 성공적인 모습은 어떤 것일까요?</p><p>그리고 Brand Designer가 가장 자주 맡게 될 프로젝트 유형은 어떤 것들인가요?</p><p>시간이 좀 더 있다면 — Brand Design 팀이 엔지니어링 및 다른 기술 팀과 보통 어떻게 협업하는지도 궁금합니다.</p><p>마지막으로, 이후 인터뷰 프로세스의 다음 단계는 어떻게 되는지도 알려주실 수 있을까요?</p></div>
         </div>
     </section></div>
-    
+      
     <section class="summary-block" id="summary">
       <h2 class="summary-title">Closing Summary — What Should Stick</h2>
 
@@ -546,7 +604,8 @@ body.kr-hidden .text-kr{ display:none; }
         <p class="quote-kr">제 배경은 시각디자인이고, 커리어 내내 그 기반 위에서 복잡한 기술 제품을 명확한 브랜드 시스템으로 만들고, 그것을 디지털과 물리적 경험 양쪽에 걸쳐 컨셉부터 프로덕션까지 이끌어왔습니다.</p>
       </blockquote>
     </section>
-  </main>
+    </main>
+  </div>
   <script>
     (function() {
       var btn = document.getElementById('krToggle');
@@ -556,6 +615,33 @@ body.kr-hidden .text-kr{ display:none; }
         btn.setAttribute('aria-pressed', String(!hidden));
         label.textContent = hidden ? 'Korean translation: Off' : 'Korean translation: On';
       });
+    })();
+
+    (function() {
+      var links = Array.prototype.slice.call(document.querySelectorAll('.sidebar-toc .toc a'));
+      var linkById = {};
+      links.forEach(function(a) {
+        var id = a.getAttribute('href').slice(1);
+        linkById[id] = a;
+      });
+      var sections = Array.prototype.slice.call(document.querySelectorAll('main .qa-block, main .summary-block'));
+      function setActive(id) {
+        links.forEach(function(a) { a.classList.remove('active'); });
+        var link = linkById[id];
+        if (link) { link.classList.add('active'); }
+      }
+      var observer = new IntersectionObserver(function(entries) {
+        var best = null;
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            if (!best || entry.boundingClientRect.top < best.boundingClientRect.top) {
+              best = entry;
+            }
+          }
+        });
+        if (best) { setActive(best.target.id); }
+      }, { root: null, rootMargin: '-15% 0px -70% 0px', threshold: 0 });
+      sections.forEach(function(sec) { observer.observe(sec); });
     })();
   </script>
 </body>
